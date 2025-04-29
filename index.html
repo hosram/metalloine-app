@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Metalline | ترازو</title>
+
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
+
+<style>
+ :root{
+   --c-primary:#8E1F61; --c-accent:#8FA2B2;
+   --glass:rgba(255,255,255,.10); --r:24px; --g:12px;
+ }
+ *{box-sizing:border-box;margin:0}
+ body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif}
+
+ /* سرصفحه و لوگو */
+ #topbar{display:flex;justify-content:center;align-items:center;height:64px;
+         margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);
+         border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
+ .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
+ .logo .brand{color:var(--c-primary)}
+ .logo .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+
+ /* صفحهٔ فرود */
+ #landing{height:calc(100vh - 64px - 2*var(--g));display:grid;place-items:center}
+ .btn-main{padding:14px 32px;border:none;border-radius:var(--r);cursor:pointer;
+           background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+           color:#fff;font-weight:700;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+
+ /* اپلیکیشن */
+ #app{display:none;padding:var(--g)}
+ form{display:grid;grid-template-columns:1fr 1fr;gap:var(--g)}
+ label{display:flex;flex-direction:column;font-size:.85rem}
+ input,select{
+   padding:8px;border:none;border-radius:var(--r);
+   background:var(--glass);color:#fff;font:inherit;backdrop-filter:blur(24px)
+ }
+ select,option{background:#1a1a1a;color:#fff} select:focus{outline:2px solid var(--c-primary)}
+ .row-2{grid-column:span 2}
+ button[type=submit]{padding:14px;border:none;border-radius:var(--r);cursor:pointer;
+                     background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+                     color:#fff;font-weight:700}
+ #btnBack{display:none;margin-top:var(--g);width:100%;
+          background:#444;border:none;border-radius:var(--r);color:#fff;padding:12px;font-weight:600;cursor:pointer}
+
+ /* کارت‌ها */
+ #cards{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);margin-top:var(--g)}
+ .card{background:var(--glass);backdrop-filter:blur(24px);
+       border:1px solid rgba(255,255,255,.25);border-radius:var(--r);
+       padding:16px;text-align:center}
+ .value{font-size:1.4rem;font-weight:700;margin-top:4px}
+ @media(max-width:600px){form,#cards{grid-template-columns:1fr}}
+
+ /* پاورقی */
+ footer{position:fixed;bottom:8px;left:0;right:0;text-align:center;
+        font-size:.7rem;opacity:.75;line-height:1.4}
+</style>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+<header id="topbar">
+  <span class="logo"><span class="ring"></span><span class="brand">Metalloine</span>
+</span>
+</header>
+
+<section id="landing">
+  <button id="btnStart" class="btn-main">محاسبه وزن</button>
+</section>
+
+<section id="app">
+  <form id="f">
+    <!-- ماده و مقطع -->
+    <label>نوع ماده
+      <select id="mat">
+        <option value="7800">فولاد</option><option value="8900">مس</option>
+        <option value="2700">آلومینیوم</option><option value="8050">فولاد زنگ‌نزن</option>
+        <option value="8600">برنج</option><option value="8900">کبالت</option>
+        <option value="7100">چدن</option><option value="4430">تیتانیوم</option>
+        <option value="8190">اینکونل</option><option value="8900">فسفر برنز</option>
+        <option value="7140">گالوانیزه</option>
+      </select>
+    </label>
+
+    <label>نوع مقطع
+      <select id="sec">
+        <option value="areaRound">میله‌گرد</option>
+        <option value="areaPipe">لوله</option>
+        <option value="areaBox">پروفیل</option>
+        <option value="areaAngle">نبشی</option>
+        <option value="areaI">تیر I/H</option>
+        <option value="areaZ">پروفیل Z</option>
+        <option value="areaRail">ریل</option>
+        <option value="areaFlat">تسمه</option>
+        <option value="areaHex">شش‌گوش</option>
+        <option value="areaSquare">چهارگوش</option>
+        <option value="areaSpiral">لوله اسپیرال</option>
+      </select>
+    </label>
+
+    <!-- ابعاد (میلی‌متر) -->
+    <label>قطر / ضخامت (میلی‌متر)<input id="d1" type="number" min="0" step="0.1"></label>
+    <label>ارتفاع / قطر داخلی (میلی‌متر)<input id="d2" type="number" min="0" step="0.1"></label>
+    <label>عرض (میلی‌متر)<input id="d3" type="number" min="0" step="0.1"></label>
+    <label>عرض بال (میلی‌متر)<input id="d4" type="number" min="0" step="0.1"></label>
+    <label>ضخامت (میلی‌متر)<input id="d5" type="number" min="0" step="0.1"></label>
+    <label>ضخامت بال (میلی‌متر)<input id="d6" type="number" min="0" step="0.1"></label>
+    <label class="row-2">ضخامت جان (میلی‌متر)<input id="d7" type="number" min="0" step="0.1"></label>
+
+    <label>طول (سانتی‌متر)<input id="len" type="number" min="0" step="0.1" required></label>
+    <label>تعداد<input id="qty" type="number" min="1" step="1" value="1" required></label>
+
+    <button type="submit" class="row-2">محاسبه</button>
+  </form>
+
+  <!-- نتایج -->
+  <section id="cards">
+    <div class="card"><span>وزن تقریبی هر قطعه</span><div id="w1" class="value">—</div></div>
+    <div class="card"><span>وزن دست‌بالا هر قطعه</span><div id="w2" class="value">—</div></div>
+    <div class="card"><span>وزن تقریبی کل</span><div id="w3" class="value">—</div></div>
+    <div class="card"><span>وزن دست‌بالا کل</span><div id="w4" class="value">—</div></div>
+  </section>
+
+  <button id="btnBack">بازگشت به منو</button>
+</section>
+
+<footer>تمامی حقوق این اپ متعلق به شرکت مشاوران پخش برخط فولاد است – نسخه&nbsp;۱٫۰۰</footer>
+
+<script>
+/* نمایش اپ */
+document.getElementById('btnStart').onclick=function(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('app').style.display='block';
+};
+
+/* بازگشت به فرود */
+document.getElementById('btnBack').onclick=function(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('landing').style.display='grid';
+  document.getElementById('btnBack').style.display='none';
+  /* مخفی کردن دکمه تلگرام (در صورت نمایش) */
+  if(window.Telegram && Telegram.WebApp){Telegram.WebApp.MainButton.hide();}
+};
+
+/* توابع مساحت */
+function areaRound(d){return Math.PI*d*d/4;}
+function areaPipe(d,o){return areaRound(d)-areaRound(o);}
+function areaSquare(a){return a*a;}
+function areaHex(a){return 2.598*a*a;}
+function areaFlat(b,t){return b*t;}
+function areaAngle(b,t){return 2*b*t - t*t;}
+function areaI(h,b,tf,tw){return h*tw + 2*b*tf;}
+function areaBox(h,b,t){return b*h - (b-2*t)*(h-2*t);}
+function areaZ(h,b,t){return h*t + b*t;}
+function areaRail(h,b,tf,tw){return h*tw + 2*b*tf;}
+function areaSpiral(d,o){return areaPipe(d,o);}
+
+/* فیلدهای لازم */
+var need={
+  areaRound :['d1'],
+  areaPipe  :['d1','d2'],
+  areaSquare:['d3'],
+  areaHex   :['d3'],
+  areaFlat  :['d3','d5'],
+  areaAngle :['d3','d5'],
+  areaBox   :['d2','d3','d5'],
+  areaZ     :['d2','d3','d5'],
+  areaI     :['d2','d3','d6','d7'],
+  areaRail  :['d2','d3','d6','d7'],
+  areaSpiral:['d1','d2']
+};
+var dims=['d1','d2','d3','d4','d5','d6','d7'];
+var secSel=document.getElementById('sec');
+function updateInputs(){
+  var req=need[secSel.value];
+  for(var i=0;i<dims.length;i++){
+    var id=dims[i];
+    var row=document.getElementById(id).parentNode;
+    var show=req.indexOf(id)!==-1;
+    row.style.display=show?'flex':'none';
+    document.getElementById(id).required=show;
+  }
+}
+secSel.onchange=updateInputs; updateInputs();
+
+/* انیمیشن عدد */
+function animate(el,from,to){
+  var dur=800,start=Date.now();
+  (function step(){
+    var p=Math.min((Date.now()-start)/dur,1);
+    var val=(from+(to-from)*p).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,'٬');
+    el.textContent=val;
+    if(p<1) requestAnimationFrame(step);
+  })();
+}
+
+/* محاسبه */
+var form=document.getElementById('f');
+var out=['w1','w2','w3','w4'];
+var TG=(window.Telegram&&Telegram.WebApp)?Telegram.WebApp:null; var bound=false;
+
+form.onsubmit=function(e){
+  e.preventDefault();
+  var rho=+document.getElementById('mat').value;
+  var qty=+document.getElementById('qty').value;
+  var L  =+document.getElementById('len').value/100;
+  if(rho<=0||qty<=0||L<=0){alert('ورودی نامعتبر است');return;}
+
+  var v={}; dims.forEach(function(id){v[id]=+document.getElementById(id).value||0;});
+  var args=need[secSel.value].map(function(id){return v[id];});
+  var fn=window[secSel.value];
+  var A =fn.apply(null,args);
+  if(!A){alert('ابعاد کافی نیست');return;}
+
+  var argsUp=need[secSel.value].map(function(id){return v[id]+1;});
+  var A2=fn.apply(null,argsUp);
+
+  var w1=rho*(A /1e6)*L;
+  var w2=rho*(A2/1e6)*(L+0.01);
+  var res=[w1,w2,w1*qty,w2*qty];
+
+  out.forEach(function(id,i){
+    var el=document.getElementById(id), prev=+el.dataset.val||0;
+    el.dataset.val=res[i].toFixed(2);
+    animate(el,prev,res[i]);
+  });
+
+  /* دکمه بازگشت نمایان شود */
+  document.getElementById('btnBack').style.display='block';
+
+  /* دکمه تلگرام */
+  if(TG){
+    TG.MainButton.setText('ارسال نتیجه');
+    if(!bound){
+      TG.MainButton.onClick(function(){
+        TG.sendData('وزن تقریبی کل: '+res[2].toFixed(2)+' کیلوگرم');
+      });
+      bound=true;
+    }
+    TG.MainButton.show();
+  }
+};
+</script>
+</body>
+</html>
