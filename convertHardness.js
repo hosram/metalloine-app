@@ -123,3 +123,4 @@ export function listMaterials() {
 export function listScales() {
   return ['HB', 'HRC', 'HRB', 'HV'];
 }
+export function getRows(mat){ return DATA[mat] ?? []; } 
