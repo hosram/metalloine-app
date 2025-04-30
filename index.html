@@ -245,5 +245,64 @@ form.onsubmit=function(e){
   }
 };
 </script>
+     <section id="hardness-card" class="card">
+  <h2>تبدیل سختی</h2>
+
+  <label>مقدار:
+    <input id="h-val" type="number" placeholder="200" />
+  </label>
+
+  <label>از:
+    <select id="h-from">
+      <option>HB</option><option>HRC</option>
+      <option>HRB</option><option>HV</option>
+    </select>
+  </label>
+
+  <label>به:
+    <select id="h-to">
+      <option>HRC</option><option>HB</option>
+      <option>HRB</option><option>HV</option>
+    </select>
+  </label>
+
+  <label>جنس:
+    <select id="h-mat">
+      <option value="steel">فولاد</option>
+      <option value="cast_iron">چدن</option>
+      <option value="aluminium">آلومینیوم</option>
+      <option value="copper">مس</option>
+      <option value="brass">برنج</option>
+      <option value="phosphor_bronze">برنز فسفری</option>
+    </select>
+  </label>
+
+  <button id="h-btn">محاسبه</button>
+  <output id="h-out"></output>
+</section>
+ <script type="module">
+  let hardness;
+  const btn   = document.getElementById('h-btn');
+  const $val  = document.getElementById('h-val');
+  const $from = document.getElementById('h-from');
+  const $to   = document.getElementById('h-to');
+  const $mat  = document.getElementById('h-mat');
+  const $out  = document.getElementById('h-out');
+
+  btn.addEventListener('click', async () => {
+    if (!hardness) {
+      hardness = await import('./convertHardness.js');   /* ← یا ./js/convertHardness.js */
+    }
+    const v = parseFloat($val.value);
+    if (isNaN(v)) { $out.value = '—'; return; }
+    try {
+      const res = hardness.convert(v, $from.value, $to.value, $mat.value);
+      $out.value = res.toFixed(1);
+    } catch (e) {
+      $out.value = e.message;
+    }
+  });
+</script>
+
 </body>
 </html>
