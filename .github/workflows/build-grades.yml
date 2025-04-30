@@ -1,6 +1,6 @@
 name: build-grades
 on:
-  workflow_dispatch:          # اجرای دستی
+  workflow_dispatch:
   push:
     paths:
       - build_grades_split.py
@@ -16,6 +16,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: Install dependencies          # ← افزوده شد
+        run: pip install pandas
 
       - name: Run script – generate JSON files
         run: python build_grades_split.py
