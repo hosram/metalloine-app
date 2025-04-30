@@ -5,76 +5,89 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>تبدیل سختی</title>
 
-  <!-- فونت و استایل واحد (همان که در index.html است) -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
+
   <style>
   :root{--c-primary:#8E1F61;--c-accent:#8FA2B2;--glass:rgba(255,255,255,.10);--r:24px;--g:12px}
   *{box-sizing:border-box;margin:0}
   body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif}
 
   /* نوار بالا */
-  #topbar{display:flex;justify-content:center;align-items:center;height:64px;
-          margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);
+  #topbar{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
+          background:var(--glass);backdrop-filter:blur(24px);
           border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
   .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
   .logo .brand{color:var(--c-primary)}
   .logo .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
 
-  /* فرم و ورودی‌ها */
+  /* دکمه مشترک */
+  .btn-main{padding:14px 32px;border:none;border-radius:var(--r);cursor:pointer;
+            background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+            color:#fff;font-weight:700;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+  .btn-icon{display:flex;align-items:center;justify-content:center;gap:4px}
+  .btn-flat{padding:8px 16px;font-size:.85rem;border:none;border-radius:var(--r);cursor:pointer;
+            background:#444;color:#fff}
+
+  /* فرم */
   form{display:grid;grid-template-columns:1fr 1fr;gap:var(--g)}
-  label{display:flex;flex-direction:column;font-size:.85rem}
+  label{display:flex;flex-direction:column;font-size:.9rem}
   input,select{padding:8px;border:none;border-radius:var(--r);
                background:var(--glass);color:#fff;font:inherit;backdrop-filter:blur(24px)}
   select,option{background:#1a1a1a;color:#fff} select:focus{outline:2px solid var(--c-primary)}
   .row-2{grid-column:span 2}
 
-  /* دکمه مشترک */
-  .btn-main{padding:14px 32px;border:none;border-radius:var(--r);cursor:pointer;
-            background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
-            color:#fff;font-weight:700;box-shadow:0 4px 10px rgba(0,0,0,.4)}
-
-  /* کارت کدر شیشه‌ای */
+  /* کارت */
   .card{background:var(--glass);backdrop-filter:blur(24px);
-        border:1px solid rgba(255,255,255,.25);border-radius:var(--r);
-        padding:16px}
+        border:1px solid rgba(255,255,255,.25);border-radius:var(--r);padding:16px}
 
   /* خروجی */
-  #h-out{font-size:1.4rem;font-weight:700;text-align:center;margin-top:8px}
+  #h-out{font-size:1.8rem;font-weight:700;text-align:center;margin-top:4px;user-select:none;cursor:pointer}
+  #copy-toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+              background:#333;color:#fff;padding:8px 16px;border-radius:var(--r);opacity:0;transition:.3s}
 
-  /* لینک بازگشت */
-  .back{display:block;text-align:center;color:#fff;margin:2rem auto 0;text-decoration:none}
+  /* جدول مرجع */
+  #reference{margin-top:2rem}
+  #reference input{margin-bottom:8px;width:100%}
+  #tableBox{max-height:240px;overflow:auto;border:1px solid rgba(255,255,255,.2);border-radius:var(--r)}
+  table{width:100%;border-collapse:collapse;font-size:.8rem}
+  th,td{padding:4px 6px;text-align:center}
+  tr:nth-child(even){background:rgba(255,255,255,.04)}
+
+  /* هشدار */
+  #warn{color:#ffb84d;font-size:.8rem;text-align:center;margin-top:4px;min-height:16px}
 
   @media(max-width:600px){form{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 
-<!-- نوار بالا مانند صفحهٔ اصلی -->
 <header id="topbar">
   <span class="logo"><span class="ring"></span><span class="brand">Metalloine</span></span>
 </header>
 
-<!-- فرم درون کارت -->
-<section style="max-width:420px;margin:0 auto">
+<main style="max-width:420px;margin:0 auto">
   <form id="hardnessCard" class="card">
     <label class="row-2">مقدار
-      <input id="h-val" type="number" placeholder="200">
+      <input id="h-val" type="number" placeholder="200" inputmode="decimal">
     </label>
 
     <label>از:
       <select id="h-from">
-        <option>HB</option><option>HRC</option>
-        <option>HRB</option><option>HV</option>
+        <option value="HB">⚫ HB</option><option value="HRC">⬤ HRC</option>
+        <option value="HRB">◯ HRB</option><option value="HV">◆ HV</option>
       </select>
     </label>
 
-    <label>به:
-      <select id="h-to">
-        <option>HRC</option><option>HB</option>
-        <option>HRB</option><option>HV</option>
-      </select>
-    </label>
+    <div style="display:flex;align-items:end;gap:4px">
+      <label style="flex:1">به:
+        <select id="h-to">
+          <option value="HRC">⬤ HRC</option><option value="HB">⚫ HB</option>
+          <option value="HRB">◯ HRB</option><option value="HV">◆ HV</option>
+        </select>
+      </label>
+      <!-- دکمه جابجایی -->
+      <button id="swapBtn" type="button" class="btn-flat" aria-label="swap scales">↔︎</button>
+    </div>
 
     <label class="row-2">جنس:
       <select id="h-mat">
@@ -89,31 +102,116 @@
 
     <button id="h-btn" class="btn-main row-2" type="button">محاسبه</button>
     <output id="h-out" class="row-2">—</output>
+    <div id="warn" class="row-2"></div>
   </form>
-</section>
 
-<a href="index.html" class="back">⬅ بازگشت به صفحهٔ اصلی</a>
+  <!-- جدول مرجع -->
+  <details id="reference">
+    <summary style="cursor:pointer;margin-top:1rem">جدول مرجع ASTM/ISO</summary>
+    <input id="search" type="search" placeholder="جست‌وجو…">
+    <div id="tableBox"><table id="refTable"></table></div>
+  </details>
+</main>
+
+<a href="index.html" class="btn-main btn-icon" style="display:block;width:90%;max-width:420px;margin:2rem auto;text-align:center">⬅ بازگشت به صفحهٔ اصلی</a>
+
+<div id="copy-toast">کپی شد!</div>
 
 <script type="module">
+import DATA from './convertHardness.js'; // dynamic import later; we need structure here
+</script>
+<script type="module">
 let hardness;
-const btn   = document.getElementById('h-btn');
 const $val  = document.getElementById('h-val');
 const $from = document.getElementById('h-from');
 const $to   = document.getElementById('h-to');
 const $mat  = document.getElementById('h-mat');
 const $out  = document.getElementById('h-out');
+const $warn = document.getElementById('warn');
+const toast = document.getElementById('copy-toast');
+const btnCalc= document.getElementById('h-btn');
+const swapBtn= document.getElementById('swapBtn');
 
-btn.addEventListener('click', async () => {
-  if (!hardness) hardness = await import('./convertHardness.js');
-  const v = parseFloat($val.value);
-  if (isNaN(v)){ $out.textContent='—'; return; }
+/* lazy load hardness */
+async function load(){ if(!hardness) hardness = await import('./convertHardness.js'); }
+
+/* animate like index */
+function animate(el,from,to){
+  const dur=600,start=Date.now();
+  (function step(){
+    const p=Math.min((Date.now()-start)/dur,1);
+    const val=(from+(to-from)*p).toFixed(1);
+    el.textContent=val;
+    if(p<1) requestAnimationFrame(step);})();
+}
+
+/* update output */
+async function update(){
+  await load();
+  const v=parseFloat($val.value);
+  if(isNaN(v)){ $out.textContent='—';return; }
   try{
-    const res = hardness.convert(v,$from.value,$to.value,$mat.value);
-    $out.textContent = res.toFixed(1);
-  }catch(e){
-    $out.textContent = e.message;
-  }
+    const res= hardness.convert(v,$from.value,$to.value,$mat.value);
+    const prev=parseFloat($out.dataset.prev)||0;
+    animate($out,prev,res);
+    $out.dataset.prev=res;
+    rangeCheck(v,$from.value,$mat.value);
+  }catch(e){ $out.textContent=e.message; }
+}
+
+/* range / material advisory */
+function rangeCheck(val,scale,mat){
+  const msg = (scale==='HRB'&&mat==='steel')? 'HRB برای فولاد سخت‌شده معمول نیست.' : '';
+  $warn.textContent=msg;
+}
+
+/* listeners */
+['input','change'].forEach(ev=>{
+  $val.addEventListener(ev,update);
+  $from.addEventListener(ev,update);
+  $to.addEventListener(ev,update);
+  $mat.addEventListener(ev,update);
 });
+btnCalc.addEventListener('click',update);
+
+/* swap scales */
+swapBtn.addEventListener('click',()=>{
+  const a=$from.value; $from.value=$to.value; $to.value=a; update();
+});
+
+/* copy on click */
+$out.addEventListener('click',async()=>{
+  const val=$out.textContent.trim();
+  if(val==='—') return;
+  try{ await navigator.clipboard.writeText(val); showToast(); }catch{}
+});
+function showToast(){
+  toast.style.opacity='1';
+  setTimeout(()=>toast.style.opacity='0',1200);
+}
+
+/* build reference table */
+(async function buildTable(){
+  await load();
+  const tbl=document.getElementById('refTable');
+  tbl.innerHTML='<thead><tr><th>ماده</th><th>HB</th><th>HRC</th><th>HRB</th><th>HV</th></tr></thead><tbody></tbody>';
+  const tb=tbl.querySelector('tbody');
+  Object.entries(hardness.listMaterials? hardness.listMaterials():{});
+  const mats= ['steel','cast_iron','aluminium','copper','brass','phosphor_bronze'];
+  mats.forEach(mat=>{
+    const rows= hardness.convert? hardness.getRows? []:[]:[]; // placeholder, we fill later via DATA
+  });
+})();
+
+/* simple search filter */
+const search=document.getElementById('search');
+if(search){
+  search.addEventListener('input',()=>{
+    const q=search.value.trim();
+    const rows=document.querySelectorAll('#refTable tbody tr');
+    rows.forEach(r=>{ r.style.display=r.textContent.includes(q)?'':'none'; });
+  });
+}
 </script>
 </body>
 </html>
