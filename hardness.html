@@ -191,17 +191,20 @@ function showToast(){
 }
 
 /* build reference table */
-(async function buildTable(){
-  await load();
-  const tbl=document.getElementById('refTable');
-  tbl.innerHTML='<thead><tr><th>ماده</th><th>HB</th><th>HRC</th><th>HRB</th><th>HV</th></tr></thead><tbody></tbody>';
-  const tb=tbl.querySelector('tbody');
-  Object.entries(hardness.listMaterials? hardness.listMaterials():{});
-  const mats= ['steel','cast_iron','aluminium','copper','brass','phosphor_bronze'];
+async function buildTable(){
+  await load();                               // ماژول را بیاور
+  const tblBody=document.querySelector('#refTable tbody');
+  const mats=['steel','cast_iron','aluminium','copper','brass','phosphor_bronze'];
   mats.forEach(mat=>{
-    const rows= hardness.convert? hardness.getRows? []:[]:[]; // placeholder, we fill later via DATA
+    hardness.getRows(mat).forEach(r=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${mat}</td><td>${r.HB??'–'}</td><td>${r.HRC??'–'}</td>
+                    <td>${r.HRB??'–'}</td><td>${r.HV??'–'}</td>`;
+      tblBody.appendChild(tr);
+    });
   });
-})();
+}
+
 
 /* simple search filter */
 const search=document.getElementById('search');
