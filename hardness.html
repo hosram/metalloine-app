@@ -1,127 +1,119 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>تبدیل سختی</title>
-  <!-- اگر style.css یا هر فایلی در index.html لینک شده بود، این‌جا هم همان را قرار دهید -->
-  <link rel="stylesheet" href="style.css" />
-  <!-- استایل یکسان با index.html -->
-<style>
- :root{
-   --c-primary:#8E1F61; --c-accent:#8FA2B2;
-   --glass:rgba(255,255,255,.10); --r:24px; --g:12px;
- }
- *{box-sizing:border-box;margin:0}
- body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif}
 
- /* سرصفحه و لوگو */
- #topbar{display:flex;justify-content:center;align-items:center;height:64px;
-         margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);
-         border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
- .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
- .logo .brand{color:var(--c-primary)}
- .logo .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+  <!-- فونت و استایل واحد (همان که در index.html است) -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
+  <style>
+  :root{--c-primary:#8E1F61;--c-accent:#8FA2B2;--glass:rgba(255,255,255,.10);--r:24px;--g:12px}
+  *{box-sizing:border-box;margin:0}
+  body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif}
 
- /* صفحهٔ فرود (در hardness استفاده نمی‌شود اما بی‌ضرر است) */
- #landing{height:calc(100vh - 64px - 2*var(--g));display:grid;place-items:center}
- .btn-main{padding:14px 32px;border:none;border-radius:var(--r);cursor:pointer;
-           background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
-           color:#fff;font-weight:700;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+  /* نوار بالا */
+  #topbar{display:flex;justify-content:center;align-items:center;height:64px;
+          margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);
+          border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
+  .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
+  .logo .brand{color:var(--c-primary)}
+  .logo .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
 
- /* اپلیکیشن / فرم‌ها */
- #app{display:none;padding:var(--g)}
- form{display:grid;grid-template-columns:1fr 1fr;gap:var(--g)}
- label{display:flex;flex-direction:column;font-size:.85rem}
- input,select{
-   padding:8px;border:none;border-radius:var(--r);
-   background:var(--glass);color:#fff;font:inherit;backdrop-filter:blur(24px)
- }
- select,option{background:#1a1a1a;color:#fff} select:focus{outline:2px solid var(--c-primary)}
- .row-2{grid-column:span 2}
- button[type=submit],.btn-main{
-   padding:14px;border:none;border-radius:var(--r);cursor:pointer;
-   background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
-   color:#fff;font-weight:700
- }
- #btnBack{display:none;margin-top:var(--g);width:100%;
-          background:#444;border:none;border-radius:var(--r);color:#fff;padding:12px;font-weight:600;cursor:pointer}
+  /* فرم و ورودی‌ها */
+  form{display:grid;grid-template-columns:1fr 1fr;gap:var(--g)}
+  label{display:flex;flex-direction:column;font-size:.85rem}
+  input,select{padding:8px;border:none;border-radius:var(--r);
+               background:var(--glass);color:#fff;font:inherit;backdrop-filter:blur(24px)}
+  select,option{background:#1a1a1a;color:#fff} select:focus{outline:2px solid var(--c-primary)}
+  .row-2{grid-column:span 2}
 
- /* کارت‌ها */
- #cards{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);margin-top:var(--g)}
- .card{background:var(--glass);backdrop-filter:blur(24px);
-       border:1px solid rgba(255,255,255,.25);border-radius:var(--r);
-       padding:16px;text-align:center}
- .value{font-size:1.4rem;font-weight:700;margin-top:4px}
- @media(max-width:600px){form,#cards{grid-template-columns:1fr}}
+  /* دکمه مشترک */
+  .btn-main{padding:14px 32px;border:none;border-radius:var(--r);cursor:pointer;
+            background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+            color:#fff;font-weight:700;box-shadow:0 4px 10px rgba(0,0,0,.4)}
 
- /* پاورقی */
- footer{position:fixed;bottom:8px;left:0;right:0;text-align:center;
-        font-size:.7rem;opacity:.75;line-height:1.4}
-</style>
+  /* کارت کدر شیشه‌ای */
+  .card{background:var(--glass);backdrop-filter:blur(24px);
+        border:1px solid rgba(255,255,255,.25);border-radius:var(--r);
+        padding:16px}
 
+  /* خروجی */
+  #h-out{font-size:1.4rem;font-weight:700;text-align:center;margin-top:8px}
+
+  /* لینک بازگشت */
+  .back{display:block;text-align:center;color:#fff;margin:2rem auto 0;text-decoration:none}
+
+  @media(max-width:600px){form{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
 
-<h1 style="text-align:center;margin-top:1rem;">تبدیل سختی</h1>
+<!-- نوار بالا مانند صفحهٔ اصلی -->
+<header id="topbar">
+  <span class="logo"><span class="ring"></span><span class="brand">Metalloine</span></span>
+</header>
 
-<section id="hardness-card" class="card">
-  <h2>مقدار:</h2>
-  <input id="h-val" type="number" placeholder="200" />
+<!-- فرم درون کارت -->
+<section style="max-width:420px;margin:0 auto">
+  <form id="hardnessCard" class="card">
+    <label class="row-2">مقدار
+      <input id="h-val" type="number" placeholder="200">
+    </label>
 
-  <h2>از:</h2>
-  <select id="h-from">
-    <option>HB</option><option>HRC</option>
-    <option>HRB</option><option>HV</option>
-  </select>
+    <label>از:
+      <select id="h-from">
+        <option>HB</option><option>HRC</option>
+        <option>HRB</option><option>HV</option>
+      </select>
+    </label>
 
-  <h2>به:</h2>
-  <select id="h-to">
-    <option>HRC</option><option>HB</option>
-    <option>HRB</option><option>HV</option>
-  </select>
+    <label>به:
+      <select id="h-to">
+        <option>HRC</option><option>HB</option>
+        <option>HRB</option><option>HV</option>
+      </select>
+    </label>
 
-  <h2>جنس:</h2>
-  <select id="h-mat">
-    <option value="steel">فولاد</option>
-    <option value="cast_iron">چدن</option>
-    <option value="aluminium">آلومینیوم</option>
-    <option value="copper">مس</option>
-    <option value="brass">برنج</option>
-    <option value="phosphor_bronze">برنز فسفری</option>
-  </select>
+    <label class="row-2">جنس:
+      <select id="h-mat">
+        <option value="steel">فولاد</option>
+        <option value="cast_iron">چدن</option>
+        <option value="aluminium">آلومینیوم</option>
+        <option value="copper">مس</option>
+        <option value="brass">برنج</option>
+        <option value="phosphor_bronze">برنز فسفری</option>
+      </select>
+    </label>
 
-  <button id="h-btn" style="margin-top:1rem;">محاسبه</button>
-  <output id="h-out" style="display:block;font-size:1.5rem;margin-top:0.5rem;">—</output>
+    <button id="h-btn" class="btn-main row-2" type="button">محاسبه</button>
+    <output id="h-out" class="row-2">—</output>
+  </form>
 </section>
 
-<!-- دکمهٔ بازگشت به صفحهٔ اصلی -->
-<div style="text-align:center;margin-top:2rem;">
-  <a href="index.html" style="color:#fff;text-decoration:none;">⬅ بازگشت به صفحهٔ اصلی</a>
-</div>
+<a href="index.html" class="back">⬅ بازگشت به صفحهٔ اصلی</a>
 
 <script type="module">
-  let hardness;
-  const btn   = document.getElementById('h-btn');
-  const $val  = document.getElementById('h-val');
-  const $from = document.getElementById('h-from');
-  const $to   = document.getElementById('h-to');
-  const $mat  = document.getElementById('h-mat');
-  const $out  = document.getElementById('h-out');
+let hardness;
+const btn   = document.getElementById('h-btn');
+const $val  = document.getElementById('h-val');
+const $from = document.getElementById('h-from');
+const $to   = document.getElementById('h-to');
+const $mat  = document.getElementById('h-mat');
+const $out  = document.getElementById('h-out');
 
-  btn.addEventListener('click', async () => {
-    if (!hardness) {
-      hardness = await import('./convertHardness.js');   // چون هر دو فایل در ریشه هستند
-    }
-    const v = parseFloat($val.value);
-    if (isNaN(v)) { $out.textContent = '—'; return; }
-    try {
-      const res = hardness.convert(v, $from.value, $to.value, $mat.value);
-      $out.textContent = res.toFixed(1);
-    } catch (e) {
-      $out.textContent = e.message;
-    }
-  });
+btn.addEventListener('click', async () => {
+  if (!hardness) hardness = await import('./convertHardness.js');
+  const v = parseFloat($val.value);
+  if (isNaN(v)){ $out.textContent='—'; return; }
+  try{
+    const res = hardness.convert(v,$from.value,$to.value,$mat.value);
+    $out.textContent = res.toFixed(1);
+  }catch(e){
+    $out.textContent = e.message;
+  }
+});
 </script>
 </body>
 </html>
