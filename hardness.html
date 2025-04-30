@@ -6,6 +6,60 @@
   <title>تبدیل سختی</title>
   <!-- اگر style.css یا هر فایلی در index.html لینک شده بود، این‌جا هم همان را قرار دهید -->
   <link rel="stylesheet" href="style.css" />
+  <!-- استایل یکسان با index.html -->
+<style>
+ :root{
+   --c-primary:#8E1F61; --c-accent:#8FA2B2;
+   --glass:rgba(255,255,255,.10); --r:24px; --g:12px;
+ }
+ *{box-sizing:border-box;margin:0}
+ body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif}
+
+ /* سرصفحه و لوگو */
+ #topbar{display:flex;justify-content:center;align-items:center;height:64px;
+         margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);
+         border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
+ .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
+ .logo .brand{color:var(--c-primary)}
+ .logo .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+
+ /* صفحهٔ فرود (در hardness استفاده نمی‌شود اما بی‌ضرر است) */
+ #landing{height:calc(100vh - 64px - 2*var(--g));display:grid;place-items:center}
+ .btn-main{padding:14px 32px;border:none;border-radius:var(--r);cursor:pointer;
+           background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+           color:#fff;font-weight:700;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+
+ /* اپلیکیشن / فرم‌ها */
+ #app{display:none;padding:var(--g)}
+ form{display:grid;grid-template-columns:1fr 1fr;gap:var(--g)}
+ label{display:flex;flex-direction:column;font-size:.85rem}
+ input,select{
+   padding:8px;border:none;border-radius:var(--r);
+   background:var(--glass);color:#fff;font:inherit;backdrop-filter:blur(24px)
+ }
+ select,option{background:#1a1a1a;color:#fff} select:focus{outline:2px solid var(--c-primary)}
+ .row-2{grid-column:span 2}
+ button[type=submit],.btn-main{
+   padding:14px;border:none;border-radius:var(--r);cursor:pointer;
+   background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+   color:#fff;font-weight:700
+ }
+ #btnBack{display:none;margin-top:var(--g);width:100%;
+          background:#444;border:none;border-radius:var(--r);color:#fff;padding:12px;font-weight:600;cursor:pointer}
+
+ /* کارت‌ها */
+ #cards{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);margin-top:var(--g)}
+ .card{background:var(--glass);backdrop-filter:blur(24px);
+       border:1px solid rgba(255,255,255,.25);border-radius:var(--r);
+       padding:16px;text-align:center}
+ .value{font-size:1.4rem;font-weight:700;margin-top:4px}
+ @media(max-width:600px){form,#cards{grid-template-columns:1fr}}
+
+ /* پاورقی */
+ footer{position:fixed;bottom:8px;left:0;right:0;text-align:center;
+        font-size:.7rem;opacity:.75;line-height:1.4}
+</style>
+
 </head>
 <body>
 
