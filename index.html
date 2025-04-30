@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Metalline | ترازو</title>
+<title>Metalline | فولادیار</title>
 
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
@@ -69,8 +69,18 @@
 </header>
 
 <section id="landing">
-  <button id="btnStart" class="btn-main">محاسبه وزن</button>
+  <div style="display:flex;gap:1rem;justify-content:center;">
+    <button id="btnStart" class="btn-main">محاسبه وزن</button>
+
+    <!-- دکمة جدید مبدّل سختی -->
+    <a href="hardness.html"
+       class="btn-main"
+       style="display:inline-block;text-decoration:none;">
+       مبدّل سختی
+    </a>
+  </div>
 </section>
+
 
 <section id="app">
   <form id="f">
@@ -245,12 +255,5 @@ form.onsubmit=function(e){
   }
 };
 </script>
-      <div class="card" style="margin:2rem auto;text-align:center;max-width:320px;">
-  <a href="hardness.html"
-     style="display:block;padding:1rem 2rem;text-decoration:none;">
-    ➡ مبدّل سختی
-  </a>
-</div>
-
 </body>
 </html>
