@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>تبدیل سختی (نسخهٔ بهبودیافته)</title>
+  <title>تبدیل سختی (نسخه اصلاح‌شده)</title>
 
   <!-- فونت فارسی Vazirmatn -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
@@ -76,6 +76,10 @@
       padding: 10px;
     }
     select:focus, input:focus { outline: 2px solid var(--c-primary); }
+    select, option {
+      background: #1a1a1a; /* تا در تم تاریک مشخص باشد */
+      color: #fff;
+    }
 
     .btn-flat {
       background: #444; color: #fff; cursor: pointer;
@@ -169,11 +173,12 @@
 
     <!-- واحد از -->
     <label>از:
+      <!-- به‌جای نمادهای سیاه (⚫ یا ⬤)، از نمادهای روشن مثل ⚪، ○ استفاده می‌کنیم -->
       <select id="h-from">
-        <option value="HB">⚫ HB</option>
-        <option value="HRC">⬤ HRC</option>
-        <option value="HRB">◯ HRB</option>
-        <option value="HV">◆ HV</option>
+        <option value="HB">⚪ HB</option>
+        <option value="HRC">○ HRC</option>
+        <option value="HRB">◌ HRB</option>
+        <option value="HV">◇ HV</option>
       </select>
     </label>
 
@@ -181,10 +186,10 @@
     <div style="display:flex;align-items:end;gap:4px">
       <label style="flex:1">به:
         <select id="h-to">
-          <option value="HRC">⬤ HRC</option>
-          <option value="HB">⚫ HB</option>
-          <option value="HRB">◯ HRB</option>
-          <option value="HV">◆ HV</option>
+          <option value="HRC">○ HRC</option>
+          <option value="HB">⚪ HB</option>
+          <option value="HRB">◌ HRB</option>
+          <option value="HV">◇ HV</option>
         </select>
       </label>
       <button id="swapBtn" type="button" class="btn-flat" aria-label="جابجایی واحد">↔︎</button>
@@ -265,7 +270,7 @@ const toast = document.getElementById('copy-toast');
 const searchInput = document.getElementById('search');
 const refDetails = document.getElementById('reference');
 
-/* -------- تنظیم و بازیابی از LocalStorage ---------- */
+/* -------- لود/ذخیره در LocalStorage (اختیاری) ---------- */
 function saveState(){
   const data = {
     val: $val.value,
@@ -333,7 +338,7 @@ function showSuggestions(arr, scale){
 
 /* ---------- تابع اصلی آپدیت/محاسبه ---------- */
 async function update(){
-  // ذخیره در لوکال‌استوریج
+  // ذخیره در لوکال‌استوریج (اختیاری)
   saveState();
 
   const v = parseFloat($val.value);
@@ -346,12 +351,11 @@ async function update(){
   }
 
   // محدوده‌های معقول برای هر مقیاس
-  // (مثلاً برای HRC معمولاً 0 تا 70)
-  let maxVal = 9999; // به‌صورت پیش‌فرض عدد بالایی
-  if($from.value === 'HRC') maxVal = 70;
-  if($from.value === 'HRB') maxVal = 100;   // HRB تا حدود 100
-  if($from.value === 'HB')  maxVal = 750;   // به‌صورت عمومی تا 750 (برای فولاد)
-  if($from.value === 'HV')  maxVal = 2000;  // حدودی
+  let maxVal = 9999;
+  if($from.value.includes('HRC')) maxVal = 70;
+  if($from.value.includes('HRB')) maxVal = 100;
+  if($from.value.includes('HB'))  maxVal = 750;
+  if($from.value.includes('HV'))  maxVal = 2000;
 
   if(v < 0 || v > maxVal) {
     $warn.textContent = `مقدار واردشده (${v}) از محدودهٔ معمول برای ${$from.value} خارج است!`;
@@ -359,31 +363,27 @@ async function update(){
     $warn.textContent = '';
   }
 
-  // اگر ترکیب واحد و جنس نامعمول باشد:
-  if($mat.value==='aluminium' && $from.value==='HRC'){
+  // هشدار برای ترکیب نامعمول
+  if($mat.value==='aluminium' && $from.value.includes('HRC')){
     $warn.textContent += ' - آلومینیوم معمولاً در مقیاس HRC سنجیده نمی‌شود.';
   }
 
-  // فراخوانی تنبل ماژول تبدیل سختی
   await loadHardness();
-  // محاسبه تبدیل
-  const resNum = hardness.convert(v, $from.value, $to.value, $mat.value);
+  const resNum = hardness.convert(v, $from.value.replace(/\D+/,''), $to.value.replace(/\D+/,''), $mat.value);
 
   // انیمیشن خروجی
   const prev = parseFloat($out.dataset.prev || "0");
   animateNumber($out, prev, resNum);
   $out.dataset.prev = resNum;
 
-  // لود گریدها
   await loadGrades();
-
-  // جست‌وجوی گریدهای نزدیک در جدول (± چند عدد)
-  // اگر "HB" باشد، ±5  یا اگر HRC/HRB باشد ±2 ...
+  // برای تشخیص گریدهای نزدیک
   let delta = 2;
-  if($from.value==='HB') delta=5;
-  if($from.value==='HV') delta=10;
+  if($from.value.includes('HB')) delta=5;
+  if($from.value.includes('HV')) delta=10;
   const list = gradesMap[$mat.value] || [];
-  const scale = $from.value;
+  // از مقدار scale فقط حروف اصلی را می‌گیریم (HB/HRC/HRB/HV)
+  const scale = $from.value.replace(/\D+/,''); 
   const near = list.filter(g=>{
     const lo = g[scale+'min'];
     const hi = g[scale+'max'];
@@ -423,15 +423,14 @@ btnCalc.addEventListener('click', update);
 refDetails.addEventListener('toggle', async e=>{
   if(e.target.open){
     const tbody = document.querySelector('#refTable tbody');
-    // اگر خالی است، پرش کنیم
     if(!tbody.children.length){
       await loadGrades();
       await loadHardness();
-      Object.entries(gradesMap).forEach(([mat, rows])=>{
+      Object.entries(gradesMap).forEach(([m, rows])=>{
         rows.forEach(r=>{
           const tr=document.createElement('tr');
           tr.innerHTML=`
-            <td>${mat}</td>
+            <td>${m}</td>
             <td>${(r.HBmin ?? '—') + '-' + (r.HBmax ?? '—')}</td>
             <td>${(r.HRCmin ?? '—') + '-' + (r.HRCmax ?? '—')}</td>
             <td>${(r.HRBmin ?? '—') + '-' + (r.HRBmax ?? '—')}</td>
