@@ -1,103 +1,225 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Metalline | فولادیار</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>محاسبه وزن | نمونه بهبودیافته</title>
 
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
+  <!-- فونت فارسی Vazirmatn -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
 
-<style>
- :root{
-   --c-primary:#8E1F61; --c-accent:#8FA2B2;
-   --glass:rgba(255,255,255,.10); --r:24px; --g:12px;
- }
- *{box-sizing:border-box;margin:0}
- body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif}
+  <style>
+    :root {
+      --c-primary: #8E1F61;
+      --c-accent:  #8FA2B2;
+      --glass: rgba(255,255,255,.10);
+      --r: 24px;
+      --g: 12px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: "Vazirmatn", sans-serif;
+    }
 
- /* سرصفحه و لوگو */
- #topbar{display:flex;justify-content:center;align-items:center;height:64px;
-         margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);
-         border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
- .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
- .logo .brand{color:var(--c-primary)}
- .logo .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+    /* سرصفحه و لوگو */
+    #topbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 64px;
+      margin: var(--g);
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: var(--r);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .logo .brand {
+      color: var(--c-primary);
+    }
+    .logo .ring {
+      width: 22px;
+      height: 22px;
+      border: 6px solid var(--c-accent);
+      border-radius: 50%;
+    }
 
- /* صفحهٔ فرود */
- #landing{height:calc(100vh - 64px - 2*var(--g));display:grid;place-items:center}
- .btn-main{padding:14px 32px;border:none;border-radius:var(--r);cursor:pointer;
-           background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
-           color:#fff;font-weight:700;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+    /* صفحه فرود */
+    #landing {
+      height: calc(100vh - 64px - 2*var(--g));
+      display: grid;
+      place-items: center;
+    }
+    .btn-main {
+      padding: 14px 32px;
+      border: none;
+      border-radius: var(--r);
+      cursor: pointer;
+      background: linear-gradient(135deg,var(--c-primary), var(--c-accent));
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(0,0,0,.4);
+      text-decoration: none; /* برای لینک‌ها */
+    }
 
- /* اپلیکیشن */
- #app{display:none;padding:var(--g)}
- form{display:grid;grid-template-columns:1fr 1fr;gap:var(--g)}
- label{display:flex;flex-direction:column;font-size:.85rem}
- input,select{
-   padding:8px;border:none;border-radius:var(--r);
-   background:var(--glass);color:#fff;font:inherit;backdrop-filter:blur(24px)
- }
- select,option{background:#1a1a1a;color:#fff} select:focus{outline:2px solid var(--c-primary)}
- .row-2{grid-column:span 2}
- button[type=submit]{padding:14px;border:none;border-radius:var(--r);cursor:pointer;
-                     background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
-                     color:#fff;font-weight:700}
- #btnBack{display:none;margin-top:var(--g);width:100%;
-          background:#444;border:none;border-radius:var(--r);color:#fff;padding:12px;font-weight:600;cursor:pointer}
+    /* اپلیکیشن */
+    #app {
+      display: none;
+      padding: var(--g);
+    }
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--g);
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: .85rem;
+    }
+    input, select {
+      padding: 8px;
+      border: none;
+      border-radius: var(--r);
+      background: var(--glass);
+      color: #fff;
+      font: inherit;
+      backdrop-filter: blur(24px);
+    }
+    select, option {
+      background: #1a1a1a;
+      color: #fff;
+    }
+    select:focus {
+      outline: 2px solid var(--c-primary);
+    }
+    .row-2 {
+      grid-column: span 2;
+    }
+    button[type=submit] {
+      padding: 14px;
+      border: none;
+      border-radius: var(--r);
+      cursor: pointer;
+      background: linear-gradient(135deg,var(--c-primary),var(--c-accent));
+      color: #fff;
+      font-weight: 700;
+    }
+    #btnBack {
+      display: none;
+      margin-top: var(--g);
+      width: 100%;
+      background: #444;
+      border: none;
+      border-radius: var(--r);
+      color: #fff;
+      padding: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
- /* کارت‌ها */
- #cards{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);margin-top:var(--g)}
- .card{background:var(--glass);backdrop-filter:blur(24px);
-       border:1px solid rgba(255,255,255,.25);border-radius:var(--r);
-       padding:16px;text-align:center}
- .value{font-size:1.4rem;font-weight:700;margin-top:4px}
- @media(max-width:600px){form,#cards{grid-template-columns:1fr}}
+    /* کارت‌ها */
+    #cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--g);
+      margin-top: var(--g);
+    }
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: var(--r);
+      padding: 16px;
+      text-align: center;
+    }
+    .value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-top: 4px;
+      min-height: 1.4em; /* برای جلوگیری از جابه‌جایی در تغییر عدد */
+    }
+    @media(max-width:600px) {
+      form, #cards {
+        grid-template-columns: 1fr;
+      }
+    }
 
- /* پاورقی */
- footer{position:fixed;bottom:8px;left:0;right:0;text-align:center;
-        font-size:.7rem;opacity:.75;line-height:1.4}
-</style>
+    /* خطای فرم */
+    .error-msg {
+      color: #ff8080;
+      margin-top: 4px;
+      font-size: 0.8rem;
+      display: none;
+    }
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+    /* پاورقی */
+    footer {
+      position: fixed;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: .7rem;
+      opacity: .75;
+      line-height: 1.4;
+    }
+  </style>
+
+  <!-- اسکریپت تلگرام -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 
 <header id="topbar">
-  <span class="logo"><span class="ring"></span><span class="brand">Metalloine</span>
-</span>
+  <span class="logo">
+    <span class="ring"></span>
+    <span class="brand">Metalloine</span>
+  </span>
 </header>
 
+<!-- سکشن فرود (Landing) -->
 <section id="landing">
   <div style="display:flex;gap:1rem;justify-content:center;">
     <button id="btnStart" class="btn-main">محاسبه وزن</button>
-
-    <!-- دکمة جدید مبدّل سختی -->
-    <a href="hardness.html"
-       class="btn-main"
-       style="display:inline-block;text-decoration:none;">
-       مبدّل سختی
-    </a>
+    <a href="hardness.html" class="btn-main">مبدّل سختی</a>
   </div>
 </section>
 
-
+<!-- سکشن اصلی برنامه -->
 <section id="app">
   <form id="f">
     <!-- ماده و مقطع -->
     <label>نوع ماده
-      <select id="mat">
-        <option value="7800">فولاد</option><option value="8900">مس</option>
-        <option value="2700">آلومینیوم</option><option value="8050">فولاد زنگ‌نزن</option>
-        <option value="8600">برنج</option><option value="8900">کبالت</option>
-        <option value="7100">چدن</option><option value="4430">تیتانیوم</option>
-        <option value="8190">اینکونل</option><option value="8900">فسفر برنز</option>
+      <select id="mat" oninput="autoCalc()">
+        <option value="7800">فولاد</option>
+        <option value="8900">مس</option>
+        <option value="2700">آلومینیوم</option>
+        <option value="8050">فولاد زنگ‌نزن</option>
+        <option value="8600">برنج</option>
+        <option value="8900">کبالت</option>
+        <option value="7100">چدن</option>
+        <option value="4430">تیتانیوم</option>
+        <option value="8190">اینکونل</option>
+        <option value="8900">فسفر برنز</option>
         <option value="7140">گالوانیزه</option>
       </select>
     </label>
 
     <label>نوع مقطع
-      <select id="sec">
+      <select id="sec" onchange="updateInputs(); autoCalc()">
         <option value="areaRound">میله‌گرد</option>
         <option value="areaPipe">لوله</option>
         <option value="areaBox">پروفیل</option>
@@ -112,148 +234,341 @@
       </select>
     </label>
 
-    <!-- ابعاد (میلی‌متر) -->
-    <label>قطر / ضخامت (میلی‌متر)<input id="d1" type="number" min="0" step="0.1"></label>
-    <label>ارتفاع / قطر داخلی (میلی‌متر)<input id="d2" type="number" min="0" step="0.1"></label>
-    <label>عرض (میلی‌متر)<input id="d3" type="number" min="0" step="0.1"></label>
-    <label>عرض بال (میلی‌متر)<input id="d4" type="number" min="0" step="0.1"></label>
-    <label>ضخامت (میلی‌متر)<input id="d5" type="number" min="0" step="0.1"></label>
-    <label>ضخامت بال (میلی‌متر)<input id="d6" type="number" min="0" step="0.1"></label>
-    <label class="row-2">ضخامت جان (میلی‌متر)<input id="d7" type="number" min="0" step="0.1"></label>
+    <!-- فیلدهای ابعادی -->
+    <label>قطر / ضخامت (میلی‌متر)
+      <input id="d1" type="number" min="0" step="0.1" placeholder="مثلاً 35" oninput="autoCalc()">
+      <span class="error-msg" data-for="d1"></span>
+    </label>
+    <label>ارتفاع / قطر داخلی (میلی‌متر)
+      <input id="d2" type="number" min="0" step="0.1" placeholder="مثلاً 28" oninput="autoCalc()">
+      <span class="error-msg" data-for="d2"></span>
+    </label>
+    <label>عرض (میلی‌متر)
+      <input id="d3" type="number" min="0" step="0.1" placeholder="مثلاً 50" oninput="autoCalc()">
+      <span class="error-msg" data-for="d3"></span>
+    </label>
+    <label>عرض بال (میلی‌متر)
+      <input id="d4" type="number" min="0" step="0.1" placeholder="مثلاً 80" oninput="autoCalc()">
+      <span class="error-msg" data-for="d4"></span>
+    </label>
+    <label>ضخامت (میلی‌متر)
+      <input id="d5" type="number" min="0" step="0.1" placeholder="مثلاً 5" oninput="autoCalc()">
+      <span class="error-msg" data-for="d5"></span>
+    </label>
+    <label>ضخامت بال (میلی‌متر)
+      <input id="d6" type="number" min="0" step="0.1" placeholder="مثلاً 7" oninput="autoCalc()">
+      <span class="error-msg" data-for="d6"></span>
+    </label>
+    <label class="row-2">ضخامت جان (میلی‌متر)
+      <input id="d7" type="number" min="0" step="0.1" placeholder="مثلاً 4" oninput="autoCalc()">
+      <span class="error-msg" data-for="d7"></span>
+    </label>
 
-    <label>طول (سانتی‌متر)<input id="len" type="number" min="0" step="0.1" required></label>
-    <label>تعداد<input id="qty" type="number" min="1" step="1" value="1" required></label>
+    <!-- طول و تعداد -->
+    <label>طول (سانتی‌متر)
+      <input id="len" type="number" min="0" step="0.1" placeholder="مثلاً 100" required oninput="autoCalc()">
+      <span class="error-msg" data-for="len"></span>
+    </label>
+    <label>تعداد
+      <input id="qty" type="number" min="1" step="1" value="1" oninput="autoCalc()">
+      <span class="error-msg" data-for="qty"></span>
+    </label>
 
+    <!-- دکمه محاسبه -->
     <button type="submit" class="row-2">محاسبه</button>
   </form>
 
-  <!-- نتایج -->
+  <!-- بخش نمایش نتایج -->
   <section id="cards">
-    <div class="card"><span>وزن تقریبی هر قطعه</span><div id="w1" class="value">—</div></div>
-    <div class="card"><span>وزن دست‌بالا هر قطعه</span><div id="w2" class="value">—</div></div>
-    <div class="card"><span>وزن تقریبی کل</span><div id="w3" class="value">—</div></div>
-    <div class="card"><span>وزن دست‌بالا کل</span><div id="w4" class="value">—</div></div>
+    <div class="card">
+      <span>وزن تقریبی هر قطعه (کیلوگرم)</span>
+      <div id="w1" class="value">—</div>
+    </div>
+    <div class="card">
+      <span>وزن دست‌بالا هر قطعه (کیلوگرم)</span>
+      <div id="w2" class="value">—</div>
+    </div>
+    <div class="card">
+      <span>وزن تقریبی کل (کیلوگرم)</span>
+      <div id="w3" class="value">—</div>
+    </div>
+    <div class="card">
+      <span>وزن دست‌بالا کل (کیلوگرم)</span>
+      <div id="w4" class="value">—</div>
+    </div>
   </section>
 
   <button id="btnBack">بازگشت به منو</button>
 </section>
 
-<footer>تمامی حقوق این اپ متعلق به شرکت مشاوران پخش برخط فولاد است – نسخه&nbsp;۱٫۰۰</footer>
+<footer>تمامی حقوق این اپ متعلق به شرکت مشاوران پخش برخط فولاد است – نسخه&nbsp;۱٫01</footer>
 
 <script>
-/* نمایش اپ */
-document.getElementById('btnStart').onclick=function(){
-  document.getElementById('landing').style.display='none';
-  document.getElementById('app').style.display='block';
-};
-
-/* بازگشت به فرود */
-document.getElementById('btnBack').onclick=function(){
-  document.getElementById('app').style.display='none';
-  document.getElementById('landing').style.display='grid';
-  document.getElementById('btnBack').style.display='none';
-  /* مخفی کردن دکمه تلگرام (در صورت نمایش) */
-  if(window.Telegram && Telegram.WebApp){Telegram.WebApp.MainButton.hide();}
-};
-
-/* توابع مساحت */
-function areaRound(d){return Math.PI*d*d/4;}
-function areaPipe(d,o){return areaRound(d)-areaRound(o);}
-function areaSquare(a){return a*a;}
-function areaHex(a){return 2.598*a*a;}
-function areaFlat(b,t){return b*t;}
-function areaAngle(b,t){return 2*b*t - t*t;}
-function areaI(h,b,tf,tw){return h*tw + 2*b*tf;}
-function areaBox(h,b,t){return b*h - (b-2*t)*(h-2*t);}
-function areaZ(h,b,t){return h*t + b*t;}
-function areaRail(h,b,tf,tw){return h*tw + 2*b*tf;}
-function areaSpiral(d,o){return areaPipe(d,o);}
-
-/* فیلدهای لازم */
-var need={
-  areaRound :['d1'],
-  areaPipe  :['d1','d2'],
-  areaSquare:['d3'],
-  areaHex   :['d3'],
-  areaFlat  :['d3','d5'],
-  areaAngle :['d3','d5'],
-  areaBox   :['d2','d3','d5'],
-  areaZ     :['d2','d3','d5'],
-  areaI     :['d2','d3','d6','d7'],
-  areaRail  :['d2','d3','d6','d7'],
-  areaSpiral:['d1','d2']
-};
-var dims=['d1','d2','d3','d4','d5','d6','d7'];
-var secSel=document.getElementById('sec');
-function updateInputs(){
-  var req=need[secSel.value];
-  for(var i=0;i<dims.length;i++){
-    var id=dims[i];
-    var row=document.getElementById(id).parentNode;
-    var show=req.indexOf(id)!==-1;
-    row.style.display=show?'flex':'none';
-    document.getElementById(id).required=show;
+  /* اگر محیط تلگرام است، در ابتدای کار مشخص کنیم */
+  const TG = window.Telegram && Telegram.WebApp ? Telegram.WebApp : null;
+  if (TG) {
+    // رنگ و متن دکمه اصلی تلگرام
+    TG.MainButton.color = "#8E1F61";
+    TG.MainButton.textColor = "#ffffff";
+    TG.MainButton.setText("ارسال نتیجه");
   }
-}
-secSel.onchange=updateInputs; updateInputs();
 
-/* انیمیشن عدد */
-function animate(el,from,to){
-  var dur=800,start=Date.now();
-  (function step(){
-    var p=Math.min((Date.now()-start)/dur,1);
-    var val=(from+(to-from)*p).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,'٬');
-    el.textContent=val;
-    if(p<1) requestAnimationFrame(step);
-  })();
-}
+  /* دکمه محاسبه وزن در صفحه فرود */
+  const btnStart = document.getElementById('btnStart');
+  btnStart.onclick = function() {
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadFromStorage();
+  };
 
-/* محاسبه */
-var form=document.getElementById('f');
-var out=['w1','w2','w3','w4'];
-var TG=(window.Telegram&&Telegram.WebApp)?Telegram.WebApp:null; var bound=false;
+  /* دکمه بازگشت */
+  const btnBack = document.getElementById('btnBack');
+  btnBack.onclick = function() {
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('landing').style.display = 'grid';
+    btnBack.style.display = 'none';
+    if (TG) TG.MainButton.hide();
+  };
 
-form.onsubmit=function(e){
-  e.preventDefault();
-  var rho=+document.getElementById('mat').value;
-  var qty=+document.getElementById('qty').value;
-  var L  =+document.getElementById('len').value/100;
-  if(rho<=0||qty<=0||L<=0){alert('ورودی نامعتبر است');return;}
+  /* توابع محاسباتی مساحت در قالب یک آبجکت: */
+  const areas = {
+    areaRound : (d) => Math.PI * d*d / 4,
+    areaPipe  : (D,d) => areas.areaRound(D) - areas.areaRound(d),
+    areaSquare: (a) => a*a,
+    areaHex   : (a) => 2.598 * a*a,
+    areaFlat  : (b,t) => b*t,
+    areaAngle : (b,t) => 2*b*t - t*t,
+    areaI     : (h,b,tf,tw) => (h*tw) + 2*(b*tf),
+    areaBox   : (h,b,t) => (b*h) - ((b-2*t)*(h-2*t)),
+    areaZ     : (h,b,t) => (h*t) + (b*t),
+    areaRail  : (h,b,tf,tw) => areas.areaI(h,b,tf,tw), // مشابه تیر
+    areaSpiral: (D,d) => areas.areaPipe(D,d)
+  };
 
-  var v={}; dims.forEach(function(id){v[id]=+document.getElementById(id).value||0;});
-  var args=need[secSel.value].map(function(id){return v[id];});
-  var fn=window[secSel.value];
-  var A =fn.apply(null,args);
-  if(!A){alert('ابعاد کافی نیست');return;}
+  /* چه فیلدهایی برای هر نوع مقطع نیاز است؟ */
+  const need = {
+    areaRound : ["d1"],
+    areaPipe  : ["d1","d2"],
+    areaBox   : ["d2","d3","d5"],
+    areaAngle : ["d3","d5"],
+    areaI     : ["d2","d3","d6","d7"],
+    areaZ     : ["d2","d3","d5"],
+    areaRail  : ["d2","d3","d6","d7"],
+    areaFlat  : ["d3","d5"],
+    areaHex   : ["d3"],
+    areaSquare: ["d3"],
+    areaSpiral: ["d1","d2"]
+  };
 
-  var argsUp=need[secSel.value].map(function(id){return v[id]+1;});
-  var A2=fn.apply(null,argsUp);
+  const dims = ["d1","d2","d3","d4","d5","d6","d7"];
+  const secSel = document.getElementById('sec');
 
-  var w1=rho*(A /1e6)*L;
-  var w2=rho*(A2/1e6)*(L+0.01);
-  var res=[w1,w2,w1*qty,w2*qty];
-
-  out.forEach(function(id,i){
-    var el=document.getElementById(id), prev=+el.dataset.val||0;
-    el.dataset.val=res[i].toFixed(2);
-    animate(el,prev,res[i]);
-  });
-
-  /* دکمه بازگشت نمایان شود */
-  document.getElementById('btnBack').style.display='block';
-
-  /* دکمه تلگرام */
-  if(TG){
-    TG.MainButton.setText('ارسال نتیجه');
-    if(!bound){
-      TG.MainButton.onClick(function(){
-        TG.sendData('وزن تقریبی کل: '+res[2].toFixed(2)+' کیلوگرم');
-      });
-      bound=true;
+  /* تابع نمایش/عدم نمایش فیلدهای لازم */
+  function updateInputs(){
+    const requiredFields = need[secSel.value] || [];
+    for (let id of dims) {
+      const row = document.getElementById(id).parentNode;
+      const show = requiredFields.includes(id);
+      row.style.display = show ? 'flex' : 'none';
+      document.getElementById(id).required = show;
+      if (!show) {
+        // مقدارش را صفر یا خالی کنیم تا در محاسبات تاثیر نگذارد
+        document.getElementById(id).value = "";
+      }
     }
-    TG.MainButton.show();
   }
-};
+  updateInputs();
+
+  /* انیمیشن اعداد در کارت‌ها */
+  function animateNumber(el, from, to) {
+    const dur = 800;
+    const start = Date.now();
+    function step(){
+      const p = Math.min((Date.now() - start) / dur, 1);
+      const val = (from + (to - from) * p).toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g,'٬'); // فرمت با جداکننده
+      el.textContent = val;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    step();
+  }
+
+  /* نمایش خطا در محل مناسب */
+  function showError(id, msg) {
+    const errSpan = document.querySelector(`.error-msg[data-for="${id}"]`);
+    if (errSpan) {
+      errSpan.textContent = msg;
+      errSpan.style.display = msg ? 'block' : 'none';
+    }
+  }
+
+  /* تابع اصلی محاسبه */
+  function calculate() {
+    // پاک کردن خطاها
+    for (let id of ["len","qty", ...dims]) {
+      showError(id, "");
+    }
+
+    const rho = parseFloat(document.getElementById('mat').value || "0");
+    const qty = parseInt(document.getElementById('qty').value || "1", 10);
+    const L   = parseFloat(document.getElementById('len').value || "0") / 100; // cm -> m
+
+    if (rho <= 0) {
+      showError("mat","چگالی نامعتبر است");
+      return null;
+    }
+    if (qty <= 0) {
+      showError("qty","تعداد باید حداقل ۱ باشد");
+      return null;
+    }
+    if (L <= 0) {
+      showError("len","طول وارد شده معتبر نیست");
+      return null;
+    }
+
+    // ابعاد لازم بر اساس نوع مقطع
+    const requiredFields = need[secSel.value] || [];
+    const values = {};
+    for (let id of requiredFields) {
+      values[id] = parseFloat(document.getElementById(id).value || "0");
+      if (values[id] <= 0) {
+        showError(id,"مقدار وارد شده معتبر نیست");
+        return null;
+      }
+    }
+
+    // محاسبه مساحت
+    const areaFn = areas[secSel.value];
+    if (!areaFn) {
+      return null;
+    }
+    const A = areaFn(...requiredFields.map(id => values[id]));
+    // برای محاسبه دست‌بالا: ضخامت +1 و طول+1cm
+    const A2 = areaFn(...requiredFields.map(id => values[id] + 1));
+    if (!A) {
+      return null;
+    }
+    // وزن تقریبی
+    const w1 = rho * (A / 1e6) * L;      // A mm² -> m² (تقسیم بر 1e6)
+    // وزن دست‌بالا
+    const w2 = rho * (A2 / 1e6) * (L + 0.01); // طول +1cm
+
+    // خروجی
+    return {
+      wApprox: w1,
+      wHigh: w2,
+      wTotalApprox: w1 * qty,
+      wTotalHigh: w2 * qty
+    };
+  }
+
+  /* رویداد onsubmit (وقتی دکمه محاسبه زده شد) */
+  const form = document.getElementById('f');
+  form.onsubmit = function(e){
+    e.preventDefault();
+    const res = calculate();
+    if (!res) return; // در صورت خطا، متوقف شو
+
+    // نمایش نتایج با انیمیشن
+    const outIds = ["w1","w2","w3","w4"];
+    const vals   = [res.wApprox, res.wHigh, res.wTotalApprox, res.wTotalHigh];
+    outIds.forEach((id, i) => {
+      const el = document.getElementById(id);
+      const prev = parseFloat(el.dataset.val || "0");
+      el.dataset.val = vals[i].toFixed(2);
+      animateNumber(el, prev, vals[i]);
+    });
+
+    // دکمه بازگشت نشان داده شود
+    btnBack.style.display = 'block';
+
+    // ذخیره مقادیر فرم در localStorage
+    saveToStorage();
+
+    // اگر در محیط تلگرام هستیم، دکمه‌اش را نشان دهیم
+    if (TG) {
+      TG.MainButton.show();
+    }
+  };
+
+  /* محاسبه خودکار در حین تایپ (oninput) */
+  function autoCalc() {
+    // فقط اگر کاربر هنوز دکمه محاسبه نزده، می‌توانیم نتایج را لحظه‌ای نشان دهیم
+    // یا می‌توانیم همان calculate() را صدا بزنیم و نمایش دهیم.
+    const res = calculate();
+    if (!res) return;
+
+    // فقط نمایش فوری؛ انیمیشن دقیق نیاز نیست
+    document.getElementById("w1").textContent = res.wApprox.toFixed(2);
+    document.getElementById("w2").textContent = res.wHigh.toFixed(2);
+    document.getElementById("w3").textContent = res.wTotalApprox.toFixed(2);
+    document.getElementById("w4").textContent = res.wTotalHigh.toFixed(2);
+  }
+
+  /* اگر تلگرام هست، روی کلیک دکمه اصلی چه بشود؟ */
+  if (TG) {
+    TG.MainButton.onClick(function() {
+      const res = calculate();
+      if (!res) return;
+
+      // اطلاعات مفید برای ارسال
+      const matName = document.getElementById('mat').selectedOptions[0].text;
+      const sectionName = document.getElementById('sec').selectedOptions[0].text;
+      const lengthVal = document.getElementById('len').value;
+      const qtyVal = document.getElementById('qty').value;
+
+      // یک متن ساده یا JSON
+      const dataToSend = {
+        material: matName,
+        section: sectionName,
+        length_cm: lengthVal,
+        qty: qtyVal,
+        wApprox_each: res.wApprox.toFixed(2),
+        wHigh_each: res.wHigh.toFixed(2),
+        wApprox_total: res.wTotalApprox.toFixed(2),
+        wHigh_total: res.wTotalHigh.toFixed(2)
+      };
+      // می‌توانید یک متن خوانا بسازید یا مستقیماً JSON بفرستید
+      TG.sendData(JSON.stringify(dataToSend));
+    });
+  }
+
+  /* ذخیره و بازیابی مقادیر از LocalStorage */
+  function saveToStorage() {
+    // بهتر است فقط مقادیری را ذخیره کنیم که وجود دارند
+    const data = {
+      mat: document.getElementById('mat').value,
+      sec: document.getElementById('sec').value,
+      len: document.getElementById('len').value,
+      qty: document.getElementById('qty').value
+    };
+    for (let id of dims) {
+      data[id] = document.getElementById(id).value;
+    }
+    localStorage.setItem('weightCalc', JSON.stringify(data));
+  }
+
+  function loadFromStorage() {
+    const str = localStorage.getItem('weightCalc');
+    if (!str) return;
+    try {
+      const data = JSON.parse(str);
+      if (data.mat) document.getElementById('mat').value = data.mat;
+      if (data.sec) {
+        document.getElementById('sec').value = data.sec;
+        updateInputs();
+      }
+      if (data.len) document.getElementById('len').value = data.len;
+      if (data.qty) document.getElementById('qty').value = data.qty;
+      for (let id of dims) {
+        if (data[id]) document.getElementById(id).value = data[id];
+      }
+    } catch(e) {}
+  }
+
+  // بارگذاری اولیه مقادیر از استوریج (در صورت تمایل می‌توان در load قرار داد)
+  // loadFromStorage(); // این را هنگام کلیک دکمه Start می‌خوانیم
+
 </script>
 </body>
 </html>
