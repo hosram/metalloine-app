@@ -3,135 +3,461 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>تبدیل سختی</title>
+  <title>تبدیل سختی (نسخهٔ بهبودیافته)</title>
+
+  <!-- فونت فارسی Vazirmatn -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
+
   <style>
-  /* … همان CSS تم تاریک (کوتاه‌شده برای فضا) … */
+    :root {
+      --c-primary: #8E1F61;
+      --c-accent:  #8FA2B2;
+      --glass: rgba(255,255,255,.10);
+      --r: 24px;
+      --g: 12px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: "Vazirmatn", sans-serif;
+      line-height: 1.6;
+    }
+    /* هدر */
+    #topbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 64px;
+      margin: var(--g);
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: var(--r);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 1.4rem; font-weight: 700;
+    }
+    .ring {
+      width: 22px; height: 22px;
+      border: 6px solid var(--c-accent);
+      border-radius: 50%;
+    }
+    .brand { color: var(--c-primary); }
+
+    main {
+      max-width: 420px; margin: 0 auto; padding: var(--g);
+    }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,.2);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .row-2 { grid-column: span 2; }
+
+    label {
+      display: flex; flex-direction: column;
+      gap: 4px; font-size: .85rem;
+    }
+    input, select, button {
+      border: none; border-radius: var(--r);
+      background: var(--glass);
+      color: #fff; font: inherit;
+      padding: 10px;
+    }
+    select:focus, input:focus { outline: 2px solid var(--c-primary); }
+
+    .btn-flat {
+      background: #444; color: #fff; cursor: pointer;
+      border-radius: var(--r);
+      border: none; padding: 8px 14px;
+      font-size: 1rem; transition: background .2s;
+    }
+    .btn-flat:hover { background: #555; }
+
+    .btn-main {
+      background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+      color: #fff; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,.4);
+      font-weight: 600;
+    }
+
+    output {
+      display: block; background: #111; text-align: center; padding: 12px;
+      border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,.2);
+      font-size: 1.2rem; font-weight: 700;
+    }
+    /* برای دسترس‌پذیری و اعلام نتیجه به screen readers */
+    output[aria-live] { min-height: 1.2em; }
+
+    /* پیام هشدار */
+    #warn {
+      color: #ff9090; font-size: .8rem; text-align: center;
+      min-height: 1.2em;
+    }
+
+    /* پیشنهاد گریدها */
+    #suggest {
+      margin-top: 8px; font-size: .8rem;
+      list-style: none; padding: 0;
+    }
+    #suggest li { margin-bottom: 4px; }
+
+    /* لینک بازگشت */
+    .btn-icon {
+      display: block; width: 90%; max-width: 420px;
+      margin: 2rem auto; text-align: center;
+      padding: 14px;
+    }
+
+    /* Toast کپی */
+    #copy-toast {
+      position: fixed; bottom: 16px; left: 50%;
+      transform: translateX(-50%);
+      background: #333; color: #fff;
+      padding: 8px 16px; border-radius: var(--r);
+      opacity: 0; transition: .3s;
+      font-size: .85rem;
+    }
+
+    /* جدول مرجع */
+    details { margin-top: 1rem; }
+    details summary { cursor: pointer; }
+    #tableBox {
+      max-height: 240px; overflow: auto;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: var(--r);
+      margin-top: 8px;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: .8rem; text-align: left;
+    }
+    thead tr { background: #222; position: sticky; top: 0; }
+    th, td { padding: 6px 8px; }
+    tbody tr:nth-child(2n) { background: rgba(255,255,255,.04); }
+    tr.hide { display: none; }
   </style>
 </head>
 <body>
 <header id="topbar">
-  <span class="logo"><span class="ring"></span><span class="brand">Metalloine</span></span>
+  <span class="logo">
+    <span class="ring"></span>
+    <span class="brand">Metalloine</span>
+  </span>
 </header>
 
-<main style="max-width:420px;margin:0 auto">
+<main>
+  <!-- فرم تبدیل سختی -->
   <form id="hardnessCard" class="card">
-    <!-- ورودی‌ها -->
-    <label class="row-2">مقدار<input id="h-val" type="number" placeholder="200" inputmode="decimal"></label>
-    <label>از:<select id="h-from">
-      <option value="HB">⚫ HB</option><option value="HRC">⬤ HRC</option>
-      <option value="HRB">◯ HRB</option><option value="HV">◆ HV</option></select></label>
+    <!-- ورودی سختی -->
+    <label class="row-2">
+      مقدار
+      <input id="h-val" type="number" placeholder="مثلاً 200" inputmode="decimal">
+    </label>
+
+    <!-- واحد از -->
+    <label>از:
+      <select id="h-from">
+        <option value="HB">⚫ HB</option>
+        <option value="HRC">⬤ HRC</option>
+        <option value="HRB">◯ HRB</option>
+        <option value="HV">◆ HV</option>
+      </select>
+    </label>
+
+    <!-- واحد به + دکمه سواپ -->
     <div style="display:flex;align-items:end;gap:4px">
-      <label style="flex:1">به:<select id="h-to">
-        <option value="HRC">⬤ HRC</option><option value="HB">⚫ HB</option>
-        <option value="HRB">◯ HRB</option><option value="HV">◆ HV</option></select></label>
-      <button id="swapBtn" type="button" class="btn-flat" aria-label="swap">↔︎</button>
+      <label style="flex:1">به:
+        <select id="h-to">
+          <option value="HRC">⬤ HRC</option>
+          <option value="HB">⚫ HB</option>
+          <option value="HRB">◯ HRB</option>
+          <option value="HV">◆ HV</option>
+        </select>
+      </label>
+      <button id="swapBtn" type="button" class="btn-flat" aria-label="جابجایی واحد">↔︎</button>
     </div>
-    <label class="row-2">جنس:<select id="h-mat">
-      <option value="steel">فولاد</option><option value="cast_iron">چدن</option>
-      <option value="aluminium">آلومینیوم</option><option value="copper">مس</option>
-      <option value="brass">برنج</option><option value="phosphor_bronze">برنز فسفری</option></select></label>
+
+    <!-- انتخاب جنس -->
+    <label class="row-2">
+      جنس:
+      <select id="h-mat">
+        <option value="steel">فولاد</option>
+        <option value="cast_iron">چدن</option>
+        <option value="aluminium">آلومینیوم</option>
+        <option value="copper">مس</option>
+        <option value="brass">برنج</option>
+        <option value="phosphor_bronze">برنز فسفری</option>
+      </select>
+    </label>
+
+    <!-- دکمه محاسبه -->
     <button id="h-btn" class="btn-main row-2" type="button">محاسبه</button>
-    <output id="h-out" class="row-2">—</output>
+
+    <!-- خروجی -->
+    <output id="h-out" class="row-2" aria-live="polite">—</output>
+    <!-- پیام هشدار/خطا -->
     <div id="warn" class="row-2"></div>
-    <ul id="suggest" class="row-2" style="margin-top:8px;font-size:.8rem;list-style:none;padding:0"></ul>
+    <!-- پیشنهاد گریدها -->
+    <ul id="suggest" class="row-2"></ul>
   </form>
 
   <!-- جدول مرجع -->
   <details id="reference">
-    <summary style="cursor:pointer;margin-top:1rem">جدول مرجع ASTM/ISO</summary>
-    <input id="search" type="search" placeholder="جست‌وجو…" style="width:100%;margin-bottom:8px">
-    <div id="tableBox" style="max-height:240px;overflow:auto;border:1px solid rgba(255,255,255,.2);border-radius:var(--r)">
-      <table id="refTable" style="width:100%;border-collapse:collapse;font-size:.8rem">
-        <thead><tr><th>ماده</th><th>HB</th><th>HRC</th><th>HRB</th><th>HV</th></tr></thead><tbody></tbody>
+    <summary>جدول مرجع ASTM/ISO</summary>
+    <input id="search" type="search" placeholder="جست‌وجو…" style="width:100%;margin:8px 0;padding:8px;">
+    <div id="tableBox">
+      <table id="refTable">
+        <thead>
+          <tr>
+            <th>ماده</th>
+            <th>HB</th>
+            <th>HRC</th>
+            <th>HRB</th>
+            <th>HV</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
       </table>
     </div>
   </details>
 </main>
 
-<a href="index.html" class="btn-main btn-icon" style="display:block;width:90%;max-width:420px;margin:2rem auto;text-align:center">⬅ بازگشت به صفحهٔ اصلی</a>
-<div id="copy-toast" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:8px 16px;border-radius:var(--r);opacity:0;transition:.3s">کپی شد!</div>
+<a href="index.html" class="btn-main btn-icon">⬅ بازگشت به صفحهٔ اصلی</a>
 
+<!-- Toast نمایش پیغام "کپی شد" -->
+<div id="copy-toast">کپی شد!</div>
+
+<!-- ماژول اولیه برای وجود فایل تبدیل -->
 <script type="module">
-import DATA from './convertHardness.js'; // فقط برای نوع‌بندی؛ در run-time دوباره lazy-load می‌کنیم
+import DATA from './convertHardness.js'; 
+// فقط برای تأیید وجود فایل؛ در run-time با lazy load از آن استفاده خواهیم کرد
 </script>
-<script type="module">
-/* ---------- متغیّرها ---------- */
-let hardness, gradesMap=null;
-const $val=document.getElementById('h-val'), $from=document.getElementById('h-from'),
-      $to=document.getElementById('h-to'),   $mat=document.getElementById('h-mat'),
-      $out=document.getElementById('h-out'), $warn=document.getElementById('warn'),
-      btnCalc=document.getElementById('h-btn'), swapBtn=document.getElementById('swapBtn'),
-      toast=document.getElementById('copy-toast');
 
-/* ---------- لود تنبل جداول گرید ---------- */
-async function loadGrades(){
-  if(gradesMap) return;
-  const mats=['steel','cast_iron','aluminium','copper','brass','phosphor_bronze'];
-  gradesMap={};
-  await Promise.all(mats.map(m=>fetch(`${m}.json`).then(r=>r.json()).then(j=>gradesMap[m]=j)));
+<!-- اسکریپت اصلی -->
+<script type="module">
+/* ---------- متغیّرهای سراسری ---------- */
+let hardness = null;  // ماژول تبدیل سختی، Lazy Load
+let gradesMap = null; // داده‌های JSON مربوط به گریدهای هر ماده
+
+// انتخاب المان‌های DOM
+const $val = document.getElementById('h-val');
+const $from = document.getElementById('h-from');
+const $to = document.getElementById('h-to');
+const $mat = document.getElementById('h-mat');
+const $out = document.getElementById('h-out');
+const $warn = document.getElementById('warn');
+const btnCalc = document.getElementById('h-btn');
+const swapBtn = document.getElementById('swapBtn');
+const toast = document.getElementById('copy-toast');
+const searchInput = document.getElementById('search');
+const refDetails = document.getElementById('reference');
+
+/* -------- تنظیم و بازیابی از LocalStorage ---------- */
+function saveState(){
+  const data = {
+    val: $val.value,
+    from: $from.value,
+    to: $to.value,
+    mat: $mat.value
+  };
+  localStorage.setItem('hardnessState', JSON.stringify(data));
+}
+function loadState(){
+  const s = localStorage.getItem('hardnessState');
+  if(!s) return;
+  try {
+    const data = JSON.parse(s);
+    if(data.val)  $val.value = data.val;
+    if(data.from) $from.value = data.from;
+    if(data.to)   $to.value = data.to;
+    if(data.mat)  $mat.value = data.mat;
+  } catch(e){}
 }
 
-/* ---------- لود تنبل مبدّل ---------- */
-async function loadHardness(){ if(!hardness) hardness = await import('./convertHardness.js'); }
+/* -------- لود تنبل مبدّل سختی ---------- */
+async function loadHardness(){
+  if(!hardness) {
+    hardness = await import('./convertHardness.js');
+  }
+}
 
-/* ---------- انیمیشن عدد ---------- */
-function animate(el,from,to){
-  const d=600,s=Date.now(); (function step(){
-    const p=Math.min((Date.now()-s)/d,1); el.textContent=(from+(to-from)*p).toFixed(1);
+/* -------- لود تنبل جداول گرید ---------- */
+async function loadGrades(){
+  if(gradesMap) return;
+  const mats = ['steel','cast_iron','aluminium','copper','brass','phosphor_bronze'];
+  gradesMap = {};
+  await Promise.all(mats.map(async m=>{
+    const res = await fetch(`${m}.json`);
+    const json = await res.json();
+    gradesMap[m] = json;
+  }));
+}
+
+/* ---------- تابع انیمیشن عدد ---------- */
+function animateNumber(el, from, to){
+  const dur = 600;
+  const start = Date.now();
+  (function step(){
+    const p = Math.min((Date.now()-start)/dur, 1);
+    const val = from + (to - from)*p;
+    el.textContent = val.toFixed(1);
     if(p<1) requestAnimationFrame(step);
   })();
 }
 
-/* ---------- پیشنهاد گرید ---------- */
-function showSuggestions(arr,scale){
-  const ul=document.getElementById('suggest');
-  ul.innerHTML = arr.length
-    ? arr.map(g=>`<li>${g.name} | ${g.id} | ${scale} ${g[scale+'min']}-${g[scale+'max']}</li>`).join('')
-    : '<li style="opacity:.6">گرید نزدیکی یافت نشد</li>';
-}
-
-/* ---------- به‌روزرسانی ---------- */
-async function update(){
-  const v=parseFloat($val.value); if(isNaN(v)){ $out.textContent='—'; return; }
-  await loadHardness(); const res=hardness.convert(v,$from.value,$to.value,$mat.value);
-  animate($out,parseFloat($out.dataset.prev)||0,res); $out.dataset.prev=res;
-
-  await loadGrades();
-  const δ=($from.value==='HB'?5:2), list=gradesMap[$mat.value]||[], scale=$from.value;
-  const near=list.filter(g=>{const lo=g[scale+'min'],hi=g[scale+'max'];return lo!=null&&hi!=null&&v>=lo-δ&&v<=hi+δ;}).slice(0,5);
-  showSuggestions(near,scale);
-
-  $warn.textContent = (scale==='HRB' && $mat.value==='steel') ? 'HRB برای فولاد سخت‌شده معمول نیست.' : '';
-}
-
-/* ---------- رویدادها ---------- */
-['input','change'].forEach(ev=>[$val,$from,$to,$mat].forEach(el=>el.addEventListener(ev,update)));
-btnCalc.addEventListener('click',update);
-swapBtn.addEventListener('click',()=>{[$from.value,$to.value]=[$to.value,$from.value];update();});
-$out.addEventListener('click',async()=>{if($out.textContent!=='—'){await navigator.clipboard.writeText($out.textContent);toast.style.opacity='1';setTimeout(()=>toast.style.opacity='0',1200);}});
-
-/* ---------- جدول مرجع ---------- */
-document.getElementById('reference').addEventListener('toggle', async e=>{
-  if(e.target.open && !document.querySelector('#refTable tbody').children.length){
-    await loadGrades(); await loadHardness();
-    const tbody=document.querySelector('#refTable tbody');
-    Object.entries(gradesMap).forEach(([mat,rows])=>{
-      rows.forEach(r=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML=`<td>${mat}</td><td>${r.HBmin??'—'}-${r.HBmax??'—'}</td>
-                       <td>${r.HRCmin??'—'}-${r.HRCmax??'—'}</td>
-                       <td>${r.HRBmin??'—'}-${r.HRBmax??'—'}</td>
-                       <td>${r.HVmin??'—'}-${r.HVmax??'—'}</td>`;
-        tbody.appendChild(tr);
-      });
-    });
+/* ---------- نمایش پیشنهاد گرید ---------- */
+function showSuggestions(arr, scale){
+  const ul = document.getElementById('suggest');
+  if(!arr || !arr.length) {
+    ul.innerHTML = '<li style="opacity:.6">گرید نزدیکی یافت نشد</li>';
+    return;
   }
+  ul.innerHTML = arr.map(g=>{
+    const range = `${g[scale+'min'] ?? '—'}-${g[scale+'max'] ?? '—'}`;
+    return `<li>${g.name || '-'} | ${g.id || '-'} | ${scale} ${range}</li>`;
+  }).join('');
+}
+
+/* ---------- تابع اصلی آپدیت/محاسبه ---------- */
+async function update(){
+  // ذخیره در لوکال‌استوریج
+  saveState();
+
+  const v = parseFloat($val.value);
+  if(isNaN(v)){
+    $out.textContent = '—';
+    $out.dataset.prev = '0';
+    $warn.textContent = '';
+    document.getElementById('suggest').innerHTML = '';
+    return;
+  }
+
+  // محدوده‌های معقول برای هر مقیاس
+  // (مثلاً برای HRC معمولاً 0 تا 70)
+  let maxVal = 9999; // به‌صورت پیش‌فرض عدد بالایی
+  if($from.value === 'HRC') maxVal = 70;
+  if($from.value === 'HRB') maxVal = 100;   // HRB تا حدود 100
+  if($from.value === 'HB')  maxVal = 750;   // به‌صورت عمومی تا 750 (برای فولاد)
+  if($from.value === 'HV')  maxVal = 2000;  // حدودی
+
+  if(v < 0 || v > maxVal) {
+    $warn.textContent = `مقدار واردشده (${v}) از محدودهٔ معمول برای ${$from.value} خارج است!`;
+  } else {
+    $warn.textContent = '';
+  }
+
+  // اگر ترکیب واحد و جنس نامعمول باشد:
+  if($mat.value==='aluminium' && $from.value==='HRC'){
+    $warn.textContent += ' - آلومینیوم معمولاً در مقیاس HRC سنجیده نمی‌شود.';
+  }
+
+  // فراخوانی تنبل ماژول تبدیل سختی
+  await loadHardness();
+  // محاسبه تبدیل
+  const resNum = hardness.convert(v, $from.value, $to.value, $mat.value);
+
+  // انیمیشن خروجی
+  const prev = parseFloat($out.dataset.prev || "0");
+  animateNumber($out, prev, resNum);
+  $out.dataset.prev = resNum;
+
+  // لود گریدها
+  await loadGrades();
+
+  // جست‌وجوی گریدهای نزدیک در جدول (± چند عدد)
+  // اگر "HB" باشد، ±5  یا اگر HRC/HRB باشد ±2 ...
+  let delta = 2;
+  if($from.value==='HB') delta=5;
+  if($from.value==='HV') delta=10;
+  const list = gradesMap[$mat.value] || [];
+  const scale = $from.value;
+  const near = list.filter(g=>{
+    const lo = g[scale+'min'];
+    const hi = g[scale+'max'];
+    if(lo==null || hi==null) return false;
+    return (v >= lo - delta && v <= hi + delta);
+  }).slice(0,5);
+  showSuggestions(near, scale);
+}
+
+/* -------- کپی مقدار خروجی با کلیک -------- */
+$out.addEventListener('click', async ()=>{
+  if($out.textContent==='—') return;
+  await navigator.clipboard.writeText($out.textContent);
+  toast.style.opacity = '1';
+  setTimeout(()=>toast.style.opacity='0', 1200);
 });
-document.getElementById('search').addEventListener('input',e=>{
-  const q=e.target.value.trim(); document.querySelectorAll('#refTable tbody tr').forEach(tr=>{
-    tr.style.display=tr.textContent.includes(q)?'':'none';
+
+/* -------- دکمه سواپ "از" و "به" -------- */
+swapBtn.addEventListener('click', ()=>{
+  const tmp = $from.value;
+  $from.value = $to.value;
+  $to.value = tmp;
+  update();
+});
+
+/* -------- رویداد برای محاسبه خودکار -------- */
+[$val, $from, $to, $mat].forEach(el=>{
+  ['input','change'].forEach(ev=>{
+    el.addEventListener(ev, update);
   });
 });
+
+/* -------- دکمه محاسبه -------- */
+btnCalc.addEventListener('click', update);
+
+/* -------- جدول مرجع و جست‌وجو -------- */
+refDetails.addEventListener('toggle', async e=>{
+  if(e.target.open){
+    const tbody = document.querySelector('#refTable tbody');
+    // اگر خالی است، پرش کنیم
+    if(!tbody.children.length){
+      await loadGrades();
+      await loadHardness();
+      Object.entries(gradesMap).forEach(([mat, rows])=>{
+        rows.forEach(r=>{
+          const tr=document.createElement('tr');
+          tr.innerHTML=`
+            <td>${mat}</td>
+            <td>${(r.HBmin ?? '—') + '-' + (r.HBmax ?? '—')}</td>
+            <td>${(r.HRCmin ?? '—') + '-' + (r.HRCmax ?? '—')}</td>
+            <td>${(r.HRBmin ?? '—') + '-' + (r.HRBmax ?? '—')}</td>
+            <td>${(r.HVmin ?? '—') + '-' + (r.HVmax ?? '—')}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+  }
+});
+
+/* -------- جست‌وجو در جدول مرجع -------- */
+searchInput.addEventListener('input', e=>{
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('#refTable tbody tr').forEach(tr=>{
+    tr.classList.remove('hide');
+    if(!tr.textContent.toLowerCase().includes(q)) {
+      tr.classList.add('hide');
+    }
+  });
+});
+
+/* -------- راه‌اندازی اولیه -------- */
+loadState();
+update();
 </script>
-</body></html>
+</body>
+</html>
