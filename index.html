@@ -6,8 +6,10 @@
   <title>Metalloine | صفحه اصلی</title>
 
   <!-- فونت فارسی Vazirmatn -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"
+  />
 
   <style>
     :root {
@@ -18,51 +20,80 @@
       --g: 12px;
     }
     * {
-      box-sizing: border-box; margin: 0; padding: 0;
+      box-sizing: border-box;
+      margin: 0; 
+      padding: 0;
     }
     body {
-      background: #000; color: #fff;
+      background: #000; 
+      color: #fff;
       font-family: "Vazirmatn", sans-serif;
-      min-height: 100vh; line-height: 1.6;
+      min-height: 100vh; 
+      line-height: 1.6;
     }
     /* هدر */
     #topbar {
-      display: flex; justify-content: center; align-items: center;
-      height: 64px; margin: var(--g);
-      background: var(--glass); backdrop-filter: blur(24px);
+      display: flex; 
+      justify-content: center; 
+      align-items: center;
+      height: 64px; 
+      margin: var(--g);
+      background: var(--glass); 
+      backdrop-filter: blur(24px);
       border: 1px solid rgba(255,255,255,0.25);
       border-radius: var(--r);
     }
     .logo {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 1.4rem; font-weight: 700;
+      display: flex; 
+      align-items: center; 
+      gap: 8px;
+      font-size: 1.4rem; 
+      font-weight: 700;
     }
     .ring {
-      width: 22px; height: 22px;
-      border: 6px solid var(--c-accent); border-radius: 50%;
+      width: 22px; 
+      height: 22px;
+      border: 6px solid var(--c-accent); 
+      border-radius: 50%;
     }
-    .brand { color: var(--c-primary); }
+    .brand { 
+      color: var(--c-primary); 
+    }
 
     /* صفحه فرود */
     #landing {
       height: calc(100vh - 64px - 2*var(--g));
-      display: grid; place-items: center;
+      display: grid; 
+      place-items: center;
       text-align: center;
     }
 
     .btn-main {
       padding: 14px 32px;
-      border: none; border-radius: var(--r);
-      cursor: pointer; font-weight: 700;
-      background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
-      color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      border: none; 
+      border-radius: var(--r);
+      cursor: pointer; 
+      font-weight: 700;
+      background: linear-gradient(
+        135deg,
+        var(--c-primary),
+        var(--c-accent)
+      );
+      color: #fff; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
       text-decoration: none;
       display: inline-block;
     }
 
     footer {
-      margin-top: 1rem; text-align: center; font-size: 0.8rem; opacity: 0.7;
-      position: fixed; left: 0; right: 0; bottom: 8px;
+      margin-top: 1rem; 
+      text-align: center; 
+      font-size: 0.8rem; 
+      opacity: 0.7;
+      position: fixed; 
+      left: 0; 
+      right: 0; 
+      bottom: 8px;
     }
   </style>
 </head>
@@ -81,8 +112,9 @@
     <a href="scrap.html" class="btn-main">محاسبه ضایعات</a>
     <a href="hardness.html" class="btn-main">تبدیل سختی</a>
     <a href="machining-allowances.html" class="btn-main">تلرانس ماشین‌کاری</a>
-    <!-- دکمه لیزینگ با همان استایل -->
     <a href="leaseCalc.html" class="btn-main">محاسبه لیزینگ</a>
+    <!-- دکمه جدید برای نمایش موجودی بانک -->
+    <a href="bank_balance.html" class="btn-main">نمایش موجودی بانک</a>
   </div>
 </section>
 
