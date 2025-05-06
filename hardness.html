@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>تبدیل سختی – تک‌فایلی</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>تبدیل سختی | Metalloine</title>
 
-  <!-- فونت فارسی Vazirmatn -->
+  <!-- فونت Vazirmatn -->
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
 
@@ -23,14 +23,15 @@
     body {
       background: #000; color: #fff;
       font-family: "Vazirmatn", sans-serif;
-      line-height: 1.6;
+      min-height: 100vh; line-height: 1.6;
     }
     /* هدر */
     #topbar {
       display: flex; justify-content: center; align-items: center;
       height: 64px; margin: var(--g);
       background: var(--glass); backdrop-filter: blur(24px);
-      border: 1px solid rgba(255,255,255,0.25); border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: var(--r);
     }
     .logo {
       display: flex; align-items: center; gap: 8px;
@@ -47,20 +48,14 @@
     }
 
     .card {
-      background: var(--glass);
-      backdrop-filter: blur(24px);
+      background: var(--glass); backdrop-filter: blur(24px);
       border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
-      padding: 16px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      padding: 16px; display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-top: var(--g);
     }
-    .row-2 { grid-column: span 2; }
-
     label {
-      display: flex; flex-direction: column; gap: 4px;
-      font-size: 0.85rem;
+      display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem;
     }
     input, select, button {
       border: none; border-radius: var(--r);
@@ -73,303 +68,137 @@
     select, option {
       background: #1a1a1a; color: #fff;
     }
+    .row-2 { grid-column: span 2; }
 
-    .btn-flat {
-      background: #444; color: #fff; cursor: pointer;
-      border-radius: var(--r);
-      border: none; padding: 8px 14px;
-      font-size: 1rem; transition: background 0.2s;
-    }
-    .btn-flat:hover { background: #555; }
-
-    .btn-main {
+    .btn-submit {
       background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
       color: #fff; cursor: pointer;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
       font-weight: 600;
+      border: none; border-radius: var(--r);
     }
 
     output {
-      display: block;
-      background: #111;
-      text-align: center; padding: 12px;
-      border-radius: var(--r);
+      display: block; background: #111; text-align: center;
+      padding: 12px; border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
       font-size: 1.2rem; font-weight: 700;
     }
-    /* دسترس‌پذیری: screen reader نتیجه را اعلام کند */
-    output[aria-live] { min-height: 1.2em; }
+    output[aria-live] { min-height: 1.4em; }
 
-    /* پیام هشدار */
-    #warn {
-      color: #ff9090; font-size: 0.8rem; text-align: center;
-      min-height: 1.2em;
+    .warning {
+      color: #ff8080; text-align: center; grid-column: span 2;
+      min-height: 1.2em; font-size: 0.8rem;
     }
 
-    /* لیست پیشنهاد گریدها (فعلاً غیرفعال) */
-    #suggest {
-      margin-top: 8px; font-size: 0.8rem;
-      list-style: none; padding: 0;
-    }
-    #suggest li { margin-bottom: 4px; }
-
-    /* لینک بازگشت */
     .btn-icon {
       display: block; width: 90%; max-width: 420px;
       margin: 2rem auto; text-align: center; padding: 14px;
+      text-decoration: none;
+      background: #444; color: #fff; border-radius: var(--r);
     }
 
-    /* Toast کپی */
-    #copy-toast {
-      position: fixed; bottom: 16px; left: 50%;
-      transform: translateX(-50%);
-      background: #333; color: #fff; padding: 8px 16px;
-      border-radius: var(--r);
-      opacity: 0; transition: 0.3s; font-size: 0.85rem;
+    @media (max-width: 600px) {
+      .card {
+        grid-template-columns: 1fr !important;
+      }
     }
   </style>
 </head>
 <body>
-  <header id="topbar">
-    <span class="logo">
-      <span class="ring"></span>
-      <span class="brand">Metalloine</span>
-    </span>
-  </header>
+<header id="topbar">
+  <span class="logo">
+    <span class="ring"></span>
+    <span class="brand">Metalloine</span>
+  </span>
+</header>
 
-  <main>
-    <!-- فرم تبدیل سختی -->
-    <form id="hardnessCard" class="card">
-      <!-- ورودی سختی -->
-      <label class="row-2">
-        مقدار
-        <input id="h-val" type="number" placeholder="مثلاً 200" inputmode="decimal" />
-      </label>
+<main>
+  <h2 style="text-align:center">تبدیل سختی</h2>
+  <form id="hardnessForm" class="card">
+    <label class="row-2">
+      مقدار
+      <input id="h-val" type="number" placeholder="مثلاً 200">
+    </label>
+    <label>از:
+      <select id="h-from">
+        <option value="HB">⚪ HB</option>
+        <option value="HRC">○ HRC</option>
+        <option value="HRB">◌ HRB</option>
+        <option value="HV">◇ HV</option>
+      </select>
+    </label>
+    <label>به:
+      <select id="h-to">
+        <option value="HRC">○ HRC</option>
+        <option value="HB">⚪ HB</option>
+        <option value="HRB">◌ HRB</option>
+        <option value="HV">◇ HV</option>
+      </select>
+    </label>
+    <label class="row-2">جنس
+      <select id="h-mat">
+        <option value="steel">فولاد</option>
+        <option value="cast_iron">چدن</option>
+        <option value="aluminium">آلومینیوم</option>
+      </select>
+    </label>
 
-      <!-- واحد از -->
-      <label>از:
-        <!-- حروف/نمادهای سفید تا در پس‌زمینهٔ تیره دیده شوند -->
-        <select id="h-from">
-          <option value="HB">⚪ HB</option>
-          <option value="HRC">○ HRC</option>
-          <option value="HRB">◌ HRB</option>
-          <option value="HV">◇ HV</option>
-        </select>
-      </label>
+    <button id="h-btn" type="button" class="btn-submit row-2">محاسبه</button>
+    <output id="h-out" class="row-2" aria-live="polite">—</output>
+    <div id="h-warn" class="warning"></div>
+  </form>
 
-      <!-- واحد به + دکمه سواپ -->
-      <div style="display: flex; align-items: end; gap: 4px">
-        <label style="flex: 1">به:
-          <select id="h-to">
-            <option value="HRC">○ HRC</option>
-            <option value="HB">⚪ HB</option>
-            <option value="HRB">◌ HRB</option>
-            <option value="HV">◇ HV</option>
-          </select>
-        </label>
-        <button
-          id="swapBtn"
-          type="button"
-          class="btn-flat"
-          aria-label="جابجایی واحد"
-        >↔︎</button>
-      </div>
+  <a href="index.html" class="btn-icon">⬅ بازگشت</a>
+</main>
 
-      <!-- انتخاب جنس -->
-      <label class="row-2">
-        جنس:
-        <select id="h-mat">
-          <option value="steel">فولاد</option>
-          <option value="cast_iron">چدن</option>
-          <option value="aluminium">آلومینیوم</option>
-          <option value="copper">مس</option>
-          <option value="brass">برنج</option>
-          <option value="phosphor_bronze">برنز فسفری</option>
-        </select>
-      </label>
+<script>
+function convertHardness(value, fromScale, toScale, material){
+  if(fromScale===toScale) return value;
+  // نمونه‌ی فرضی: همه ابتدا به "HB" تبدیل شوند
+  let inter = value;
+  if(fromScale==="HRC"){ inter = value*10+100; }
+  else if(fromScale==="HRB"){ inter = value*5+80; }
+  else if(fromScale==="HV"){  inter = value/3; }
 
-      <!-- دکمه محاسبه -->
-      <button id="h-btn" class="btn-main row-2" type="button">محاسبه</button>
+  let finalVal = inter;
+  if(toScale==="HRC"){ finalVal=(inter-100)/10; }
+  else if(toScale==="HRB"){ finalVal=(inter-80)/5; }
+  else if(toScale==="HV"){  finalVal=inter*3; }
 
-      <!-- خروجی -->
-      <output id="h-out" class="row-2" aria-live="polite">—</output>
-      <!-- پیام هشدار/خطا -->
-      <div id="warn" class="row-2"></div>
-      <!-- پیشنهاد گریدها (غیرفعال) -->
-      <ul id="suggest" class="row-2"></ul>
-    </form>
-  </main>
+  if(material==="aluminium" && toScale==="HRC"){
+    finalVal*=0.5; // مثال
+  }
+  return finalVal;
+}
 
-  <!-- دکمه بازگشت به صفحه اصلی (اختیاری) -->
-  <a href="index.html" class="btn-main btn-icon">⬅ بازگشت</a>
+function calcHardness(){
+  const v = parseFloat(document.getElementById('h-val').value||"0");
+  const fs= document.getElementById('h-from').value.replace(/[^\w]/g,"");
+  const ts= document.getElementById('h-to').value.replace(/[^\w]/g,"");
+  const mat=document.getElementById('h-mat').value;
+  const $out=document.getElementById('h-out');
+  const $warn=document.getElementById('h-warn');
 
-  <!-- Toast نمایش پیغام "کپی شد" -->
-  <div id="copy-toast">کپی شد!</div>
+  if(isNaN(v)||v<=0){
+    $out.textContent="—";
+    $warn.textContent="مقدار ورودی نامعتبر است.";
+    return;
+  }
+  $warn.textContent="";
 
-  <!-- اسکریپت: همه‌چیز در همین فایل -->
-  <script>
-    /*****************************************************
-     * ۱) تابع تبدیل سختی (نسخه‌ی نمایشی/فرضی)          *
-     *    اینجا باید فرمول واقعی را جایگزین کنید.        *
-     *****************************************************/
-    function convertHardness(value, fromScale, toScale, material) {
-      // اگر واحد مبدا و مقصد یکی است، تغییری لازم نیست
-      if (fromScale === toScale) {
-        return value;
-      }
+  let maxVal=9999;
+  if(fs==="HRC") maxVal=70;
+  if(fs==="HRB") maxVal=100;
+  if(fs==="HB")  maxVal=750;
+  if(fs==="HV")  maxVal=2000;
+  if(v>maxVal) $warn.textContent="مقدار از محدوده بالاتر است.";
 
-      // گام اول: تبدیل ورودی به HB (به شکل فرضی)
-      let intermediate = value;
-      if (fromScale === "HRC") {
-        intermediate = value * 10 + 100; // فرمول فرضی
-      } else if (fromScale === "HRB") {
-        intermediate = value * 5 + 80;   // فرمول فرضی
-      } else if (fromScale === "HV") {
-        intermediate = value / 3;        // فرمول فرضی
-      }
-      // گام دوم: از HB به واحد مقصد
-      let finalVal = intermediate;
-      if (toScale === "HRC") {
-        finalVal = (intermediate - 100) / 10; // فرمول فرضی
-      } else if (toScale === "HRB") {
-        finalVal = (intermediate - 80) / 5;   // فرمول فرضی
-      } else if (toScale === "HV") {
-        finalVal = intermediate * 3;          // فرمول فرضی
-      }
+  const res=convertHardness(v, fs, ts, mat);
+  $out.textContent = res.toFixed(1);
+}
 
-      // مثال: کاهش سختی برای آلومینیوم در HRC
-      if (material === "aluminium" && toScale === "HRC") {
-        finalVal *= 0.5;
-      }
-
-      return finalVal;
-    }
-
-    /*******************************************
-     * ۲) نگه‌داری در LocalStorage (اختیاری)  *
-     *******************************************/
-    function saveState(){
-      const data = {
-        val: $val.value,
-        from: $from.value,
-        to: $to.value,
-        mat: $mat.value
-      };
-      localStorage.setItem('hardnessState', JSON.stringify(data));
-    }
-    function loadState(){
-      const s = localStorage.getItem('hardnessState');
-      if(!s) return;
-      try {
-        const data = JSON.parse(s);
-        if(data.val)  $val.value = data.val;
-        if(data.from) $from.value = data.from;
-        if(data.to)   $to.value = data.to;
-        if(data.mat)  $mat.value = data.mat;
-      } catch(e){}
-    }
-
-    /*******************************************
-     * ۳) راه‌اندازی رویدادها و منطق اصلی    *
-     *******************************************/
-    const $val = document.getElementById("h-val");
-    const $from = document.getElementById("h-from");
-    const $to = document.getElementById("h-to");
-    const $mat = document.getElementById("h-mat");
-    const $out = document.getElementById("h-out");
-    const $warn = document.getElementById("warn");
-    const btnCalc = document.getElementById("h-btn");
-    const swapBtn = document.getElementById("swapBtn");
-    const toast = document.getElementById("copy-toast");
-
-    // تابع انیمیشن نمایش اعداد
-    function animateNumber(el, from, to) {
-      const dur = 600;
-      const start = Date.now();
-      (function step(){
-        const p = Math.min((Date.now() - start) / dur, 1);
-        const val = from + (to - from)*p;
-        el.textContent = val.toFixed(1);
-        if (p < 1) requestAnimationFrame(step);
-      })();
-    }
-
-    // تابع محاسبه اصلی
-    function update() {
-      // ذخیره وضعیت در LocalStorage
-      saveState();
-
-      const v = parseFloat($val.value);
-      if (isNaN(v)) {
-        $out.textContent = "—";
-        $out.dataset.prev = "0";
-        $warn.textContent = "";
-        document.getElementById("suggest").innerHTML = "";
-        return;
-      }
-
-      // بررسی محدوده متداول
-      let maxVal = 9999;
-      if ($from.value.includes("HRC")) maxVal = 70;
-      if ($from.value.includes("HRB")) maxVal = 100;
-      if ($from.value.includes("HB"))  maxVal = 750;
-      if ($from.value.includes("HV"))  maxVal = 2000;
-
-      if (v < 0 || v > maxVal) {
-        $warn.textContent = `مقدار واردشده (${v}) از محدودهٔ معمول برای ${$from.value} خارج است!`;
-      } else {
-        $warn.textContent = "";
-      }
-      // هشدار برای ترکیب نامعمول
-      if ($mat.value === "aluminium" && $from.value.includes("HRC")) {
-        $warn.textContent += " - آلومینیوم معمولاً در مقیاس HRC سنجیده نمی‌شود.";
-      }
-
-      // حذف شکلک‌ها برای محاسبه (مثلاً "○ HRC" -> "HRC")
-      const scaleFrom = $from.value.replace(/[^\w]/g, "");
-      const scaleTo   = $to.value.replace(/[^\w]/g, "");
-
-      // صدا زدن تابع تبدیل (اینجا فرمول فرضی)
-      const prevVal = parseFloat($out.dataset.prev || "0");
-      const resNum = convertHardness(v, scaleFrom, scaleTo, $mat.value);
-
-      animateNumber($out, prevVal, resNum);
-      $out.dataset.prev = resNum;
-
-      // «پیشنهاد گرید» غیرفعال شده است
-      document.getElementById("suggest").innerHTML =
-        '<li style="opacity:.6">گریدها غیرفعال شده‌اند</li>';
-    }
-
-    // رویداد دکمه «محاسبه»
-    btnCalc.addEventListener("click", update);
-
-    // رویداد کلیک برای کپی خروجی
-    $out.addEventListener("click", async ()=>{
-      if($out.textContent === "—") return;
-      await navigator.clipboard.writeText($out.textContent);
-      toast.style.opacity = "1";
-      setTimeout(()=>toast.style.opacity="0", 1200);
-    });
-
-    // دکمه سواپ «از» و «به»
-    swapBtn.addEventListener("click", () => {
-      const tmp = $from.value;
-      $from.value = $to.value;
-      $to.value   = tmp;
-      update();
-    });
-
-    // محاسبه خودکار حین تایپ یا تغییر انتخاب
-    [$val, $from, $to, $mat].forEach(el => {
-      ["input","change"].forEach(ev => {
-        el.addEventListener(ev, update);
-      });
-    });
-
-    // راه‌اندازی اولیه
-    loadState();
-    update();
-  </script>
+document.getElementById('h-btn').addEventListener('click', calcHardness);
+</script>
 </body>
 </html>
