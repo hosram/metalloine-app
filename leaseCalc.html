@@ -173,6 +173,7 @@ function formatNumber(str) {
   const n = parseInt(numericVal, 10);
   return sign + n.toLocaleString("en-US");
 }
+
 function getNumericValue(str) {
   if(!str) return 0;
   let sign = 1;
@@ -184,9 +185,10 @@ function getNumericValue(str) {
   const n = parseInt(tmp.replace(/\D/g, ""), 10) || 0;
   return sign * n;
 }
+
 document.querySelectorAll(".sepNumber").forEach((el) => {
   el.addEventListener("input", () => {
-    const pos = el.selectionStart; 
+    const pos = el.selectionStart;
     const oldLength = el.value.length;
     el.value = formatNumber(el.value);
     const newLength = el.value.length;
@@ -196,34 +198,45 @@ document.querySelectorAll(".sepNumber").forEach((el) => {
 
 /***********************************************************
  * API گرفتن قیمت تتر از تترلند
- *  - کلید API: RwhiHcpmdrOPYZjtOfdMLeIERPilFNMwFfO2XsgB
+ *  - آدرس جدید: https://api.tetherland.com/currencies
  **********************************************************/
 async function fetchTetherPriceFromTetherland() {
-  // طبق مستندات تترلند باید آدرس API و پارامتر/هدر را تنظیم کنید:
-  // اینجا یک نمونه فرضی است!
-  // لطفاً طبق مستندات واقعی تترلند اصلاح شود.
-  const apiKey = "RwhiHcpmdrOPYZjtOfdMLeIERPilFNMwFfO2XsgB";
-  const url = "https://api.tetherland.com/v1/usdt-price"; // نمونه فرضی
-
+  const apiKey = "RwhiHcpmdrOPYZjtOfdMLeIERPilFNMwFfO2XsgB"; // کلید API شما
+  const url = "https://api.tetherland.com/currencies";
   try {
     const res = await fetch(url, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}` 
+        "accept": "application/json",
+        "X-API-Key": apiKey
       }
     });
     if(!res.ok) {
       throw new Error("HTTP status " + res.status);
     }
     const data = await res.json();
-    // فرضاً data = { status: "ok", price: 123456, ... }
-    // یا هر ساختار دیگر
-    // لطفاً با مستندات واقعی چک کنید:
-    if(!data?.price) throw new Error("قیمت تتر در پاسخ تترلند پیدا نشد");
-
-    // فرض می‌کنیم data.price برحسب تومان است
-    return parseInt(data.price, 10);
+    /*
+      ساختار پاسخ احتمالی (مثال):
+      {
+        "success": true,
+        "message": "...",
+        "data": [
+          {
+            "symbol": "USDT",
+            "buy": 49500,
+            "sell": 50000,
+            ...
+          },
+          ...
+        ]
+      }
+    */
+    const tetherObj = data?.data?.find(item => item.symbol === "USDT");
+    if(!tetherObj) {
+      throw new Error("قیمت USDT پیدا نشد");
+    }
+    // در اینجا از قیمت فروش (sell) به عنوان معیار استفاده می‌کنیم
+    return parseInt(tetherObj.sell, 10);
   } catch (err) {
     console.error("Tetherland API error:", err);
     alert("خطا در دریافت قیمت تتر از تترلند!");
@@ -233,14 +246,14 @@ async function fetchTetherPriceFromTetherland() {
 }
 
 /***********************************************************
- * API گرفتن قیمت فلز از MetalpriceAPI 
+ * API گرفتن قیمت فلز از MetalpriceAPI
  **********************************************************/
 async function fetchMetalPriceFromMetalpriceAPI(metalKey) {
-  const apiKey = "c2f59c2d961f1da98265a3acd9dfe431";
+  const apiKey = "c2f59c2d961f1da98265a3acd9dfe431"; // نمونه
   const symbolMap = {
-    "فولاد ساده":     "STEEL-SC", 
-    "فولاد زنگ‌نزن":  "STEEL-SC", 
-    "مس":             "XCU", 
+    "فولاد ساده":     "STEEL-SC",
+    "فولاد زنگ‌نزن":  "STEEL-SC",
+    "مس":             "XCU",
     "آلومینیوم":      "ALU",
     "برنج":           "BRASS",
     "فسفر برنز":      "BRONZE",
@@ -280,9 +293,10 @@ const monthlyInterest = 0.07;
 function calcPriceNoPrepay(basePrice) {
   return basePrice * (1 + monthlyInterest);
 }
+
 function calcPriceWith50Prepay(basePrice) {
-  const dp = basePrice * 0.5;
-  const remain = basePrice - dp;
+  const dp = basePrice * 0.5;    // پیش‌پرداخت
+  const remain = basePrice - dp; // باقیمانده
   return dp + remain * (1 + monthlyInterest);
 }
 
