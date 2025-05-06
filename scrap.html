@@ -98,6 +98,8 @@
       background: #444; color: #fff; border-radius: var(--r);
     }
 
+    .hidden { display: none !important; }
+
     @media (max-width: 600px) {
       .card {
         grid-template-columns: 1fr !important;
@@ -116,6 +118,7 @@
 <main>
   <h2 style="text-align:center">محاسبه ضایعات (Kerf &amp; Scrap)</h2>
   <form id="scrapForm" class="card">
+    <!-- نوع ماده و مقطع -->
     <label>نوع ماده
       <select id="s-mat">
         <option value="7800">فولاد</option>
@@ -127,16 +130,22 @@
       <select id="s-sec">
         <option value="round">میله‌گرد</option>
         <option value="pipe">لوله</option>
-        <option value="flat">تسمه/ورق</option>
+        <option value="hex">شش‌گوش</option>
+        <option value="square">چهارگوش</option>
+        <option value="sheet">ورق</option>
+        <option value="flat">تسمه</option>
+        <option value="angle">نبشی</option>
+        <option value="channel">ناودونی</option>
+        <option value="ibeam">تیراهن</option>
+        <option value="box">قوطی</option>
       </select>
     </label>
 
-    <label>قطر/ضخامت (mm)
-      <input id="s-d1" type="number" placeholder="مثلاً 4 یا 40">
-    </label>
-    <label>ابعاد فرعی (mm)
-      <input id="s-d2" type="number" placeholder="مثلاً قطر داخلی لوله">
-    </label>
+    <!-- فیلدهای ابعاد (چندگانه) -->
+    <label id="f-d1">قطر/ضخامت <input id="s-d1" type="number" placeholder="مثلاً 40"></label>
+    <label id="f-d2">قطر داخلی / بُعد دوم <input id="s-d2" type="number" placeholder="مثلاً 35"></label>
+    <label id="f-d3" class="hidden">بُعد سوم <input id="s-d3" type="number" placeholder="مثلاً 6"></label>
+    <label id="f-d4" class="hidden">بُعد چهارم <input id="s-d4" type="number" placeholder="مثلاً 4"></label>
 
     <label>طول قطعه (cm)
       <input id="s-len" type="number" placeholder="مثلاً 100">
@@ -161,11 +170,68 @@
 </main>
 
 <script>
+/********************************************************
+ * ۱) نمایش/پنهان‌سازی فیلدهای مورد نیاز برای هر مقطع
+ ********************************************************/
+const secSelect = document.getElementById('s-sec');
+const fields = ['f-d1','f-d2','f-d3','f-d4']; // لیبل‌هایی که داریم
+const inputs = ['s-d1','s-d2','s-d3','s-d4'];
+
+function updateSecFields(){
+  // ابتدا همه را پنهان کنیم
+  fields.forEach(fId => document.getElementById(fId).classList.add('hidden'));
+  inputs.forEach(inId => document.getElementById(inId).required = false);
+
+  switch(secSelect.value){
+    case 'round': /* میله گرد → d1 کافی */
+      document.getElementById('f-d1').classList.remove('hidden');
+      document.getElementById('s-d1').required = true;
+      break;
+    case 'pipe': /* لوله → d1=قطر بیرونی، d2=قطر داخلی */
+      document.getElementById('f-d1').classList.remove('hidden');
+      document.getElementById('f-d2').classList.remove('hidden');
+      document.getElementById('s-d1').required = true;
+      document.getElementById('s-d2').required = true;
+      break;
+    case 'hex': /* شش‌گوش → d1 */
+    case 'square': /* چهارگوش → d1 */
+    case 'sheet':  /* ورق → d1 ضخامت */
+    case 'flat':   /* تسمه → d1 ضخامت */
+      document.getElementById('f-d1').classList.remove('hidden');
+      document.getElementById('s-d1').required = true;
+      break;
+    case 'angle': /* نبشی → d1=ضخامت، d2=ارتفاع بال؟ */
+    case 'channel': /* ناودونی → d1= ارتفاع، d2=جان یا ضخامت؟ */
+    case 'ibeam': /* تیرآهن → ممکن است به d3,d4 هم نیاز داشته باشید */
+      document.getElementById('f-d1').classList.remove('hidden');
+      document.getElementById('f-d2').classList.remove('hidden');
+      document.getElementById('s-d1').required = true;
+      document.getElementById('s-d2').required = true;
+      // اگر واقعاً نیاز به d3,d4 داشتید، آن‌ها را هم نشان دهید
+      break;
+    case 'box': /* قوطی → d1=ضخامت، d2=ابعاد اصلی؟ d3=? */
+      document.getElementById('f-d1').classList.remove('hidden');
+      document.getElementById('f-d2').classList.remove('hidden');
+      document.getElementById('s-d1').required = true;
+      document.getElementById('s-d2').required = true;
+      break;
+  }
+}
+secSelect.addEventListener('change', updateSecFields);
+updateSecFields(); // فراخوانی اولیه
+
+
+/********************************************************
+ * ۲) محاسبه ضایعات (نسخه نمایشی)
+ *    بسته به پروژهٔ شما فرمول دقیق ممکن است فرق کند
+ ********************************************************/
 function calcScrap(){
   const rho = parseFloat(document.getElementById('s-mat').value||"0");
   const sec = document.getElementById('s-sec').value;
   const d1  = parseFloat(document.getElementById('s-d1').value||"0");
   const d2  = parseFloat(document.getElementById('s-d2').value||"0");
+  const d3  = parseFloat(document.getElementById('s-d3').value||"0");
+  const d4  = parseFloat(document.getElementById('s-d4').value||"0");
   const len = parseFloat(document.getElementById('s-len').value||"0")/100; // cm->m
   const qty = parseInt(document.getElementById('s-qty').value||"1",10);
   const kerf= parseFloat(document.getElementById('s-kerf').value||"1.2");
@@ -173,21 +239,41 @@ function calcScrap(){
   const $out = document.getElementById('s-out');
   const $warn= document.getElementById('s-warn');
 
-  if(rho<=0 || d1<=0 || len<=0 || qty<=0){
+  // بررسی ورودی‌ها
+  if(rho<=0 || len<=0 || qty<=0){
     $warn.textContent = "مقادیر را کامل وارد کنید.";
+    $out.textContent = "—";
+    return;
+  }
+  // برای برخی مقاطع d1 هم ضروری است
+  if(d1<=0){
+    $warn.textContent = "ابعاد لازم وارد نشده‌اند.";
     $out.textContent = "—";
     return;
   }
   $warn.textContent="";
 
-  // فرمول نمونه (ساده): حجم پرت = طول(m)* kerf(mm)* ضخامت قطعه(mm)* تعداد
-  // 1 mm = 1e-3 m
-  const volume_m3 = len * (kerf*1e-3) * (d1*1e-3) * qty;
-  // وزن = حجم * چگالی (kg/m^3)
-  const scrap_kg = rho*volume_m3;
+  /* فرمول نمونه:
+   * حجم پرت = طول(m) * ضخامت برش(mm -> m) * ضخامت قطعه(mm -> m) ...
+   * در عمل ممکن است بخواهید "محیط برش" یا پارامترهای دیگر را حساب کنید.
+   */
+  let thicknessMM = d1; 
+  // مثال برای "pipe": می‌توان ضخامت را d1 - d2 /2 گرفت یا ...
+  // برای "ibeam" یا "channel" ممکن است طول برش متفاوت باشد...
+  // در اینجا ساده فرض می‌کنیم thickness = d1.
+
+  // تبدیلات واحد
+  const kerf_m = kerf * 1e-3; // mm -> m
+  const thick_m = thicknessMM * 1e-3;
+  // حجم
+  const volume_m3 = len * kerf_m * thick_m * qty;
+  // وزن
+  const scrap_kg = rho * volume_m3;
+
   $out.textContent = scrap_kg.toFixed(3)+" کیلوگرم";
 }
 
+// رویداد کلیک
 document.getElementById('s-calc').addEventListener('click', calcScrap);
 </script>
 </body>
