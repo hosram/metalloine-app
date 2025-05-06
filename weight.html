@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>محاسبه وزن | Metalloine</title>
+
+  <!-- فونت Vazirmatn -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+
+  <style>
+    :root {
+      --c-primary: #8E1F61;
+      --c-accent:  #8FA2B2;
+      --glass: rgba(255,255,255,0.1);
+      --r: 24px;
+      --g: 12px;
+    }
+    * {
+      box-sizing: border-box; margin: 0; padding: 0;
+    }
+    body {
+      background: #000; color: #fff;
+      font-family: "Vazirmatn", sans-serif;
+      min-height: 100vh; line-height: 1.6;
+    }
+    /* هدر */
+    #topbar {
+      display: flex; justify-content: center; align-items: center;
+      height: 64px; margin: var(--g);
+      background: var(--glass); backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: var(--r);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 1.4rem; font-weight: 700;
+    }
+    .ring {
+      width: 22px; height: 22px;
+      border: 6px solid var(--c-accent); border-radius: 50%;
+    }
+    .brand { color: var(--c-primary); }
+
+    main {
+      max-width: 420px; margin: 0 auto; padding: var(--g);
+    }
+
+    .card {
+      background: var(--glass); backdrop-filter: blur(24px);
+      border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 16px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-top: var(--g);
+    }
+
+    label {
+      display: flex; flex-direction: column; gap: 4px;
+      font-size: 0.85rem;
+    }
+    input, select, button {
+      border: none; border-radius: var(--r);
+      background: var(--glass); color: #fff; font: inherit;
+      padding: 10px;
+    }
+    select:focus, input:focus {
+      outline: 2px solid var(--c-primary);
+    }
+    select, option {
+      background: #1a1a1a; color: #fff;
+    }
+    .row-2 { grid-column: span 2; }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+      color: #fff; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      font-weight: 600;
+      border: none; border-radius: var(--r);
+    }
+
+    output {
+      display: block; background: #111; text-align: center;
+      padding: 12px; border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 1.2rem; font-weight: 700;
+    }
+    output[aria-live] { min-height: 1.4em; }
+
+    .warning {
+      color: #ff8080; text-align: center; grid-column: span 2;
+      min-height: 1.2em; font-size: 0.8rem;
+    }
+
+    .btn-icon {
+      display: block; width: 90%; max-width: 420px;
+      margin: 2rem auto; text-align: center; padding: 14px;
+      text-decoration: none;
+      background: #444; color: #fff; border-radius: var(--r);
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<header id="topbar">
+  <span class="logo">
+    <span class="ring"></span>
+    <span class="brand">Metalloine</span>
+  </span>
+</header>
+
+<main>
+  <h2 style="text-align:center">محاسبه وزن</h2>
+  <form id="weightForm" class="card">
+    <label>نوع ماده
+      <select id="w-mat">
+        <option value="7800">فولاد</option>
+        <option value="2700">آلومینیوم</option>
+        <option value="8900">مس</option>
+      </select>
+    </label>
+    <label>نوع مقطع
+      <select id="w-sec">
+        <option value="round">میله‌گرد</option>
+        <option value="pipe">لوله</option>
+        <option value="flat">تسمه/ورق</option>
+      </select>
+    </label>
+    <label>قطر/ضخامت (mm)
+      <input id="w-d1" type="number" placeholder="مثلاً 40">
+    </label>
+    <label>ابعاد فرعی (mm)
+      <input id="w-d2" type="number" placeholder="مثلاً قطر داخلی لوله">
+    </label>
+    <label>طول قطعه (cm)
+      <input id="w-len" type="number" placeholder="مثلاً 100">
+    </label>
+    <label>تعداد
+      <input id="w-qty" type="number" value="1">
+    </label>
+
+    <button id="w-calc" type="button" class="btn-submit row-2">محاسبه</button>
+    <output id="w-out" class="row-2" aria-live="polite">—</output>
+    <div id="w-warn" class="warning"></div>
+  </form>
+
+  <a href="index.html" class="btn-icon">⬅ بازگشت</a>
+</main>
+
+<script>
+function areaRound(d){ return Math.PI*d*d/4; }
+function areaPipe(od,id){ return areaRound(od) - areaRound(id); }
+function areaFlat(thick,width){ return thick*width; }
+
+function calcWeight(){
+  const rho = parseFloat(document.getElementById('w-mat').value||"0");
+  const sec = document.getElementById('w-sec').value;
+  const d1  = parseFloat(document.getElementById('w-d1').value||"0");
+  const d2  = parseFloat(document.getElementById('w-d2').value||"0");
+  const len = parseFloat(document.getElementById('w-len').value||"0")/100; // cm->m
+  const qty = parseInt(document.getElementById('w-qty').value||"1",10);
+  const $out = document.getElementById('w-out');
+  const $warn= document.getElementById('w-warn');
+
+  if(rho<=0 || d1<=0 || len<=0 || qty<=0){
+    $warn.textContent="مقادیر واردشده کافی نیست.";
+    $out.textContent="—";
+    return;
+  }
+  $warn.textContent="";
+
+  let areaMM2 = 0;
+  switch(sec){
+    case 'round': areaMM2=areaRound(d1); break;
+    case 'pipe':  areaMM2=areaPipe(d1,d2); break;
+    case 'flat':  areaMM2=areaFlat(d1,d2); break;
+    default: areaMM2=0;
+  }
+  if(areaMM2<=0){
+    $warn.textContent="ابعاد مقطع نامعتبر است.";
+    $out.textContent="—";
+    return;
+  }
+
+  // حجم = area(mm^2)*length(m) => mm^3 => در m^3 = *1e-9
+  const vol_m3 = areaMM2*len*1e-9;
+  const wEach = rho*vol_m3; // kg
+  const total = wEach*qty;
+
+  $out.textContent = total.toFixed(3)+" کیلوگرم (هر قطعه: "+wEach.toFixed(3)+" kg)";
+}
+
+document.getElementById('w-calc').addEventListener('click', calcWeight);
+</script>
+</body>
+</html>
