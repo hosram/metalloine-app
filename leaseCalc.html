@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>محاسبه لیزینگ فلزات | Metalloine (با لاگ دیباگ)</title>
+  <title>محاسبه لیزینگ فلزات | Metalloine (تترلند)</title>
 
   <!-- فونت فارسی Vazirmatn -->
   <link
@@ -14,7 +14,7 @@
   <style>
     :root {
       --c-primary: #8E1F61;
-      --c-accent: #8FA2B2;
+      --c-accent:  #8FA2B2;
       --glass: rgba(255,255,255,0.1);
       --r: 24px;
       --g: 12px;
@@ -42,9 +42,7 @@
       width: 22px; height: 22px;
       border: 6px solid var(--c-accent); border-radius: 50%;
     }
-    .brand {
-      color: var(--c-primary);
-    }
+    .brand { color: var(--c-primary); }
 
     main {
       max-width: 420px; margin: 0 auto; padding: var(--g);
@@ -101,17 +99,6 @@
     .sepNumber {
       text-align: right;
     }
-    /* باکس ساده برای نمایش لاگ (اختیاری) */
-    #debugLog {
-      font-size: 0.8rem; 
-      background: #222; 
-      margin-top: 1rem; 
-      padding: 12px; 
-      border-radius: var(--r);
-      border: 1px solid rgba(255,255,255,0.2);
-      min-height: 60px;
-      white-space: pre-line;
-    }
   </style>
 </head>
 <body>
@@ -123,7 +110,7 @@
 </header>
 
 <main>
-  <h2>محاسبه لیزینگ فلزات (دیباگ)</h2>
+  <h2>محاسبه لیزینگ فلزات (تترلند)</h2>
   <div class="card">
     <!-- نام متریال -->
     <label>نام متریال
@@ -143,7 +130,7 @@
       <input id="invoicePrice" type="text" class="sepNumber" placeholder="مثلاً 5,000,000"/>
     </label>
 
-    <!-- مبلغ امروز تتر (خودکار از Nobitex) -->
+    <!-- مبلغ امروز تتر (خودکار از تترلند) -->
     <label>مبلغ امروز تتر (تومان) <small>(خودکار)</small>
       <input id="tetherToday" type="text" class="sepNumber" placeholder="در حال دریافت..." readonly/>
     </label>
@@ -167,16 +154,13 @@
     <!-- کادر سوم نتایج -->
     <div class="result-box" id="box3"></div>
 
-    <!-- بخش دیباگ -->
-    <div id="debugLog">Log:</div>
-
     <a href="index.html" class="btn-back">⬅ بازگشت</a>
   </div>
 </main>
 
 <script>
 /***********************************************************
- * 1) جداسازی سه‌رقمی
+ * جداکننده سه‌رقمی
  **********************************************************/
 function formatNumber(str) {
   let sign = "";
@@ -211,54 +195,51 @@ document.querySelectorAll(".sepNumber").forEach((el) => {
 });
 
 /***********************************************************
- * 2) المان دیباگ
+ * API گرفتن قیمت تتر از تترلند
+ *  - کلید API: RwhiHcpmdrOPYZjtOfdMLeIERPilFNMwFfO2XsgB
  **********************************************************/
-const debugEl = document.getElementById("debugLog");
-function logDebug(msg) {
-  console.log(msg); // نمایش در کنسول
-  debugEl.textContent += "\n" + msg; // افزودن به باکس debugLog
-}
+async function fetchTetherPriceFromTetherland() {
+  // طبق مستندات تترلند باید آدرس API و پارامتر/هدر را تنظیم کنید:
+  // اینجا یک نمونه فرضی است!
+  // لطفاً طبق مستندات واقعی تترلند اصلاح شود.
+  const apiKey = "RwhiHcpmdrOPYZjtOfdMLeIERPilFNMwFfO2XsgB";
+  const url = "https://api.tetherland.com/v1/usdt-price"; // نمونه فرضی
 
-/***********************************************************
- * 3) API گرفتن قیمت تتر از Nobitex
- **********************************************************/
-async function fetchTetherPriceFromNobitex() {
   try {
-    logDebug("درحال دریافت قیمت تتر از Nobitex...");
-    const url = "https://api.nobitex.ir/market/stats?srcCurrency=usdt&dstCurrency=rls";
-    logDebug("GET " + url);
-
-    const res = await fetch(url);
-    logDebug("وضعیت پاسخ Nobitex: " + res.status);
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}` 
+      }
+    });
+    if(!res.ok) {
+      throw new Error("HTTP status " + res.status);
+    }
     const data = await res.json();
-    logDebug("Nobitex پاسخ دریافتی: " + JSON.stringify(data));
+    // فرضاً data = { status: "ok", price: 123456, ... }
+    // یا هر ساختار دیگر
+    // لطفاً با مستندات واقعی چک کنید:
+    if(!data?.price) throw new Error("قیمت تتر در پاسخ تترلند پیدا نشد");
 
-    const latestPrice = data?.stats?.["usdt-rls"]?.latest;
-    if(!latestPrice) throw new Error("قیمت تتر پیدا نشد (latestPrice is null)");
-    // تبدیل به تومان
-    const tetherInToman = Math.round(latestPrice / 10);
-    logDebug("قیمت تتر به تومان: " + tetherInToman);
-    return tetherInToman;
+    // فرض می‌کنیم data.price برحسب تومان است
+    return parseInt(data.price, 10);
   } catch (err) {
-    console.error("Nobitex API error:", err);
-    logDebug("Nobitex خطا: " + err);
-    alert("خطا در دریافت قیمت تتر از Nobitex. شاید نیاز به VPN باشد.");
+    console.error("Tetherland API error:", err);
+    alert("خطا در دریافت قیمت تتر از تترلند!");
     // مقدار پیشفرض
-    return 100000; 
+    return 100000;
   }
 }
 
 /***********************************************************
- * 4) API گرفتن قیمت فلز از MetalpriceAPI
+ * API گرفتن قیمت فلز از MetalpriceAPI 
  **********************************************************/
 async function fetchMetalPriceFromMetalpriceAPI(metalKey) {
-  // کلید API شما:
   const apiKey = "c2f59c2d961f1da98265a3acd9dfe431";
-
-  // نگاشت متریال به سیمبول
   const symbolMap = {
     "فولاد ساده":     "STEEL-SC", 
-    "فولاد زنگ‌نزن":  "STEEL-SC", // نمونه
+    "فولاد زنگ‌نزن":  "STEEL-SC", 
     "مس":             "XCU", 
     "آلومینیوم":      "ALU",
     "برنج":           "BRASS",
@@ -267,50 +248,46 @@ async function fetchMetalPriceFromMetalpriceAPI(metalKey) {
   };
   const symbol = symbolMap[metalKey] || "STEEL-SC";
 
-  // URL
   const url = `https://api.metalpriceapi.com/v1/latest?api_key=${apiKey}&base=USD&currencies=${symbol}`;
-  logDebug(`درحال دریافت قیمت جهانی فلز "${metalKey}" با نماد: ${symbol}\nGET ${url}`);
   try {
     const res = await fetch(url);
-    logDebug("MetalpriceAPI پاسخ: " + res.status);
+    if(!res.ok) {
+      throw new Error("HTTP status " + res.status);
+    }
     const data = await res.json();
-    logDebug("MetalpriceAPI JSON: " + JSON.stringify(data));
-    if(!data?.rates) throw new Error("ساختار پاسخ نامعتبر");
-    const usdPrice = data.rates[`USD${symbol}`];
-    if(!usdPrice) throw new Error("قیمت فلز یافت نشد (usdPrice=null)");
+    const usdPrice = data?.rates?.[`USD${symbol}`];
+    if(!usdPrice) throw new Error("قیمت فلز پیدا نشد.");
 
-    // قیمت 1 واحد از آن فلز (بر حسب دلار)
-    // حالا نرخ تتر (دلار به تومان) را میگیریم
-    const tetherPrice = await fetchTetherPriceFromNobitex();
-    const metalInToman = Math.round(usdPrice * tetherPrice);
-    logDebug("قیمت فلز به تومان: " + metalInToman);
-    return metalInToman;
+    // 1) قیمت فلز در دلار
+    // 2) قیمت تتر (دلار به تومان)
+    const tetherInToman = await fetchTetherPriceFromTetherland();
+    return Math.round(usdPrice * tetherInToman);
   } catch(err) {
     console.error("MetalpriceAPI error:", err);
-    logDebug("MetalpriceAPI خطا: " + err);
-    alert("خطا در دریافت قیمت فلز از MetalpriceAPI. شاید نیاز به VPN باشد.");
+    alert("خطا در دریافت قیمت فلز از MetalpriceAPI!");
     return 50000;
   }
 }
 
 /***********************************************************
- * 5) نرخ سود یک ماهه = 7٪
+ * نرخ سود یک ماهه = 7٪
  **********************************************************/
 const monthlyInterest = 0.07;
 
 /***********************************************************
- * 6) محاسبات نسیه
+ * محاسبه نسیه
  **********************************************************/
 function calcPriceNoPrepay(basePrice) {
   return basePrice * (1 + monthlyInterest);
 }
 function calcPriceWith50Prepay(basePrice) {
   const dp = basePrice * 0.5;
-  return dp + (basePrice - dp) * (1 + monthlyInterest);
+  const remain = basePrice - dp;
+  return dp + remain * (1 + monthlyInterest);
 }
 
 /***********************************************************
- * 7) محاسبه و نمایش نتایج
+ * محاسبه و نمایش نتایج
  **********************************************************/
 function computeAndDisplay() {
   const mat = document.getElementById("mat").value;
@@ -319,15 +296,12 @@ function computeAndDisplay() {
   const globalMetalPrice = getNumericValue(document.getElementById("globalMetalPrice").value);
   const predictedDollar = getNumericValue(document.getElementById("predictedDollar").value);
 
-  logDebug("--- شروع محاسبه ---");
-  logDebug(`mat=${mat}, invoicePrice=${invoicePrice}, tetherToday=${tetherToday}, globalMetalPrice=${globalMetalPrice}, predictedDollar=${predictedDollar}`);
-
   if(invoicePrice <= 0) {
     alert("لطفاً مبلغ کلی فاکتور را وارد کنید.");
     return;
   }
   if(tetherToday <= 0) {
-    alert("قیمت تتر نامعتبر است (Nobitex).");
+    alert("قیمت تتر نامعتبر (تترلند).");
     return;
   }
   if(globalMetalPrice <= 0) {
@@ -335,6 +309,7 @@ function computeAndDisplay() {
     return;
   }
 
+  // ====== کادر اول ======
   const box1 = document.getElementById("box1");
   box1.textContent =
     "متریال: " + mat + "\n" +
@@ -342,9 +317,8 @@ function computeAndDisplay() {
     "مبلغ امروز تتر (تومان): " + tetherToday.toLocaleString("en-US") + "\n" +
     "مبلغ هر کیلو متریال پایه جهانی (تومان): " + globalMetalPrice.toLocaleString("en-US");
 
-  // نسیه بدون پیش پرداخت
+  // ========= کادر دوم =========
   const noPrepay = calcPriceNoPrepay(invoicePrice);
-  // نسیه با 50% پیش پرداخت
   const halfPrepay = calcPriceWith50Prepay(invoicePrice);
 
   const box2 = document.getElementById("box2");
@@ -354,7 +328,7 @@ function computeAndDisplay() {
     "قیمت‌های فوق با دلار امروز محاسبه شده.\n" +
     "در صورت افزایش قیمت دلار به همان درصد قسمت‌ها افزایش پیدا می‌کنند.";
 
-  // تغییر قیمت تتر
+  // ========= کادر سوم =========
   const newTether = tetherToday + predictedDollar;
   let ratio = 1;
   if(newTether > 0) {
@@ -370,37 +344,33 @@ function computeAndDisplay() {
     "نسیه بدون پیش‌پرداخت: " + noPrepayNew.toLocaleString("en-US") + " تومان\n" +
     "نسیه با پیش‌پرداخت 50٪: " + halfPrepayNew.toLocaleString("en-US") + " تومان\n" +
     "\n(مبلغ بابت افزایش/کاهش قیمت تتر نیز در ارقام بالا لحاظ شده است.)";
-
-  logDebug("--- محاسبه پایان یافت ---");
 }
 
 /***********************************************************
- * 8) رویداد دکمه محاسبه
+ * رویداد دکمه محاسبه
  **********************************************************/
 document.getElementById("btnCalc").addEventListener("click", () => {
   computeAndDisplay();
 });
 
 /***********************************************************
- * 9) بارگذاری اولیه قیمت‌ها
+ * بارگذاری اولیه قیمت‌ها
  **********************************************************/
 async function loadInitialData() {
-  logDebug("=== بارگذاری اولیه داده‌ها ===");
-  // قیمت تتر از Nobitex
-  const tetherPrice = await fetchTetherPriceFromNobitex();
+  // قیمت تتر از تترلند
+  const tetherPrice = await fetchTetherPriceFromTetherland();
   document.getElementById("tetherToday").value = tetherPrice.toLocaleString("en-US");
 
-  // قیمت متریال جهانی براساس متریال پیش‌فرض
+  // قیمت متریال جهانی
   const matSelect = document.getElementById("mat");
   const currentMat = matSelect.value;
   const gPrice = await fetchMetalPriceFromMetalpriceAPI(currentMat);
   document.getElementById("globalMetalPrice").value = gPrice.toLocaleString("en-US");
 }
 
-/* تغییر متریال -> درخواست مجدد قیمت MetalpriceAPI */
+/* اگر کاربر متریال را تغییر داد، قیمت جهانی را دوباره بگیریم */
 document.getElementById("mat").addEventListener("change", async (e) => {
   const matName = e.target.value;
-  logDebug("کاربر متریال را تغییر داد => " + matName);
   const gPrice = await fetchMetalPriceFromMetalpriceAPI(matName);
   document.getElementById("globalMetalPrice").value = gPrice.toLocaleString("en-US");
 });
