@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Metalloine | لیست بانک‌های حسابفا</title>
 
 <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
 
 <style>
-:root{
-  --c1:#8E1F61;--c2:#8FA2B2;--glass:rgba(255,255,255,.1);--r:22px;
-}
+:root{--c1:#8E1F61;--c2:#8FA2B2;--glass:rgba(255,255,255,.1);--r:22px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6}
-#topbar{display:flex;justify-content:center;align-items:center;height:64px;
-  margin:12px;background:var(--glass);backdrop-filter:blur(24px);
-  border:1px solid rgba(255,255,255,.25);border-radius:var(--r);}
+#topbar{display:flex;justify-content:center;align-items:center;height:64px;margin:12px;
+  background:var(--glass);backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
 .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
 .ring{width:22px;height:22px;border:6px solid var(--c2);border-radius:50%}
 .brand{color:var(--c1)}
@@ -25,14 +23,16 @@ main{max-width:500px;margin:0 auto;padding:12px}
   border:1px solid rgba(255,255,255,.2);padding:16px;margin-top:12px}
 .card h2{text-align:center;margin-bottom:8px;font-size:1.2rem}
 .card p{margin-bottom:12px}
-.btn{display:inline-block;padding:10px 18px;border-radius:8px;border:none;
-  cursor:pointer;background:linear-gradient(135deg,var(--c1),var(--c2));
-  color:#fff;font-weight:700}
+.btn{display:inline-block;padding:10px 18px;border-radius:8px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-weight:700}
+.btn:hover{opacity:.9}
+.loader{display:inline-block;width:18px;height:18px;border:3px solid #fff;border-top-color:transparent;
+  border-radius:50%;animation:spin 1s linear infinite;margin-right:6px;vertical-align:-2px}
+@keyframes spin{to{transform:rotate(360deg)}}
 .status{margin-top:10px;color:#ff8080;min-height:1.2em}
 .bank-list{display:flex;flex-direction:column;gap:12px;margin-top:14px}
-.bank-row{display:flex;justify-content:space-between;align-items:center;
-  background:#111;border-radius:var(--r);padding:10px 14px;
-  border:1px solid rgba(255,255,255,.2)}
+.bank-row{display:flex;justify-content:space-between;align-items:center;background:#111;
+  border-radius:var(--r);padding:10px 14px;border:1px solid rgba(255,255,255,.2)}
 .bank-balance{color:#56ff56;font-weight:700}
 </style>
 </head>
@@ -45,7 +45,7 @@ main{max-width:500px;margin:0 auto;padding:12px}
 <main>
   <div class="card">
     <h2>لیست بانک‌های حسابفا</h2>
-    <p>روی دکمهٔ زیر بزنید تا فهرست بانک‌ها همراه موجودی‌شان نمایش داده شود.</p>
+    <p>روی دکمه کلیک کنید تا فهرست حساب‌های بانکی به‌همراه موجودی فعلی نمایش داده شود.</p>
 
     <button id="loadBtn" class="btn">دریافت لیست بانک‌ها</button>
     <div id="status" class="status"></div>
@@ -55,54 +55,72 @@ main{max-width:500px;margin:0 auto;padding:12px}
 </main>
 
 <script>
-/* === تنظیمات اتصال === */
+/* ====== اطلاعات احراز هویت ====== */
 const API_KEY     = "XYeyCb0ImFsL8hr97IjLcJyBy7NImVm4";
 const LOGIN_TOKEN = "09a16a9e8feb473bacb8ccfe1a0b2ecac9798d486193bac994022ba9e4697524d5b8de6dec5ad2af79cbae77d4ca2af0";
 
-/* endpoint واقعی لیست بانک‌ها را اینجا قرار دهید */
-const BANKS_URL   = "https://app.hesabfa.com/app/d4579cf1a94d6a693b8ab660089b8297y1/list-banks";
+/* ====== آدرس صحیح لیست حساب‌های بانکی در حسابفا (متد POST) ======
+   مستندات رسمی: POST https://api.hesabfa.com/v1/bankAccount/list         */
+const BANKS_URL = "https://api.hesabfa.com/v1/bankAccount/list";
 
+/* ====== المان‌ها ====== */
 const statusEl = document.getElementById("status");
 const listEl   = document.getElementById("bankList");
+const btn      = document.getElementById("loadBtn");
 
-document.getElementById("loadBtn").onclick = async () => {
-  statusEl.textContent = "در حال دریافت...";
+/* ====== رویداد کلیک ====== */
+btn.addEventListener("click", async () => {
   listEl.innerHTML = "";
+  statusEl.innerHTML = '<span class="loader"></span>در حال دریافت...';
+
+  /* بدنهٔ درخواستی طبق مستندات حسابفا */
+  const body = JSON.stringify({
+    apiKey: API_KEY,
+    token : LOGIN_TOKEN,
+    /* اگر خواستید فیلتر بفرستید اینجا اضافه کنید */
+    filter: {}
+  });
 
   try{
     const res = await fetch(BANKS_URL,{
-      headers:{
-        "Api-Key":API_KEY,
-        "Authorization":"Bearer "+LOGIN_TOKEN,
-        "Content-Type":"application/json"
-      }
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body
     });
-    if(!res.ok) throw new Error(`کد پاسخ ${res.status}`);
 
-    const banks = await res.json();           // ← آرایهٔ بانک‌ها
+    if(!res.ok){
+      throw new Error("کد پاسخ "+res.status);
+    }
+
+    const json = await res.json();
+    /* پاسخ استاندارد حسابفا: { "Result": [ ...BankAccounts ] } */
+    const banks = json.Result || json || [];
     if(!Array.isArray(banks) || !banks.length){
-      statusEl.textContent = "بانکی پیدا نشد!";
+      statusEl.textContent = "هیچ حساب بانکی برنگشت!";
       return;
     }
 
     banks.forEach(b=>{
-      /* name و balance را با فیلدهای واقعی عوض کنید */
-      const name = b.bankName  || b.title  || "بانک بی‌نام";
-      const bal  = b.balance   || b.currentBalance || 0;
+      /* ==== نگاشت فیلدها: Title و Balance طبق حسابفا ==== */
+      const name = b.Title   || b.bankName || "بدون‌نام";
+      const bal  = b.Balance || b.balance  || 0;
 
       const row = document.createElement("div");
-      row.className="bank-row";
+      row.className = "bank-row";
       row.innerHTML = `
         <span>${name}</span>
-        <span class="bank-balance">${bal.toLocaleString("fa-IR")} ریال</span>`;
+        <span class="bank-balance">${bal.toLocaleString("fa-IR")} ریال</span>
+      `;
       listEl.appendChild(row);
     });
     statusEl.textContent = "";
-  }catch(err){
-    console.error(err);
-    statusEl.textContent = "خطا: "+err.message+" (ممکن است به‌خاطر CORS باشد)";
+
+  }catch(e){
+    console.error(e);
+    statusEl.textContent = "خطا: "+e.message+
+      " (اگر «CORS» در کنسول دیدید باید از سرور واسط استفاده کنید)";
   }
-};
+});
 </script>
 </body>
 </html>
