@@ -3,187 +3,129 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>تبدیل سختی – ساده‌شده</title>
+  <title>تبدیل سختی – تک‌فایلی</title>
 
   <!-- فونت فارسی Vazirmatn -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"
-  />
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
 
   <style>
     :root {
       --c-primary: #8E1F61;
-      --c-accent: #8FA2B2;
-      --glass: rgba(255, 255, 255, 0.1);
+      --c-accent:  #8FA2B2;
+      --glass: rgba(255,255,255,0.1);
       --r: 24px;
       --g: 12px;
     }
     * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      box-sizing: border-box; margin: 0; padding: 0;
     }
     body {
-      background: #000;
-      color: #fff;
+      background: #000; color: #fff;
       font-family: "Vazirmatn", sans-serif;
       line-height: 1.6;
     }
     /* هدر */
     #topbar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 64px;
-      margin: var(--g);
-      background: var(--glass);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: var(--r);
+      display: flex; justify-content: center; align-items: center;
+      height: 64px; margin: var(--g);
+      background: var(--glass); backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.25); border-radius: var(--r);
     }
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.4rem;
-      font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 1.4rem; font-weight: 700;
     }
     .ring {
-      width: 22px;
-      height: 22px;
-      border: 6px solid var(--c-accent);
-      border-radius: 50%;
+      width: 22px; height: 22px;
+      border: 6px solid var(--c-accent); border-radius: 50%;
     }
-    .brand {
-      color: var(--c-primary);
-    }
+    .brand { color: var(--c-primary); }
 
     main {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: var(--g);
+      max-width: 420px; margin: 0 auto; padding: var(--g);
     }
 
     .card {
       background: var(--glass);
       backdrop-filter: blur(24px);
       border-radius: var(--r);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255,255,255,0.2);
       padding: 16px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-    .row-2 {
-      grid-column: span 2;
-    }
+    .row-2 { grid-column: span 2; }
 
     label {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      display: flex; flex-direction: column; gap: 4px;
       font-size: 0.85rem;
     }
-    input,
-    select,
-    button {
-      border: none;
-      border-radius: var(--r);
-      background: var(--glass);
-      color: #fff;
-      font: inherit;
+    input, select, button {
+      border: none; border-radius: var(--r);
+      background: var(--glass); color: #fff; font: inherit;
       padding: 10px;
     }
-    select:focus,
-    input:focus {
+    select:focus, input:focus {
       outline: 2px solid var(--c-primary);
     }
-    select,
-    option {
-      background: #1a1a1a; /* پس‌زمینه تیره برای نمایش بهتر منو */
-      color: #fff;
+    select, option {
+      background: #1a1a1a; color: #fff;
     }
 
     .btn-flat {
-      background: #444;
-      color: #fff;
-      cursor: pointer;
+      background: #444; color: #fff; cursor: pointer;
       border-radius: var(--r);
-      border: none;
-      padding: 8px 14px;
-      font-size: 1rem;
-      transition: background 0.2s;
+      border: none; padding: 8px 14px;
+      font-size: 1rem; transition: background 0.2s;
     }
-    .btn-flat:hover {
-      background: #555;
-    }
+    .btn-flat:hover { background: #555; }
 
     .btn-main {
       background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      color: #fff; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
       font-weight: 600;
     }
 
     output {
       display: block;
       background: #111;
-      text-align: center;
-      padding: 12px;
+      text-align: center; padding: 12px;
       border-radius: var(--r);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      font-size: 1.2rem;
-      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 1.2rem; font-weight: 700;
     }
-    /* برای دسترس‌پذیری و اعلام نتیجه به screen readers */
-    output[aria-live] {
-      min-height: 1.2em;
-    }
+    /* دسترس‌پذیری: screen reader نتیجه را اعلام کند */
+    output[aria-live] { min-height: 1.2em; }
 
     /* پیام هشدار */
     #warn {
-      color: #ff9090;
-      font-size: 0.8rem;
-      text-align: center;
+      color: #ff9090; font-size: 0.8rem; text-align: center;
       min-height: 1.2em;
     }
 
-    /* پیشنهاد گریدها */
+    /* لیست پیشنهاد گریدها (فعلاً غیرفعال) */
     #suggest {
-      margin-top: 8px;
-      font-size: 0.8rem;
-      list-style: none;
-      padding: 0;
+      margin-top: 8px; font-size: 0.8rem;
+      list-style: none; padding: 0;
     }
-    #suggest li {
-      margin-bottom: 4px;
-    }
+    #suggest li { margin-bottom: 4px; }
 
     /* لینک بازگشت */
     .btn-icon {
-      display: block;
-      width: 90%;
-      max-width: 420px;
-      margin: 2rem auto;
-      text-align: center;
-      padding: 14px;
+      display: block; width: 90%; max-width: 420px;
+      margin: 2rem auto; text-align: center; padding: 14px;
     }
 
     /* Toast کپی */
     #copy-toast {
-      position: fixed;
-      bottom: 16px;
-      left: 50%;
+      position: fixed; bottom: 16px; left: 50%;
       transform: translateX(-50%);
-      background: #333;
-      color: #fff;
-      padding: 8px 16px;
+      background: #333; color: #fff; padding: 8px 16px;
       border-radius: var(--r);
-      opacity: 0;
-      transition: 0.3s;
-      font-size: 0.85rem;
+      opacity: 0; transition: 0.3s; font-size: 0.85rem;
     }
   </style>
 </head>
@@ -206,7 +148,7 @@
 
       <!-- واحد از -->
       <label>از:
-        <!-- نمادهای روشن (⚪، ○، ◌، ... ) تا در تم تاریک بهتر دیده شوند -->
+        <!-- حروف/نمادهای سفید تا در پس‌زمینهٔ تیره دیده شوند -->
         <select id="h-from">
           <option value="HB">⚪ HB</option>
           <option value="HRC">○ HRC</option>
@@ -217,8 +159,7 @@
 
       <!-- واحد به + دکمه سواپ -->
       <div style="display: flex; align-items: end; gap: 4px">
-        <label style="flex: 1"
-          >به:
+        <label style="flex: 1">به:
           <select id="h-to">
             <option value="HRC">○ HRC</option>
             <option value="HB">⚪ HB</option>
@@ -231,9 +172,7 @@
           type="button"
           class="btn-flat"
           aria-label="جابجایی واحد"
-        >
-          ↔︎
-        </button>
+        >↔︎</button>
       </div>
 
       <!-- انتخاب جنس -->
@@ -256,30 +195,83 @@
       <output id="h-out" class="row-2" aria-live="polite">—</output>
       <!-- پیام هشدار/خطا -->
       <div id="warn" class="row-2"></div>
-      <!-- پیشنهاد گریدها -->
+      <!-- پیشنهاد گریدها (غیرفعال) -->
       <ul id="suggest" class="row-2"></ul>
     </form>
   </main>
 
+  <!-- دکمه بازگشت به صفحه اصلی (اختیاری) -->
   <a href="index.html" class="btn-main btn-icon">⬅ بازگشت</a>
 
   <!-- Toast نمایش پیغام "کپی شد" -->
   <div id="copy-toast">کپی شد!</div>
 
-  <!-- ماژول اولیه برای وجود فایل تبدیل -->
-  <script type="module">
-    import data from "./convertHardness.js";
-    // صرفاً برای اطمینان از وجود فایل؛ در مرحله بعد lazy-load می‌کنیم.
-  </script>
+  <!-- اسکریپت: همه‌چیز در همین فایل -->
+  <script>
+    /*****************************************************
+     * ۱) تابع تبدیل سختی (نسخه‌ی نمایشی/فرضی)          *
+     *    اینجا باید فرمول واقعی را جایگزین کنید.        *
+     *****************************************************/
+    function convertHardness(value, fromScale, toScale, material) {
+      // اگر واحد مبدا و مقصد یکی است، تغییری لازم نیست
+      if (fromScale === toScale) {
+        return value;
+      }
 
-  <!-- اسکریپت اصلی -->
-  <script type="module">
-    /* ---------- متغیّرهای سراسری ---------- */
-    let hardness = null;  // ماژول تبدیل سختی، Lazy Load
-    // اگر از گریدهای مواد استفاده نمی‌کنید، می‌توانید بخش مربوط به gradesMap را حذف کنید
-    let gradesMap = null; // در صورت نیاز به جدول گرید
+      // گام اول: تبدیل ورودی به HB (به شکل فرضی)
+      let intermediate = value;
+      if (fromScale === "HRC") {
+        intermediate = value * 10 + 100; // فرمول فرضی
+      } else if (fromScale === "HRB") {
+        intermediate = value * 5 + 80;   // فرمول فرضی
+      } else if (fromScale === "HV") {
+        intermediate = value / 3;        // فرمول فرضی
+      }
+      // گام دوم: از HB به واحد مقصد
+      let finalVal = intermediate;
+      if (toScale === "HRC") {
+        finalVal = (intermediate - 100) / 10; // فرمول فرضی
+      } else if (toScale === "HRB") {
+        finalVal = (intermediate - 80) / 5;   // فرمول فرضی
+      } else if (toScale === "HV") {
+        finalVal = intermediate * 3;          // فرمول فرضی
+      }
 
-    // انتخاب المان‌های DOM
+      // مثال: کاهش سختی برای آلومینیوم در HRC
+      if (material === "aluminium" && toScale === "HRC") {
+        finalVal *= 0.5;
+      }
+
+      return finalVal;
+    }
+
+    /*******************************************
+     * ۲) نگه‌داری در LocalStorage (اختیاری)  *
+     *******************************************/
+    function saveState(){
+      const data = {
+        val: $val.value,
+        from: $from.value,
+        to: $to.value,
+        mat: $mat.value
+      };
+      localStorage.setItem('hardnessState', JSON.stringify(data));
+    }
+    function loadState(){
+      const s = localStorage.getItem('hardnessState');
+      if(!s) return;
+      try {
+        const data = JSON.parse(s);
+        if(data.val)  $val.value = data.val;
+        if(data.from) $from.value = data.from;
+        if(data.to)   $to.value = data.to;
+        if(data.mat)  $mat.value = data.mat;
+      } catch(e){}
+    }
+
+    /*******************************************
+     * ۳) راه‌اندازی رویدادها و منطق اصلی    *
+     *******************************************/
     const $val = document.getElementById("h-val");
     const $from = document.getElementById("h-from");
     const $to = document.getElementById("h-to");
@@ -290,27 +282,23 @@
     const swapBtn = document.getElementById("swapBtn");
     const toast = document.getElementById("copy-toast");
 
-    /* -------- لود تنبل مبدّل سختی ---------- */
-    async function loadHardness() {
-      if (!hardness) {
-        hardness = await import("./convertHardness.js");
-      }
-    }
-
-    /* ---------- تابع انیمیشن عدد ---------- */
+    // تابع انیمیشن نمایش اعداد
     function animateNumber(el, from, to) {
       const dur = 600;
       const start = Date.now();
-      (function step() {
+      (function step(){
         const p = Math.min((Date.now() - start) / dur, 1);
-        const val = from + (to - from) * p;
+        const val = from + (to - from)*p;
         el.textContent = val.toFixed(1);
         if (p < 1) requestAnimationFrame(step);
       })();
     }
 
-    /* ---------- تابع اصلی آپدیت/محاسبه ---------- */
-    async function update() {
+    // تابع محاسبه اصلی
+    function update() {
+      // ذخیره وضعیت در LocalStorage
+      saveState();
+
       const v = parseFloat($val.value);
       if (isNaN(v)) {
         $out.textContent = "—";
@@ -320,73 +308,67 @@
         return;
       }
 
-      // محدوده‌های معقول برای هر مقیاس
+      // بررسی محدوده متداول
       let maxVal = 9999;
       if ($from.value.includes("HRC")) maxVal = 70;
       if ($from.value.includes("HRB")) maxVal = 100;
-      if ($from.value.includes("HB")) maxVal = 750;
-      if ($from.value.includes("HV")) maxVal = 2000;
+      if ($from.value.includes("HB"))  maxVal = 750;
+      if ($from.value.includes("HV"))  maxVal = 2000;
 
-      // چک کردن اینکه مقدار واردشده از محدودهٔ معمول تجاوز نکند
       if (v < 0 || v > maxVal) {
         $warn.textContent = `مقدار واردشده (${v}) از محدودهٔ معمول برای ${$from.value} خارج است!`;
       } else {
         $warn.textContent = "";
       }
-
       // هشدار برای ترکیب نامعمول
       if ($mat.value === "aluminium" && $from.value.includes("HRC")) {
-        $warn.textContent +=
-          " - آلومینیوم معمولاً در مقیاس HRC سنجیده نمی‌شود.";
+        $warn.textContent += " - آلومینیوم معمولاً در مقیاس HRC سنجیده نمی‌شود.";
       }
 
-      // بارگذاری تنبل ماژول
-      await loadHardness();
+      // حذف شکلک‌ها برای محاسبه (مثلاً "○ HRC" -> "HRC")
+      const scaleFrom = $from.value.replace(/[^\w]/g, "");
+      const scaleTo   = $to.value.replace(/[^\w]/g, "");
 
-      // برداشتن حروف اضافه از value="○ HRC" → "HRC"
-      const scaleFrom = $from.value.replace(/[^\w]/g, ""); // حروف غیرکلمه را حذف
-      const scaleTo = $to.value.replace(/[^\w]/g, "");
+      // صدا زدن تابع تبدیل (اینجا فرمول فرضی)
+      const prevVal = parseFloat($out.dataset.prev || "0");
+      const resNum = convertHardness(v, scaleFrom, scaleTo, $mat.value);
 
-      const resNum = hardness.convert(v, scaleFrom, scaleTo, $mat.value);
-
-      // انیمیشن نمایش خروجی
-      const prev = parseFloat($out.dataset.prev || "0");
-      animateNumber($out, prev, resNum);
+      animateNumber($out, prevVal, resNum);
       $out.dataset.prev = resNum;
 
-      // اگر نیازی به پیشنهاد گرید ندارید، این بخش را حذف کنید
-      // (در نسخه ساده فقط پیام "--" نمایش می‌دهیم)
+      // «پیشنهاد گرید» غیرفعال شده است
       document.getElementById("suggest").innerHTML =
         '<li style="opacity:.6">گریدها غیرفعال شده‌اند</li>';
     }
 
-    /* -------- کپی مقدار خروجی با کلیک -------- */
-    $out.addEventListener("click", async () => {
-      if ($out.textContent === "—") return;
+    // رویداد دکمه «محاسبه»
+    btnCalc.addEventListener("click", update);
+
+    // رویداد کلیک برای کپی خروجی
+    $out.addEventListener("click", async ()=>{
+      if($out.textContent === "—") return;
       await navigator.clipboard.writeText($out.textContent);
       toast.style.opacity = "1";
-      setTimeout(() => (toast.style.opacity = "0"), 1200);
+      setTimeout(()=>toast.style.opacity="0", 1200);
     });
 
-    /* -------- دکمه سواپ "از" و "به" -------- */
+    // دکمه سواپ «از» و «به»
     swapBtn.addEventListener("click", () => {
       const tmp = $from.value;
       $from.value = $to.value;
-      $to.value = tmp;
+      $to.value   = tmp;
       update();
     });
 
-    /* -------- رویداد برای محاسبه خودکار -------- */
-    [$val, $from, $to, $mat].forEach((el) => {
-      ["input", "change"].forEach((ev) => {
+    // محاسبه خودکار حین تایپ یا تغییر انتخاب
+    [$val, $from, $to, $mat].forEach(el => {
+      ["input","change"].forEach(ev => {
         el.addEventListener(ev, update);
       });
     });
 
-    /* -------- دکمه محاسبه -------- */
-    btnCalc.addEventListener("click", update);
-
-    /* -------- راه‌اندازی اولیه -------- */
+    // راه‌اندازی اولیه
+    loadState();
     update();
   </script>
 </body>
