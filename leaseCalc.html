@@ -5,96 +5,141 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>محاسبه لیزینگ فلزات | Metalloine</title>
 
-  <!-- فونت Vazirmatn (یا هر فونت فارسی دلخواه) -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+  <!-- فونت فارسی Vazirmatn -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"
+  />
 
-  <!-- استایل کلی (اگر در پروژه فایل استایل جدا دارید، می‌توانید همان را جایگزین کنید) -->
   <style>
     :root {
       --c-primary: #8E1F61;
-      --c-accent:  #8FA2B2;
+      --c-accent: #8FA2B2;
       --glass: rgba(255,255,255,0.1);
       --r: 24px;
       --g: 12px;
     }
     * {
-      box-sizing: border-box; margin: 0; padding: 0;
+      box-sizing: border-box;
+      margin: 0; 
+      padding: 0;
     }
     body {
-      background: #000; color: #fff;
+      background: #000;
+      color: #fff;
       font-family: "Vazirmatn", sans-serif;
-      min-height: 100vh; line-height: 1.6;
+      min-height: 100vh;
+      line-height: 1.6;
     }
     #topbar {
-      display: flex; justify-content: center; align-items: center;
-      height: 64px; margin: var(--g);
-      background: var(--glass); backdrop-filter: blur(24px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 64px;
+      margin: var(--g);
+      background: var(--glass);
+      backdrop-filter: blur(24px);
       border: 1px solid rgba(255,255,255,0.25);
       border-radius: var(--r);
     }
     .logo {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 1.4rem; font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.4rem;
+      font-weight: 700;
     }
     .ring {
-      width: 22px; height: 22px;
-      border: 6px solid var(--c-accent); border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      border: 6px solid var(--c-accent);
+      border-radius: 50%;
     }
-    .brand { color: var(--c-primary); }
+    .brand {
+      color: var(--c-primary);
+    }
 
     main {
-      max-width: 420px; margin: 0 auto; padding: var(--g);
+      max-width: 420px;
+      margin: 0 auto;
+      padding: var(--g);
     }
     .card {
-      background: var(--glass); backdrop-filter: blur(24px);
+      background: var(--glass);
+      backdrop-filter: blur(24px);
       border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
       padding: 16px;
       margin-top: var(--g);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
     h2 {
-      text-align: center; margin-bottom: var(--g);
+      text-align: center;
+      margin-bottom: var(--g);
     }
     label {
-      display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem;
-      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.85rem;
     }
     input, select, button {
-      border: none; border-radius: var(--r);
-      background: var(--glass); color: #fff; font: inherit;
+      border: none; 
+      border-radius: var(--r);
+      background: var(--glass); 
+      color: #fff; 
+      font: inherit;
       padding: 10px;
     }
     input:focus, select:focus {
       outline: 2px solid var(--c-primary);
     }
-    /* برای این‌که منوی کشویی (select/option) کاملاً تیره باشد: */
     select {
-      background: #333; /* یا #1a1a1a */
+      background: #333;
       color: #fff;
     }
     option {
-      background: #333; /* یا #1a1a1a */
+      background: #333;
       color: #fff;
     }
     .btn-submit {
       background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
-      color: #fff; cursor: pointer;
+      color: #fff;
+      cursor: pointer;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      font-weight: 600; margin-top: 16px;
-      width: 100%; text-align: center;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 8px;
     }
-    .result {
-      background: #111; margin-top: 12px;
-      padding: 12px; border-radius: var(--r);
+    .result-box {
+      background: #111;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
-      font-size: 1rem; white-space: pre-line;
+      font-size: 0.9rem;
+      white-space: pre-line;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       min-height: 4em;
     }
     .btn-back {
-      display: inline-block; margin-top: 20px;
-      background: #444; color: #fff; border-radius: var(--r);
-      padding: 10px 20px; text-decoration: none; text-align: center;
+      display: inline-block;
+      margin-top: 20px;
+      background: #444;
+      color: #fff;
+      border-radius: var(--r);
+      padding: 10px 20px;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    /* استایل برای ورودی‌هایی که با جداکننده هزارگان نمایش داده می‌شوند */
+    .sepNumber {
+      text-align: right;
     }
   </style>
 </head>
@@ -108,9 +153,10 @@
 
 <main>
   <h2>محاسبه لیزینگ فلزات</h2>
+
   <div class="card">
-    <!-- انتخاب نوع فلز -->
-    <label>نوع فلز
+    <!-- نام متریال -->
+    <label>نام متریال
       <select id="mat">
         <option>فولاد ساده</option>
         <option>فولاد زنگ‌نزن</option>
@@ -124,119 +170,155 @@
 
     <!-- مبلغ کلی فاکتور -->
     <label>مبلغ کلی فاکتور (تومان)
-      <input id="invoicePrice" type="number" placeholder="مثلاً 5000000" />
+      <input id="invoicePrice" type="text" class="sepNumber" placeholder="مثلاً 5,000,000" />
+    </label>
+
+    <!-- مبلغ امروز تتر -->
+    <label>مبلغ امروز تتر (تومان)
+      <input id="tetherToday" type="text" class="sepNumber" placeholder="مثلاً 50,000" />
+    </label>
+
+    <!-- مبلغ هر کیلو متریال پایه جهانی (تومان) -->
+    <label>مبلغ هر کیلو متریال پایه جهانی (تومان)
+      <input id="globalMetalPrice" type="text" class="sepNumber" placeholder="مثلاً 700,000" />
+    </label>
+
+    <!-- مبلغ برآورد قیمتی دلار (در صورت افزایش) -->
+    <label>مبلغ برآورد قیمتی دلار (تومان)
+      <input id="predictedDollar" type="text" class="sepNumber" placeholder="مثلاً 60,000" />
     </label>
 
     <button id="btnCalc" class="btn-submit">محاسبه</button>
 
-    <div class="result" id="resBox">نتیجه اینجا نمایش داده می‌شود</div>
+    <!-- کادر اول نتایج -->
+    <div class="result-box" id="box1"></div>
+    <!-- کادر دوم نتایج -->
+    <div class="result-box" id="box2"></div>
+    <!-- کادر سوم نتایج -->
+    <div class="result-box" id="box3"></div>
+
     <a href="index.html" class="btn-back">⬅ بازگشت</a>
   </div>
 </main>
 
 <script>
-/* برای هر فلز می‌توانیم اطلاعات خاص (مثلاً نرخ سود متفاوت یا هزینه ارزی) را تعریف کنیم. 
-   این فقط یک نمونه‌ی اولیه برای نمایش نحوه‌ی اختصاص نرخ‌هاست. */
-const metalData = {
-  "فولاد ساده": {
-    name: "فولاد ساده",
-    monthlyInterest: 0.08, // 8% سود ماهانه
-    globalExtra: 0        // بدون هزینه ارزی اضافه
-  },
-  "فولاد زنگ‌نزن": {
-    name: "فولاد زنگ‌نزن",
-    monthlyInterest: 0.08,
-    globalExtra: 200000  // مثلاً هزینه ارزی بیشتر
-  },
-  "مس": {
-    name: "مس",
-    monthlyInterest: 0.07, // سود فرضی 7%
-    globalExtra: 100000
-  },
-  "آلومینیوم": {
-    name: "آلومینیوم",
-    monthlyInterest: 0.08,
-    globalExtra: 50000
-  },
-  "برنج": {
-    name: "برنج",
-    monthlyInterest: 0.08,
-    globalExtra: 150000
-  },
-  "فسفر برنز": {
-    name: "فسفر برنز",
-    monthlyInterest: 0.08,
-    globalExtra: 200000
-  },
-  "تیتانیوم": {
-    name: "تیتانیوم",
-    monthlyInterest: 0.09,
-    globalExtra: 300000
-  }
-};
-
-/* توابع محاسبه - نمونه */
-function calcPriceNaghad(basePrice) {
-  return basePrice;
+/***********************************************************
+ * توابع فرمت جهت جداکننده سه‌رقمی در ورودی
+ **********************************************************/
+function formatNumber(str) {
+  // حذف همه کاراکترهای غیرعددی
+  const numericVal = str.replace(/\D/g, "");
+  if(!numericVal) return "";
+  // تبدیل به عدد
+  const n = parseInt(numericVal, 10);
+  // فرمت با جداکننده هزارگان
+  return n.toLocaleString("en-US");
 }
-function calcPriceOneMonthNoDP(basePrice, monthlyInterest=0.08) {
+
+function getNumericValue(str) {
+  // کاراکترهای غیرعددی حذف و سپس parseInt
+  if(!str) return 0;
+  return parseInt(str.replace(/\D/g, ""), 10) || 0;
+}
+
+/* افزودن EventListener به همه فیلدهای class="sepNumber" برای فرمت آنی */
+document.querySelectorAll(".sepNumber").forEach((el) => {
+  el.addEventListener("input", (e) => {
+    const pos = el.selectionStart; // موقعیت کاراکتر
+    const oldLength = el.value.length;
+    el.value = formatNumber(el.value);
+    const newLength = el.value.length;
+    el.selectionEnd = pos + (newLength - oldLength);
+  });
+});
+
+/***********************************************************
+ * نرخ سود یک ماهه = 7% (در متن نمایش نمی‌دهیم)
+ **********************************************************/
+const monthlyInterest = 0.07;
+
+/***********************************************************
+ * محاسبات اقساط
+ **********************************************************/
+function calcPriceNoPrepay(basePrice) {
+  // نسیه یک ماه بدون پیش پرداخت
   return basePrice * (1 + monthlyInterest);
 }
-function calcPriceOneMonthWithDP(basePrice, dpRate=0.3, monthlyInterest=0.08) {
-  const dp = basePrice * dpRate;
-  const remaining = basePrice - dp;
-  return dp + remaining * (1 + monthlyInterest);
+function calcPriceWith50Prepay(basePrice) {
+  // نسیه یک ماه با پیش پرداخت 50%
+  const dp = basePrice * 0.5;
+  const remain = basePrice - dp;
+  return dp + (remain * (1 + monthlyInterest));
 }
 
-/* تابع برای محاسبه قیمت پایه با هزینه ارزی یا هر اضافه دیگر */
-function getBasePrice(metalKey, invoicePrice){
-  const info = metalData[metalKey] || {};
-  const extra = info.globalExtra || 0; // هزینه اضافی مربوط به متریال
-  return invoicePrice + extra;
-}
-
-/* رویداد کلیک دکمه محاسبه */
+/***********************************************************
+ * با کلیک بر دکمه محاسبه
+ **********************************************************/
 document.getElementById("btnCalc").addEventListener("click", () => {
-  const mat = document.getElementById("mat").value;          // فلز انتخابی
-  const invoicePrice = parseFloat(document.getElementById("invoicePrice").value || "0");
+  // خواندن ورودی‌ها به‌صورت عددی
+  const mat = document.getElementById("mat").value;
+  const invoicePrice = getNumericValue(document.getElementById("invoicePrice").value);
+  const tetherToday = getNumericValue(document.getElementById("tetherToday").value);
+  const globalMetalPrice = getNumericValue(document.getElementById("globalMetalPrice").value);
+  const predictedDollar = getNumericValue(document.getElementById("predictedDollar").value);
 
-  if (invoicePrice <= 0) {
-    document.getElementById("resBox").textContent = "لطفاً مبلغ کلی فاکتور را وارد کنید.";
+  // بررسی اولیه
+  if(invoicePrice <= 0) {
+    alert("لطفاً مبلغ کلی فاکتور را وارد کنید.");
+    return;
+  }
+  if(tetherToday <= 0) {
+    alert("لطفاً مبلغ امروز تتر را وارد کنید.");
+    return;
+  }
+  if(globalMetalPrice <= 0) {
+    alert("لطفاً مبلغ متریال پایه جهانی را وارد کنید.");
+    return;
+  }
+  if(predictedDollar <= 0) {
+    alert("لطفاً مبلغ برآورد قیمتی دلار را وارد کنید.");
     return;
   }
 
-  // اطلاعات فلز انتخابی را از آبجکت metalData می‌گیریم
-  const info = metalData[mat];
-  if (!info) {
-    document.getElementById("resBox").textContent = "متریال نامعتبر است.";
-    return;
-  }
+  // ========== کادر اول نتایج ========== 
+  // متریال، مبلغ کلی فاکتور، مبلغ امروز تتر، مبلغ هر کیلو متریال پایه جهانی
+  const box1 = document.getElementById("box1");
+  box1.textContent = 
+    "متریال: " + mat + "\n" +
+    "مبلغ کلی فاکتور به تومان: " + invoicePrice.toLocaleString("en-US") + "\n" +
+    "مبلغ امروز تتر (تومان): " + tetherToday.toLocaleString("en-US") + "\n" +
+    "مبلغ جهانی متریال (هر کیلو) به تومان: " + globalMetalPrice.toLocaleString("en-US");
 
-  // محاسبه قیمت پایه (مجموع مبلغ فاکتور + هزینه ارزی اگر باشد)
-  const basePrice = getBasePrice(mat, invoicePrice);
+  // محاسبه‌ی قیمت پایه را می‌توان تعریف کرد؛
+  // فعلاً از invoicePrice به‌عنوان basePrice استفاده می‌کنیم
+  let basePrice = invoicePrice;
 
-  // محاسبه سناریوهای مختلف (سود ماهانه از info برداشت می‌شود)
-  const monthlyInterest = info.monthlyInterest || 0.08;
-  const pNaghad = calcPriceNaghad(basePrice);
-  const pNasiehNoDP = calcPriceOneMonthNoDP(basePrice, monthlyInterest);
-  const pNasiehWithDP = calcPriceOneMonthWithDP(basePrice, 0.3, monthlyInterest);
+  // ========== کادر دوم نتایج ==========
+  // (1) نسیه یک ماه بدون پیش‌پرداخت
+  const nasiehNoPrepay = calcPriceNoPrepay(basePrice);
+  // (2) نسیه یک ماه با 50% پیش‌پرداخت
+  const nasiehHalf = calcPriceWith50Prepay(basePrice);
 
-  let msg = "";
-  msg += "🔹 نوع فلز: " + mat + "\n";
-  msg += "🔹 مبلغ کلی فاکتور: " + invoicePrice.toLocaleString() + " تومان\n";
-  msg += (info.globalExtra > 0)
-       ? "🔹 هزینه ارزی/اضافه: " + info.globalExtra.toLocaleString() + " تومان\n"
-       : "";
-  msg += "\n";
-  msg += "➖ قیمت پایه (خرید نقدی): " + pNaghad.toLocaleString() + " تومان\n";
-  msg += "➖ نسیه یک‌ماهه (بدون پیش‌پرداخت)، سود " + (monthlyInterest*100).toFixed(1) + "%: " 
-         + pNasiehNoDP.toLocaleString() + " تومان\n";
-  msg += "➖ نسیه یک‌ماهه (با 30٪ پیش‌پرداخت)، سود " + (monthlyInterest*100).toFixed(1) + "%: " 
-         + pNasiehWithDP.toLocaleString() + " تومان\n";
+  const box2 = document.getElementById("box2");
+  box2.textContent =
+    "نسیه یک ماه بدون پیش پرداخت: " + nasiehNoPrepay.toLocaleString("en-US") + " تومان\n" +
+    "نسیه یک ماه با پیش پرداخت 50%: " + nasiehHalf.toLocaleString("en-US") + " تومان\n\n" +
+    "قیمت‌های فوق با دلار امروز محاسبه شده.\n" +
+    "در صورت افزایش قیمت دلار به همان درصد قسمت‌ها افزایش پیدا می‌کنند.";
 
-  document.getElementById("resBox").textContent = msg;
+  // ========== کادر سوم نتایج ==========
+  // محاسبه نسبت (predictedDollar / tetherToday)
+  const ratio = (predictedDollar / tetherToday);
+  // همان دو مقدار اما ضربدر ratio
+  const nasiehNoPrepayNew = nasiehNoPrepay * ratio;
+  const nasiehHalfNew = nasiehHalf * ratio;
+
+  const box3 = document.getElementById("box3");
+  box3.textContent =
+    "با افزایش نرخ دلار، قیمت‌ها به صورت زیر تغییر می‌کنند:\n" +
+    "نسیه بدون پیش پرداخت: " + nasiehNoPrepayNew.toLocaleString("en-US") + " تومان\n" +
+    "نسیه با پیش پرداخت 50%: " + nasiehHalfNew.toLocaleString("en-US") + " تومان\n";
 });
 </script>
 </body>
 </html>
- 
