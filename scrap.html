@@ -2,11 +2,12 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ماشین‌حساب ضایعات و پرت برش</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>محاسبه ضایعات | Metalloine</title>
 
-  <!-- فونت فارسی Vazirmatn -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+  <!-- فونت Vazirmatn -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
 
   <style>
     :root {
@@ -22,10 +23,8 @@
     body {
       background: #000; color: #fff;
       font-family: "Vazirmatn", sans-serif;
-      line-height: 1.6;
+      min-height: 100vh; line-height: 1.6;
     }
-
-    /* هدر */
     #topbar {
       display: flex; justify-content: center; align-items: center;
       height: 64px; margin: var(--g);
@@ -48,20 +47,15 @@
     }
 
     .card {
-      background: var(--glass);
-      backdrop-filter: blur(24px);
+      background: var(--glass); backdrop-filter: blur(24px);
       border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
       padding: 16px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-top: var(--g);
     }
-    .row-2 { grid-column: span 2; }
-
     label {
-      display: flex; flex-direction: column; gap: 4px;
-      font-size: 0.85rem;
+      display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem;
     }
     input, select, button {
       border: none; border-radius: var(--r);
@@ -74,46 +68,40 @@
     select, option {
       background: #1a1a1a; color: #fff;
     }
+    .row-2 { grid-column: span 2; }
 
-    .btn-main {
+    .btn-submit {
       background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
       color: #fff; cursor: pointer;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
       font-weight: 600;
+      border: none; border-radius: var(--r);
     }
-
-    .btn-alt {
-      background: #444; color: #fff; cursor: pointer;
-      border-radius: var(--r);
-      border: none; padding: 10px 14px;
-      font-size: 1rem; transition: background 0.2s;
-    }
-    .btn-alt:hover { background: #555; }
 
     output {
-      display: block; background: #111; text-align: center; padding: 12px;
-      border-radius: var(--r);
+      display: block; background: #111; text-align: center;
+      padding: 12px; border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
       font-size: 1.2rem; font-weight: 700;
     }
-    /* دسترس‌پذیری: اعلام نتیجه به screen readers */
     output[aria-live] { min-height: 1.4em; }
 
     .warning {
-      grid-column: span 2;
-      color: #ff9090; text-align: center;
+      color: #ff8080; text-align: center; grid-column: span 2;
       min-height: 1.2em; font-size: 0.8rem;
     }
 
-    /* لینک بازگشت */
     .btn-icon {
       display: block; width: 90%; max-width: 420px;
       margin: 2rem auto; text-align: center; padding: 14px;
-      text-decoration: none; /* اگر لینک است */
+      text-decoration: none;
+      background: #444; color: #fff; border-radius: var(--r);
     }
 
-    @media(max-width:600px) {
-      .card { grid-template-columns: 1fr; }
+    @media (max-width: 600px) {
+      .card {
+        grid-template-columns: 1fr !important;
+      }
     }
   </style>
 </head>
@@ -126,182 +114,81 @@
 </header>
 
 <main>
+  <h2 style="text-align:center">محاسبه ضایعات (Kerf &amp; Scrap)</h2>
   <form id="scrapForm" class="card">
-    <!-- نوع ماده -->
     <label>نوع ماده
-      <select id="mat">
+      <select id="s-mat">
         <option value="7800">فولاد</option>
-        <option value="8050">فولاد زنگ‌نزن</option>
-        <option value="7100">چدن</option>
         <option value="2700">آلومینیوم</option>
         <option value="8900">مس</option>
-        <option value="8600">برنج</option>
-        <option value="7140">گالوانیزه</option>
-        <option value="4430">تیتانیوم</option>
       </select>
     </label>
-
-    <!-- نوع مقطع -->
     <label>نوع مقطع
-      <select id="sec">
+      <select id="s-sec">
         <option value="round">میله‌گرد</option>
         <option value="pipe">لوله</option>
-        <option value="square">چهارگوش</option>
         <option value="flat">تسمه/ورق</option>
-        <option value="angle">نبشی</option>
-        <option value="i">تیر I/H</option>
-        <option value="box">پروفیل قوطی</option>
-        <!-- ... در صورت نیاز موارد دیگر ... -->
       </select>
     </label>
 
-    <!-- ابعاد مقطع -->
-    <label>قطر / ضخامت (میلی‌متر)
-      <input id="dim1" type="number" min="0" step="0.1" placeholder="مثلاً 4 یا 40">
+    <label>قطر/ضخامت (mm)
+      <input id="s-d1" type="number" placeholder="مثلاً 4 یا 40">
     </label>
-    <label>ابعاد فرعی (میلی‌متر)
-      <input id="dim2" type="number" min="0" step="0.1" placeholder="مثلاً قطر داخلی لوله">
+    <label>ابعاد فرعی (mm)
+      <input id="s-d2" type="number" placeholder="مثلاً قطر داخلی لوله">
     </label>
 
-    <!-- طول قطعه -->
-    <label>طول قطعه (سانتی‌متر)
-      <input id="length" type="number" min="0" step="0.1" placeholder="مثلاً 100">
+    <label>طول قطعه (cm)
+      <input id="s-len" type="number" placeholder="مثلاً 100">
     </label>
-    <!-- تعداد قطعات -->
     <label>تعداد
-      <input id="qty" type="number" min="1" step="1" value="1">
+      <input id="s-qty" type="number" value="1">
     </label>
 
-    <!-- روش برش -->
     <label class="row-2">روش برش
-      <select id="kerfMethod">
+      <select id="s-kerf">
         <option value="1.2">اره (1.2mm)</option>
         <option value="15">هوا برش / پلاسما (15mm)</option>
       </select>
     </label>
 
-    <button id="btnCalc" type="button" class="btn-main row-2">محاسبه ضایعات</button>
-
-    <!-- نمایش نتیجه -->
-    <output id="scrapOut" class="row-2" aria-live="polite">—</output>
-    <div id="warn" class="warning"></div>
+    <button id="s-calc" type="button" class="btn-submit row-2">محاسبه</button>
+    <output id="s-out" class="row-2" aria-live="polite">—</output>
+    <div id="s-warn" class="warning"></div>
   </form>
+
+  <a href="index.html" class="btn-icon">⬅ بازگشت</a>
 </main>
 
-<!-- لینک بازگشت (اختیاری) -->
-<a href="index.html" class="btn-main btn-icon">⬅ بازگشت</a>
-
 <script>
-/********************************************************
- * این کد نمونه‌ای برای محاسبه ضایعات (Kerf & Scrap)
- * بر اساس انتخاب ماده، مقطع، روش برش و برخی ابعاد است.
- * بسته به نیاز واقعی باید فرمول یا اطلاعات خود را
- * اصلاح کنید.
- ********************************************************/
+function calcScrap(){
+  const rho = parseFloat(document.getElementById('s-mat').value||"0");
+  const sec = document.getElementById('s-sec').value;
+  const d1  = parseFloat(document.getElementById('s-d1').value||"0");
+  const d2  = parseFloat(document.getElementById('s-d2').value||"0");
+  const len = parseFloat(document.getElementById('s-len').value||"0")/100; // cm->m
+  const qty = parseInt(document.getElementById('s-qty').value||"1",10);
+  const kerf= parseFloat(document.getElementById('s-kerf').value||"1.2");
 
-/* انتخابگرهای DOM */
-const $mat       = document.getElementById('mat');
-const $sec       = document.getElementById('sec');
-const $dim1      = document.getElementById('dim1');
-const $dim2      = document.getElementById('dim2');
-const $length    = document.getElementById('length');
-const $qty       = document.getElementById('qty');
-const $kerfMethod= document.getElementById('kerfMethod');
-const $scrapOut  = document.getElementById('scrapOut');
-const $warn      = document.getElementById('warn');
-const btnCalc    = document.getElementById('btnCalc');
+  const $out = document.getElementById('s-out');
+  const $warn= document.getElementById('s-warn');
 
-/********************************************************
- * فرمول‌ها (نمونه): محاسبه مساحت مقطع و سپس حجم/وزن بریده
- ********************************************************/
-/* چند تابع ساده محاسبه مساحت سطح مقطع (می‌توانید گسترش دهید) */
-function areaRound(d) {
-  return Math.PI * d*d / 4; // mm^2
-}
-function areaPipe(outer, inner){
-  return areaRound(outer) - areaRound(inner);
-}
-function areaSquare(a){ return a*a; }
-function areaFlat(thick, width){ return thick*width; }
-function areaAngle(b,t){ return 2*b*t - t*t; }
-function areaI(h,b,tf,tw){ return h*tw + 2*b*tf; }
-function areaBox(w,h,t){ return w*h - (w-2*t)*(h-2*t); }
-
-/* انتخاب توابع متناسب با نوع مقطع */
-function getAreaMM2(secType, d1, d2){
-  switch(secType){
-    case 'round': // d1 = قطر
-      return areaRound(d1);
-    case 'pipe':  // d1=قطر بیرونی، d2=قطر داخلی
-      return areaPipe(d1, d2);
-    case 'square':
-      return areaSquare(d1);
-    case 'flat':  // d1=ضخامت، d2=عرض
-      return areaFlat(d1, d2);
-    case 'angle': // ساده‌شده
-      return areaAngle(d1, d2);
-    case 'i':
-      return areaI(d1, d2, 0, 0); // باید اصلاح شود
-    case 'box':
-      return areaBox(d1, d2, 2); // ضخامت را مثلاً 2mm فرضی
-    default:
-      return 0;
-  }
-}
-
-/* تابع اصلی محاسبه وزن بریده‌شده (Kerf) */
-function calculateScrap(){
-  const rho = parseFloat($mat.value);       // چگالی
-  const d1  = parseFloat($dim1.value||"0"); // ابعاد
-  const d2  = parseFloat($dim2.value||"0");
-  const Lcm = parseFloat($length.value||"0"); // طول (سانتی‌متر)
-  const qty = parseInt($qty.value||"1", 10);
-  const kerf = parseFloat($kerfMethod.value||"1.2"); // ضخامت برش (mm)
-
-  // اعتبارسنجی اولیه
-  if(!rho || Lcm<=0 || qty<=0 || d1<=0) {
-    $warn.textContent = "لطفاً همهٔ مقادیر را کامل وارد کنید.";
-    return null;
-  }
-  $warn.textContent = "";
-
-  // محاسبه مساحت مقطع
-  const areaMM2 = getAreaMM2($sec.value, d1, d2);
-  if(areaMM2 <= 0){
-    $warn.textContent = "نوع مقطع یا ابعاد نامعتبر است.";
-    return null;
-  }
-
-  // حجم برش = طول برش × ضخامت برش (kerf) × عمق/ضخامت قطعه
-  // اینجا به‌عنوان نمونه فرض کرده‌ایم "عمق قطعه" همان d1 یا ضخامت، برای ورق
-  // اگر میله گرد باشد، شاید نیاز باشد طول محیط برش یا روش دیگری را در نظر بگیرید.
-  // اما به‌صورت ساده:
-  const totalLengthMM = (Lcm * 10) * qty; // تبدیل سانتی‌متر به میلی‌متر و ضربدر تعداد
-  const scrapVolumeMM3 = totalLengthMM * kerf * d1; 
-  // یا اگر هدف شما محاسبه وزن پرت بر اساس areaKerf باشد، می‌توانید از areaMM2 و kerfMethod ترکیب دیگری بسازید.
-  // به هر حال، فرمول کاملاً به نیاز پروژه بستگی دارد.
-
-  // تبدیل حجم به وزن = حجم × چگالی (چگالی بر اساس g/cm3 یا kg/m3 ؟)
-  // فرض قبلی: چگالی در kg/m3 و حجم در mm3 → باید یکسان‌سازی واحدها انجام شود.
-  // اگر rho (چگالی) را با واحد kg/m3 دارید، باید حجم (m^3) محاسبه کنید.
-  // 1 mm3 = 1e-9 m3
-  const scrapWeight = rho * (scrapVolumeMM3 * 1e-9); // برحسب کیلوگرم
-
-  return scrapWeight;
-}
-
-/* رویداد کلیک دکمه */
-btnCalc.addEventListener('click', ()=>{
-  const w = calculateScrap();
-  if(w === null) {
-    // خطایی رخ داده یا ورودی ناقص است
-    document.getElementById('scrapOut').textContent = "—";
+  if(rho<=0 || d1<=0 || len<=0 || qty<=0){
+    $warn.textContent = "مقادیر را کامل وارد کنید.";
+    $out.textContent = "—";
     return;
   }
-  // نتیجه
-  document.getElementById('scrapOut').textContent = w.toFixed(3) + " کیلوگرم";
-});
+  $warn.textContent="";
 
+  // فرمول نمونه (ساده): حجم پرت = طول(m)* kerf(mm)* ضخامت قطعه(mm)* تعداد
+  // 1 mm = 1e-3 m
+  const volume_m3 = len * (kerf*1e-3) * (d1*1e-3) * qty;
+  // وزن = حجم * چگالی (kg/m^3)
+  const scrap_kg = rho*volume_m3;
+  $out.textContent = scrap_kg.toFixed(3)+" کیلوگرم";
+}
+
+document.getElementById('s-calc').addEventListener('click', calcScrap);
 </script>
 </body>
 </html>
