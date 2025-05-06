@@ -239,7 +239,7 @@ function areaPipe(od, id) {
 }
 function areaHex(a){
   // شش گوش (فاصله بین دو سطح روبروی هم = a)
-  // مساحت = (3*√3 / 2)* a^2
+  // مساحت = (3*√3 / 2)* a^2 ~ 2.598 * a^2
   return 2.598 * a*a; 
 }
 function areaSquare(a){ return a*a; }
@@ -253,99 +253,8 @@ function areaAngle(a, t){
   return 2*a*t - t*t;
 }
 function areaChannel(h, t){
-  // ناودونی ساده: h*t*2؟ بسته به تعریف. (خیلی فرضی)
+  // ناودونی ساده (فرضی)
   return h * t * 2;
 }
 function areaI(h, b){
-  // تیرآهن فرضی: h*b (بسیار ساده!)
-  return h*b;
-}
-function areaBox(w, h){
-  // قوطی: فرضی: w*h - (w-2t)*(h-2t)، 
-  // ما t نداریم پس خیلی ساده.
-  return w*h;
-}
-
-/***********************************************************
- * محاسبه وزن
- ***********************************************************/
-function getAreaMM2(sec, d1, d2){
-  switch(sec){
-    case 'round':   return areaRound(d1);
-    case 'pipe':    return areaPipe(d1,d2);
-    case 'hex':     return areaHex(d1);
-    case 'square':  return areaSquare(d1);
-    case 'sheet':   return areaSheet(d1,d2);
-    case 'flat':    return areaFlat(d1,d2);
-    case 'angle':   return areaAngle(d1,d2);
-    case 'channel': return areaChannel(d1,d2);
-    case 'ibeam':   return areaI(d1,d2);
-    case 'box':     return areaBox(d1,d2);
-    default:        return 0;
-  }
-}
-
-/* انیمیشن عددی */
-function animateNumber(el, from, to){
-  const dur = 800;
-  const start = Date.now();
-  (function step(){
-    const p = Math.min((Date.now()-start)/dur, 1);
-    const val = from + (to - from)*p;
-    el.textContent = val.toFixed(3);
-    if(p<1) requestAnimationFrame(step);
-  })();
-}
-
-function calcWeight(){
-  const rho = parseFloat(document.getElementById('w-mat').value||"0");
-  const sec = document.getElementById('w-sec').value;
-  const d1  = parseFloat(document.getElementById('w-d1').value||"0");
-  const d2  = parseFloat(document.getElementById('w-d2').value||"0");
-  const len = parseFloat(document.getElementById('w-len').value||"0")/100; // cm->m
-  const qty = parseInt(document.getElementById('w-qty').value||"1",10);
-  const $out= document.getElementById('w-out');
-  const $warn=document.getElementById('w-warn');
-
-  if(rho<=0 || len<=0 || qty<=0){
-    $warn.textContent = "مقادیر واردشده کافی نیست.";
-    $out.textContent = "—";
-    $out.dataset.val = "0";
-    return;
-  }
-  // حداقل d1 > 0
-  if(d1<=0){
-    $warn.textContent = "ابعاد مقطع وارد نشده.";
-    $out.textContent = "—";
-    $out.dataset.val = "0";
-    return;
-  }
-  $warn.textContent="";
-
-  // مساحت مقطع (mm^2)
-  const A = getAreaMM2(sec, d1, d2);
-  if(A<=0){
-    $warn.textContent="فرمول مقطع موردنظر تعریف نشده یا ابعاد نامعتبر است.";
-    $out.textContent="—";
-    $out.dataset.val = "0";
-    return;
-  }
-  // حجم هر قطعه = (A mm^2) * (طول m) => mm^3 => تبدیل به m^3 => *1e-9
-  const vol_m3 = A * len * 1e-9;
-  // وزن هر قطعه (کیلوگرم)
-  const wEach = rho * vol_m3;
-  // وزن کل
-  const total = wEach * qty;
-
-  // انیمیشن از مقدار قبلی به مقدار جدید
-  const prevVal = parseFloat($out.dataset.val||"0");
-  const newVal  = total;
-  $out.dataset.val = newVal.toString();
-
-  animateNumber($out, prevVal, newVal);
-}
-
-document.getElementById('w-calc').addEventListener('click', calcWeight);
-</script>
-</body>
-</html>
+  //
