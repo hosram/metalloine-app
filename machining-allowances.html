@@ -181,7 +181,7 @@
 
 <script>
 /***********************************************************
- * پنهان/نمایش‌دادن فیلدهای ابعاد طبق نوع مقطع
+ * نمایش/پنهان‌کردن فیلدهای ابعاد طبق نوع مقطع
  ***********************************************************/
 const secSelect = document.getElementById('sec');
 const f_d1     = document.getElementById('f-d1');
@@ -190,158 +190,180 @@ const d1Input  = document.getElementById('d1');
 const d2Input  = document.getElementById('d2');
 
 function updateSecFields(){
-  // پیش‌فرض: هردو پنهان
+  // پنهان‌سازی پیش‌فرض
   f_d1.classList.add('hidden');
   f_d2.classList.add('hidden');
-  d1Input.value = "";
-  d2Input.value = "";
   d1Input.required = false;
   d2Input.required = false;
+  d1Input.value="";
+  d2Input.value="";
 
   const shape = secSelect.value;
-  // این 5 حالت یک‌بعدی هستند
-  if(shape === 'میله گرد' || shape === 'شش گوش' 
-     || shape === 'چهارگوش' || shape === 'ورق' || shape === 'تسمه'){
+  if(shape==='میله گرد' || shape==='شش گوش'
+     || shape==='چهارگوش' || shape==='ورق' || shape==='تسمه'){
+    // یک‌بعدی
     f_d1.classList.remove('hidden');
-    d1Input.required = true;
+    d1Input.required=true;
   } else {
     // لوله، نبشی، ناودونی، تیراهن، قوطی => دو بعد
     f_d1.classList.remove('hidden');
     f_d2.classList.remove('hidden');
-    d1Input.required = true;
-    d2Input.required = true;
+    d1Input.required=true;
+    d2Input.required=true;
   }
 }
 secSelect.addEventListener('change', updateSecFields);
-updateSecFields(); // بارگیری اولیه
+updateSecFields(); // فراخوانی اولیه
 
 
 /***********************************************************
- * قانون "تلرانس ماشین‌کاری" (Over Size)
- * - میله گرد یا لوله: اگر >50 → +5 میلی‌متر / در غیر اینصورت → +2 میلی‌متر
- * - سایر مقاطع: همیشه +2 میلی‌متر
+ * 1) قانون تلرانس ماشین‌کاری
+ *   - میله گرد / لوله: اگر > 50 => +5 ، در غیر اینصورت +2
+ *   - سایر: +2
  ***********************************************************/
 function getMachiningAllowance(shape, dim){
   if(shape==='میله گرد' || shape==='لوله'){
     return (dim>50)? 5 : 2;
-  } else {
-    return 2;
   }
+  return 2;
 }
 
 /***********************************************************
- * قانون "موجودی در بازار" (قطعات رایج)
- * - میله گرد یا لوله:
- *    3..10  => 1 میلی‌متر
- *    11..49 => 2 میلی‌متر
- *    50..200 => 5 میلی‌متر
- *    201..1000 => 10 میلی‌متر
- *    زیر 3 یا بالای 1000 => به صورت پیشفرض کمترین/بیشترینِ این جدول
- * - سایر مقاطع: همیشه 2 میلی‌متر
+ * 2) قانون موجودی بازار
+ *   میله گرد / لوله:
+ *     3..10 => +1
+ *     11..49 => +2
+ *     50..200 => +5
+ *     201..1000 => +10
+ *     زیر3 => 1
+ *     بالای1000 => 10
+ *   سایر: +2
  ***********************************************************/
 function getMarketAllowance(shape, dim){
   if(shape==='میله گرد' || shape==='لوله'){
-    if(dim<3)      return 1; 
+    if(dim<3)      return 1;
     if(dim<=10)    return 1;
     if(dim<=49)    return 2;
     if(dim<=200)   return 5;
     if(dim<=1000)  return 10;
-    // اگر بالای 1000 باشد
-    return 10; 
-  } else {
-    // سایر مقاطع
-    return 2;
+    return 10; // بالای 1000
+  } 
+  return 2; // سایر
+}
+
+/***********************************************************
+ * 3) تعیین نزدیک‌ترین سایز استاندارد (مضارب 5 بالایی)
+ *   اگر final دقیقا مضرب 5 باشد, همان را پیشنهاد می‌کنیم
+ *   در غیراینصورت مضرب پایین ریسکی است، مضرب بالا مطمئن
+ ***********************************************************/
+function getStandardSize(finalDim){
+  const down = 5 * Math.floor(finalDim/5);
+  const up   = 5 * Math.ceil(finalDim/5);
+  
+  // اگر خود finalDim دقیقاً مساوی یک مضرب 5 باشد
+  if(down===up){
+    return `سایز استاندارد بعد نهایی: ${down} میلی‌متر (بدون ریسک)`;
+  } 
+  else {
+    // در غیراینصورت مضرب پایین کوچکتر از بعد نهایی است => ریسکی
+    // پس مضرب بالا را پیشنهاد مطمئن می‌کنیم
+    return `سایزهای نزدیک: ${down} (ریسکی), ${up} (ایمن). پیشنهاد: ${up} میلی‌متر`;
   }
 }
 
-
 /***********************************************************
- * محاسبه و نمایش
+ * انتخابگرهای بخش نتیجه
  ***********************************************************/
-const $warn          = document.getElementById('warn');
-const $machiningBox  = document.getElementById('machiningResult');
-const $resDim1       = document.getElementById('resDim1');
-const $resDim2       = document.getElementById('resDim2');
-const $marketBox     = document.getElementById('marketResult');
-const $resMarket1    = document.getElementById('resMarket1');
-const $resMarket2    = document.getElementById('resMarket2');
+const $warn         = document.getElementById('warn');
+const $machiningBox = document.getElementById('machiningResult');
+const $resDim1      = document.getElementById('resDim1');
+const $resDim2      = document.getElementById('resDim2');
+const $marketBox    = document.getElementById('marketResult');
+const $resMarket1   = document.getElementById('resMarket1');
+const $resMarket2   = document.getElementById('resMarket2');
 
 document.getElementById('calcBtn').addEventListener('click', ()=>{
+  // پاکسازی هشدارها و نتایج
   $warn.textContent = "";
-  // پنهان‌کردن نتایج قبلی
   $machiningBox.classList.add('hidden');
+  $marketBox.classList.add('hidden');
   $resDim1.textContent="";
   $resDim2.textContent="";
-  $marketBox.classList.add('hidden');
   $resMarket1.textContent="";
   $resMarket2.textContent="";
 
   const shape = secSelect.value;
-  const v1    = parseFloat(d1Input.value||"0");
-  const v2    = parseFloat(d2Input.value||"0");
+  const v1 = parseFloat(d1Input.value||"0");
+  const v2 = parseFloat(d2Input.value||"0");
 
-  // کنترل ورودی
+  // بررسی ورودی
   if(v1<=0){
     $warn.textContent="بعد اول را وارد کنید.";
     return;
   }
-  // اگر نیاز به بعد دوم هست اما وارد نشده
   if((shape==='لوله' || shape==='نبشی' || shape==='ناودونی'
-      || shape==='تیراهن' || shape==='قوطی') && v2<=0){
+      || shape==='تیراهن' || shape==='قوطی')
+     && v2<=0){
     $warn.textContent="بعد دوم را هم وارد کنید.";
     return;
   }
 
-  // ------------------ تلرانس ماشین‌کاری --------------------
-  // حالت یک‌بعدی
-  if(shape==='میله گرد' || shape==='شش گوش' || shape==='چهارگوش' 
-     || shape==='ورق' || shape==='تسمه'){
-    const allow1 = getMachiningAllowance(shape, v1);
-    const final1 = v1 + allow1;
-    $resDim1.textContent = 
-      `➤ بعد خام: ${v1} میلی‌متر ⇒ تلرانس ماشین‌کاری: +${allow1} میلی‌متر 
-       ⇒ بعد نهایی: ${final1} میلی‌متر`;
+  /************************************
+   * محاسبه تلرانس ماشین‌کاری و موجودی بازار
+   ************************************/
+  // یک‌بعدی
+  if(shape==='میله گرد' || shape==='شش گوش' 
+     || shape==='چهارگوش' || shape==='ورق' || shape==='تسمه'){
     
-    $resDim2.textContent = ""; // چون یک‌بعدی است
-    $machiningBox.classList.remove('hidden');
+    // تلرانس ماشین‌کاری
+    const machAllow = getMachiningAllowance(shape, v1);
+    const machFinal = v1 + machAllow;
+    
+    $resDim1.innerHTML = 
+      `بعد خام: ${v1} میلی‌متر 
+       ⇒ تلرانس ماشین‌کاری: +${machAllow} 
+       ⇒ بعد نهایی: ${machFinal} میلی‌متر
+       <br> ${getStandardSize(machFinal)}`;
 
-    // همچنین موجودی بازار
-    const mAllow1 = getMarketAllowance(shape, v1);
-    const mFinal1 = v1 + mAllow1;
-    $resMarket1.textContent = 
-      `➤ موجودی بازار برای بعد ${v1} میلی‌متر: +${mAllow1} 
-       ⇒ پیشنهاد بازار: ${mFinal1} میلی‌متر`;
-    
-    $resMarket2.textContent="";
+    // موجودی بازار
+    const marketAllow = getMarketAllowance(shape, v1);
+    const marketFinal = v1 + marketAllow;
+    $resMarket1.innerHTML =
+      `موجودی بازار برای بعد ${v1} میلی‌متر: +${marketAllow}
+       ⇒ ${marketFinal} میلی‌متر
+       <br> ${getStandardSize(marketFinal)}`;
+
+    $machiningBox.classList.remove('hidden');
     $marketBox.classList.remove('hidden');
     return;
   }
 
-  // حالت دو بعدی
-  // (لوله، نبشی، ناودونی، تیراهن، قوطی)
-  const allow1 = getMachiningAllowance(shape, v1);
-  const allow2 = getMachiningAllowance(shape, v2);
-  const final1 = v1 + allow1;
-  const final2 = v2 + allow2;
+  // دو‌بعدی
+  const mAllow1 = getMachiningAllowance(shape, v1);
+  const mAllow2 = getMachiningAllowance(shape, v2);
+  const final1  = v1 + mAllow1;
+  const final2  = v2 + mAllow2;
 
-  // نمایش تلرانس ماشین‌کاری
-  $resDim1.textContent = 
-    `➤ بعد اول: ${v1} میلی‌متر ⇒ +${allow1} ⇒ ${final1} میلی‌متر`;
-  $resDim2.textContent = 
-    `➤ بعد دوم: ${v2} میلی‌متر ⇒ +${allow2} ⇒ ${final2} میلی‌متر`;
+  $resDim1.innerHTML = 
+    `بعد اول: ${v1} ⇒ +${mAllow1} ⇒ ${final1} میلی‌متر
+     <br> ${getStandardSize(final1)}`;
+  $resDim2.innerHTML = 
+    `بعد دوم: ${v2} ⇒ +${mAllow2} ⇒ ${final2} میلی‌متر
+     <br> ${getStandardSize(final2)}`;
   $machiningBox.classList.remove('hidden');
 
-  // نمایش موجودی بازار
-  const mAllow1 = getMarketAllowance(shape, v1);
-  const mAllow2 = getMarketAllowance(shape, v2);
-  const mFinal1 = v1 + mAllow1;
-  const mFinal2 = v2 + mAllow2;
-
-  $resMarket1.textContent = 
-    `➤ موجودی بازار بعد اول: ${v1} ⇒ +${mAllow1} ⇒ ${mFinal1} میلی‌متر`;
-  $resMarket2.textContent = 
-    `➤ موجودی بازار بعد دوم: ${v2} ⇒ +${mAllow2} ⇒ ${mFinal2} میلی‌متر`;
-
+  // موجودی بازار
+  const mkAllow1 = getMarketAllowance(shape, v1);
+  const mkAllow2 = getMarketAllowance(shape, v2);
+  const mkFinal1 = v1 + mkAllow1;
+  const mkFinal2 = v2 + mkAllow2;
+  
+  $resMarket1.innerHTML =
+    `موجودی بازار بعد اول: ${v1} ⇒ +${mkAllow1} ⇒ ${mkFinal1} میلی‌متر
+     <br> ${getStandardSize(mkFinal1)}`;
+  $resMarket2.innerHTML =
+    `موجودی بازار بعد دوم: ${v2} ⇒ +${mkAllow2} ⇒ ${mkFinal2} میلی‌متر
+     <br> ${getStandardSize(mkFinal2)}`;
   $marketBox.classList.remove('hidden');
 });
 </script>
