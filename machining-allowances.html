@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>پیشنهاد تلرانس ماشین‌کاری | Metalloine</title>
+  <title>پیشنهاد تلرانس ماشین‌کاری</title>
 
   <!-- فونت Vazirmatn -->
   <link rel="stylesheet"
@@ -93,7 +93,6 @@
 
     .hidden { display: none !important; }
 
-    /* بخش نتیجه */
     #results {
       margin-top: 1rem; 
     }
@@ -101,8 +100,9 @@
       background: #222; margin-top: 8px;
       border-radius: var(--r); padding: 12px;
       border: 1px solid rgba(255,255,255,0.3);
-      font-size: 0.9rem; line-height:1.4;
+      font-size: 0.9rem; line-height:1.6;
     }
+
     @media (max-width: 600px) {
       .card {
         grid-template-columns: 1fr !important;
@@ -122,29 +122,19 @@
   <h2 style="text-align:center">پیشنهاد تلرانس ماشین‌کاری</h2>
 
   <form id="allowanceForm" class="card">
-
-    <!-- انتخاب مقطع -->
+    <!-- انتخاب مقطع (فقط فارسی) -->
     <label>نوع مقطع
       <select id="sec">
-        <option value="round">میله‌گرد (Round)</option>
-        <option value="pipe">لوله (Pipe)</option>
-        <option value="hex">شش‌گوش (Hex)</option>
-        <option value="square">چهارگوش (Square)</option>
-        <option value="sheet">ورق (Sheet)</option>
-        <option value="flat">تسمه (Flat)</option>
-        <option value="angle">نبشی (Angle)</option>
-        <option value="channel">ناودونی (Channel)</option>
-        <option value="ibeam">تیراهن (I-Beam)</option>
-        <option value="box">قوطی (Box)</option>
-      </select>
-    </label>
-
-    <!-- وضعیت یا کیفیت سطح (برای تعیین اضافه‌ماشین‌کاری) -->
-    <label>کیفیت سطح
-      <select id="condition">
-        <option value="black">سیاه (نورد گرم معمولی)</option>
-        <option value="rough">خشن‌تراشی (پوسته‌گیری)</option>
-        <option value="bright">کشش سرد / سطح دقیق</option>
+        <option value="میله گرد">میله گرد</option>
+        <option value="لوله">لوله</option>
+        <option value="شش گوش">شش گوش</option>
+        <option value="چهارگوش">چهارگوش</option>
+        <option value="ورق">ورق</option>
+        <option value="تسمه">تسمه</option>
+        <option value="نبشی">نبشی</option>
+        <option value="ناودونی">ناودونی</option>
+        <option value="تیراهن">تیراهن</option>
+        <option value="قوطی">قوطی</option>
       </select>
     </label>
 
@@ -172,7 +162,7 @@
 
 <script>
 /***********************************************************
- * تغییر نمایش فیلدهای ابعاد بر اساس نوع مقطع
+ * پنهان/نمایش‌دادن فیلدهای ابعاد طبق نوع مقطع
  ***********************************************************/
 const secSelect = document.getElementById('sec');
 const f_d1     = document.getElementById('f-d1');
@@ -184,75 +174,50 @@ function updateSecFields(){
   // پیش‌فرض: هردو پنهان
   f_d1.classList.add('hidden');
   f_d2.classList.add('hidden');
+  d1Input.value = "";
+  d2Input.value = "";
   d1Input.required = false;
   d2Input.required = false;
 
-  switch(secSelect.value){
-    case 'round': 
-    case 'hex':
-    case 'square':
-    case 'sheet':
-    case 'flat':
-      // فقط یک بعد
-      f_d1.classList.remove('hidden');
-      d1Input.required = true;
-      break;
-    case 'pipe':
-    case 'angle':
-    case 'channel':
-    case 'ibeam':
-    case 'box':
-      // دو بعد
-      f_d1.classList.remove('hidden');
-      f_d2.classList.remove('hidden');
-      d1Input.required = true;
-      d2Input.required = true;
-      break;
+  const shape = secSelect.value;
+  if(shape === 'میله گرد' || shape === 'شش گوش' 
+     || shape === 'چهارگوش' || shape === 'ورق' || shape === 'تسمه'){
+    // فقط یک بعد
+    f_d1.classList.remove('hidden');
+    d1Input.required = true;
+  } else {
+    // لوله، نبشی، ناودونی، تیراهن، قوطی → حداقل دو بعد
+    f_d1.classList.remove('hidden');
+    f_d2.classList.remove('hidden');
+    d1Input.required = true;
+    d2Input.required = true;
   }
 }
 secSelect.addEventListener('change', updateSecFields);
 updateSecFields(); // بارگیری اولیه
 
+
 /***********************************************************
- * تابع محاسبه اضافه تراش بر اساس بُعد و کیفیت سطح
+ * تابع تعیین تلرانس
+ * - میله گرد یا لوله: اگر بُعد > 50 باشد 5 میل، وگرنه 2 میل
+ * - سایر مقاطع: همیشه 2 میل
  ***********************************************************/
-function getMachiningAllowance(dSize, condition){
-  // dSize بر حسب mm → بزرگ‌ترین یا همان بعد قطعه
-  // خروجی: مقدار اضافه‌تراش بر حسب میلی‌متر
-
-  let baseAllowance = 0;
-  if(dSize < 10){
-    baseAllowance = 1; 
-  } else if(dSize < 30){
-    baseAllowance = 3; 
-  } else if(dSize < 100){
-    baseAllowance = 5;
-  } else if(dSize < 300){
-    baseAllowance = 10;
-  } else if(dSize < 500){
-    baseAllowance = 15; 
+function getAllowance(shape, dimension){
+  if(shape === 'میله گرد' || shape === 'لوله'){
+    return (dimension > 50) ? 5 : 2;
   } else {
-    baseAllowance = 20; 
+    // سایر مقاطع
+    return 2;
   }
-
-  // ضرایب برای کیفیت سطح
-  // سیاه: 1.0 | خشن‌تراشی: 0.6 | کشش‌سرد: 0.3
-  let factor = 1;
-  switch(condition){
-    case 'black':  factor = 1.0;  break;
-    case 'rough':  factor = 0.6;  break;
-    case 'bright': factor = 0.3;  break;
-  }
-
-  return baseAllowance * factor;
 }
 
 /***********************************************************
- * محاسبه و نمایش نتیجه
+ * محاسبه و نمایش
  ***********************************************************/
 const $warn    = document.getElementById('warn');
 const $resDim1 = document.getElementById('resDim1');
 const $resDim2 = document.getElementById('resDim2');
+
 document.getElementById('calcBtn').addEventListener('click', ()=>{
   $warn.textContent = "";
   $resDim1.classList.add('hidden');
@@ -260,42 +225,52 @@ document.getElementById('calcBtn').addEventListener('click', ()=>{
   $resDim1.textContent = "";
   $resDim2.textContent = "";
 
-  const secType   = secSelect.value;
-  const cond      = document.getElementById('condition').value;
-  const val1      = parseFloat(d1Input.value||"0");
-  const val2      = parseFloat(d2Input.value||"0");
+  const shape = secSelect.value;
+  const v1    = parseFloat(d1Input.value||"0");
+  const v2    = parseFloat(d2Input.value||"0");
 
   // بررسی صحت ورودی
-  if(val1 <= 0){
-    $warn.textContent="حداقل بعد اول را وارد کنید.";
+  if(v1 <= 0){
+    $warn.textContent="ابتدا بعد اول را وارد کنید.";
     return;
   }
   // اگر مقطع دو بعدی باشد ولی بعد دوم وارد نشده باشد
-  if( (secType==='pipe' || secType==='angle' || secType==='channel' 
-       || secType==='ibeam' || secType==='box') 
-      && val2<=0 ){
+  if((shape === 'لوله' || shape === 'نبشی' || shape === 'ناودونی'
+      || shape === 'تیراهن' || shape === 'قوطی') && v2 <= 0){
     $warn.textContent="بعد دوم هم باید وارد شود.";
     return;
   }
 
-  // حالت تک بعدی
-  if(secType==='round' || secType==='hex' || secType==='square' 
-     || secType==='sheet' || secType==='flat'){
-    // فقط یک تلرانس
-    const allow1 = getMachiningAllowance(val1, cond);
-    $resDim1.textContent = `تلرانس ماشین‌کاری برای بعد ${val1} میلی‌متر: حدود ${allow1.toFixed(1)} میلی‌متر`;
+  // اگر مقطع یک‌بعدی است (میله گرد، شش گوش، چهارگوش، ورق، تسمه)
+  if(shape==='میله گرد' || shape==='شش گوش' || shape==='چهارگوش' 
+     || shape==='ورق' || shape==='تسمه'){
+    const allow = getAllowance(shape, v1);
+    const finalDim = v1 + allow;
+    $resDim1.textContent = `
+      🔹 بعد خام: ${v1} میلی‌متر 
+      → تلرانس پیشنهادی: ${allow} میلی‌متر
+      → بعد نهایی: ${finalDim} میلی‌متر
+    `;
     $resDim1.classList.remove('hidden');
     return;
   }
 
-  // حالت دو بعدی:
-  // برای هر بعد جداگانه محاسبه می‌کنیم
-  const allow1 = getMachiningAllowance(val1, cond);
-  const allow2 = getMachiningAllowance(val2, cond);
-  
-  $resDim1.textContent = `تلرانس ماشین‌کاری بعد اول (${val1}mm): حدود ${allow1.toFixed(1)} میلی‌متر`;
-  $resDim2.textContent = `تلرانس ماشین‌کاری بعد دوم (${val2}mm): حدود ${allow2.toFixed(1)} میلی‌متر`;
+  // اگر مقطع دو بعدی است (لوله، نبشی، ناودونی، تیراهن، قوطی)
+  const allow1 = getAllowance(shape, v1);
+  const allow2 = getAllowance(shape, v2);
+  const final1 = v1 + allow1;
+  const final2 = v2 + allow2;
 
+  $resDim1.textContent = `
+    🔹 بعد اول: ${v1} میلی‌متر 
+    → تلرانس: ${allow1} میلی‌متر 
+    → بعد نهایی: ${final1} میلی‌متر
+  `;
+  $resDim2.textContent = `
+    🔹 بعد دوم: ${v2} میلی‌متر 
+    → تلرانس: ${allow2} میلی‌متر 
+    → بعد نهایی: ${final2} میلی‌متر
+  `;
   $resDim1.classList.remove('hidden');
   $resDim2.classList.remove('hidden');
 });
