@@ -7,7 +7,7 @@
 
   <!-- فونت فارسی Vazirmatn -->
   <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+    href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
 
   <style>
     :root {
@@ -18,58 +18,50 @@
       --g: 12px;  /* فاصله پایه */
     }
     * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      box-sizing: border-box; margin: 0; padding: 0;
     }
     body {
-      background: #000;
-      color: #fff;
+      background: #000; color: #fff;
       font-family: "Vazirmatn", sans-serif;
-      min-height: 100vh;
-      line-height: 1.6;
+      min-height: 100vh; line-height: 1.6;
     }
     /* هدر بالای صفحه */
     #topbar {
-      display: flex;
-      justify-content: center;
+      display: flex; 
+      justify-content: center; 
       align-items: center;
-      height: 64px;
+      height: 64px; 
       margin: var(--g);
-      background: var(--glass);
+      background: var(--glass); 
       backdrop-filter: blur(24px);
       border: 1px solid rgba(255,255,255,0.25);
       border-radius: var(--r);
     }
     .logo {
-      display: flex;
-      align-items: center;
+      display: flex; 
+      align-items: center; 
       gap: 8px;
-      font-size: 1.4rem;
+      font-size: 1.4rem; 
       font-weight: 700;
     }
     .ring {
-      width: 22px;
-      height: 22px;
-      border: 6px solid var(--c-accent);
-      border-radius: 50%;
+      width: 22px; height: 22px;
+      border: 6px solid var(--c-accent); border-radius: 50%;
     }
-    .brand {
-      color: var(--c-primary);
-    }
+    .brand { color: var(--c-primary); }
 
     main {
-      max-width: 480px;
-      margin: 0 auto;
+      max-width: 480px; 
+      margin: 0 auto; 
       padding: var(--g);
     }
 
     .card {
-      background: var(--glass);
+      background: var(--glass); 
       backdrop-filter: blur(24px);
       border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
-      padding: 16px;
+      padding: 16px; 
       margin-top: var(--g);
     }
     .card h2 {
@@ -86,13 +78,13 @@
 
     /* استایل لیست بانک‌ها */
     .bank-list {
-      display: flex;
-      flex-direction: column;
+      display: flex; 
+      flex-direction: column; 
       gap: 12px;
     }
     .bank-row {
       display: grid;
-      /* سه ستون: نام بانک | موجودی بانک | جمع چک یک ماه آینده */
+      /* سه ستون: نام بانک | موجودی | مجموع چک یک ماه آینده */
       grid-template-columns: 1.3fr 1.3fr 1.8fr;
       align-items: center;
       background: #111;
@@ -144,77 +136,179 @@
   <main>
     <div class="card">
       <h2>لیست بانک‌ها</h2>
-      <!-- نمایش تاریخ یک ماه آینده در این پاراگراف -->
+      <!-- این متن به‌صورت پویا تاریخ یک ماه بعد را درج می‌کند -->
       <p class="note">
         مبالغ چک‌های پرداختی تا تاریخ 
         <span id="dueDate">—</span>
       </p>
 
-      <div class="bank-list">
-        <!-- هر بانک در یک سطر -->
-        <div class="bank-row">
-          <span class="bank-name">ملت</span>
-          <span class="bank-balance">2,689,480,250 ریال</span>
-          <span class="bank-check">300,000,000 ریال</span>
-        </div>
-        <div class="bank-row">
-          <span class="bank-name">صادرات</span>
-          <span class="bank-balance">6,891,785,053 ریال</span>
-          <span class="bank-check">175,000,000 ریال</span>
-        </div>
-        <div class="bank-row">
-          <span class="bank-name">ملی</span>
-          <span class="bank-balance">2,527,758,403 ریال</span>
-          <span class="bank-check">520,000,000 ریال</span>
-        </div>
-        <div class="bank-row">
-          <span class="bank-name">آینده</span>
-          <span class="bank-balance">1,870,232,397 ریال</span>
-          <span class="bank-check">90,000,000 ریال</span>
-        </div>
-        <div class="bank-row">
-          <span class="bank-name">قرض الحسنه مهر</span>
-          <span class="bank-balance">1,868,110,730 ریال</span>
-          <span class="bank-check">250,000,000 ریال</span>
-        </div>
-        <div class="bank-row">
-          <span class="bank-name">تجارت</span>
-          <span class="bank-balance">4,875,311,801 ریال</span>
-          <span class="bank-check">130,000,000 ریال</span>
-        </div>
-        <div class="bank-row">
-          <span class="bank-name">سامان</span>
-          <span class="bank-balance">3,200,273,253 ریال</span>
-          <span class="bank-check">450,000,000 ریال</span>
-        </div>
-        <div class="bank-row">
-          <span class="bank-name">مسکن</span>
-          <span class="bank-balance">3,997,141,363 ریال</span>
-          <span class="bank-check">650,000,000 ریال</span>
-        </div>
-        <div class="bank-row">
-          <span class="bank-name">قرض الحسنه رسالت</span>
-          <span class="bank-balance">2,970,532,462 ریال</span>
-          <span class="bank-check">200,000,000 ریال</span>
-        </div>
-      </div>
+      <!-- لیست بانک‌ها اینجا قرار می‌گیرد -->
+      <div id="bankList" class="bank-list"></div>
     </div>
 
-    <!-- لینک بازگشت -->
     <a href="index.html" class="btn-back">⬅ بازگشت</a>
   </main>
 
   <script>
-    // تابع محاسبه تاریخ یک ماه بعد و نمایش در فرمت شمسی (در مرورگرهایی که از fa-IR پشتیبانی می‌کنند)
-    function oneMonthLaterFA() {
-      const now = new Date();
-      now.setMonth(now.getMonth() + 1); // یک ماه اضافه می‌شود
-      // تبدیل به تاریخ شمسی
-      return now.toLocaleDateString("fa-IR");
-    }
-    // درج تاریخ در عنصر #dueDate
-    document.getElementById('dueDate').textContent = oneMonthLaterFA();
-  </script>
+    /*************************************
+     * نمونهٔ داده‌های بانک و چک‌ها
+     * فرض می‌کنیم امروز مثلاً ۲۵ اردیبهشت است.
+     * زمان جاوااسکریپت به میلادی است، لذا تاریخ
+     * را باید به فرمت مناسب وارد کنید.
+     *************************************/
+    const banksData = [
+      {
+        name: "ملت",
+        balance: 2689480250,
+        checks: [
+          // تاریخ سررسید چک‌ها (فرمت میلادی YYYY-MM-DD)
+          { dueDate: "2023-05-30", amount: 100000000 },
+          { dueDate: "2023-06-10", amount: 200000000 },
+          { dueDate: "2023-08-01", amount: 50000000 }  // بعد از یک ماه، حساب نشود
+        ]
+      },
+      {
+        name: "صادرات",
+        balance: 6891785053,
+        checks: [
+          { dueDate: "2023-05-28", amount: 75000000 },
+          { dueDate: "2023-06-20", amount: 100000000 }
+        ]
+      },
+      {
+        name: "ملی",
+        balance: 2527758403,
+        checks: [
+          { dueDate: "2023-06-05", amount: 200000000 },
+          { dueDate: "2023-06-24", amount: 320000000 }
+        ]
+      },
+      {
+        name: "آینده",
+        balance: 1870232397,
+        checks: [
+          { dueDate: "2023-05-29", amount: 90000000 }
+        ]
+      },
+      {
+        name: "قرض الحسنه مهر",
+        balance: 1868110730,
+        checks: [
+          { dueDate: "2023-06-18", amount: 250000000 }
+        ]
+      },
+      {
+        name: "تجارت",
+        balance: 4875311801,
+        checks: [
+          { dueDate: "2023-06-01", amount: 130000000 }
+        ]
+      },
+      {
+        name: "سامان",
+        balance: 3200273253,
+        checks: [
+          { dueDate: "2023-06-03", amount: 150000000 },
+          { dueDate: "2023-07-01", amount: 300000000 } // این یکی خارج از بازه 1 ماه است
+        ]
+      },
+      {
+        name: "مسکن",
+        balance: 3997141363,
+        checks: [
+          { dueDate: "2023-05-30", amount: 200000000 },
+          { dueDate: "2023-06-15", amount: 450000000 }
+        ]
+      },
+      {
+        name: "قرض الحسنه رسالت",
+        balance: 2970532462,
+        checks: [
+          { dueDate: "2023-06-25", amount: 200000000 }
+        ]
+      }
+    ];
 
+    /****************************************************
+     * تابع محاسبهٔ یک ماه بعد از امروز
+     ****************************************************/
+    function oneMonthLater() {
+      const now = new Date();
+      now.setMonth(now.getMonth() + 1); // یک ماه اضافه می‌کنیم
+      return now; // Date یک ماه بعد
+    }
+
+    /****************************************************
+     * تبدیل تاریخ میلادی به شمسی: toLocaleDateString("fa-IR")
+     ****************************************************/
+    function oneMonthLaterFA() {
+      return oneMonthLater().toLocaleDateString("fa-IR");
+    }
+
+    /****************************************************
+     * محاسبهٔ جمع چک‌های هر بانک که در فاصلهٔ
+     * امروز تا یک ماه آینده سررسید دارند
+     ****************************************************/
+    function sumChecksNextMonth(checks) {
+      const today = new Date();           // تاریخ امروز
+      const nextMonth = oneMonthLater();  // تاریخ یک ماه بعد
+
+      let sum = 0;
+      for (let c of checks) {
+        const due = new Date(c.dueDate); // تاریخ چک
+        // اگر تاریخ چک >= امروز و <= یک ماه بعد باشد:
+        if (due >= today && due <= nextMonth) {
+          sum += c.amount;
+        }
+      }
+      return sum;
+    }
+
+    /****************************************************
+     * ساخت رابط کاربری جدول بانک‌ها
+     ****************************************************/
+    function buildBankRows() {
+      const bankListDiv = document.getElementById("bankList");
+
+      // برای هر بانک یک ردیف بساز
+      banksData.forEach(bank => {
+        // جمع چک‌های یک ماه آینده
+        const sumChecks = sumChecksNextMonth(bank.checks);
+
+        // ایجاد یک سطر
+        const row = document.createElement("div");
+        row.className = "bank-row";
+
+        // ستونی: نام بانک
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "bank-name";
+        nameSpan.textContent = bank.name;
+
+        // ستونی: موجودی
+        const balanceSpan = document.createElement("span");
+        balanceSpan.className = "bank-balance";
+        balanceSpan.textContent = bank.balance.toLocaleString("fa-IR") + " ریال";
+
+        // ستونی: جمع چک‌های یک ماه آینده
+        const checkSpan = document.createElement("span");
+        checkSpan.className = "bank-check";
+        checkSpan.textContent = sumChecks.toLocaleString("fa-IR") + " ریال";
+
+        // اضافه کردن ستون‌ها به ردیف
+        row.appendChild(nameSpan);
+        row.appendChild(balanceSpan);
+        row.appendChild(checkSpan);
+
+        // درج در بانک-لیست
+        bankListDiv.appendChild(row);
+      });
+    }
+
+    // در بدو لود: تاریخ یک ماه بعد را نشان بده
+    document.getElementById("dueDate").textContent = oneMonthLaterFA();
+
+    // و جدول بانک‌ها را بساز
+    buildBankRows();
+  </script>
 </body>
 </html>
