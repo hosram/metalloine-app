@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>محاسبه وزن + تلرانس ماشین‌کاری | Metalloine</title>
+  <title>پیشنهاد تلرانس ماشین‌کاری | Metalloine</title>
 
   <!-- فونت Vazirmatn -->
   <link rel="stylesheet"
@@ -79,14 +79,6 @@
       border: none; border-radius: var(--r);
     }
 
-    output {
-      display: block; background: #111; text-align: center;
-      padding: 12px; border-radius: var(--r);
-      border: 1px solid rgba(255,255,255,0.2);
-      font-size: 1.2rem; font-weight: 700;
-    }
-    output[aria-live] { min-height: 1.4em; }
-
     .warning {
       color: #ff8080; text-align: center; grid-column: span 2;
       min-height: 1.2em; font-size: 0.8rem;
@@ -101,17 +93,16 @@
 
     .hidden { display: none !important; }
 
-    /* بخش نتیجه: سه خروجی (تئوری، دست‌بالا، و توضیح اختلاف) */
+    /* بخش نتیجه */
     #results {
       margin-top: 1rem; 
     }
-    #resTheoretical, #resUpper, #resDiff {
+    #resDim1, #resDim2 {
       background: #222; margin-top: 8px;
       border-radius: var(--r); padding: 12px;
       border: 1px solid rgba(255,255,255,0.3);
       font-size: 0.9rem; line-height:1.4;
     }
-
     @media (max-width: 600px) {
       .card {
         grid-template-columns: 1fr !important;
@@ -128,27 +119,13 @@
 </header>
 
 <main>
-  <h2 style="text-align:center">محاسبه وزن + تلرانس ماشین‌کاری</h2>
+  <h2 style="text-align:center">پیشنهاد تلرانس ماشین‌کاری</h2>
 
-  <form id="weightForm" class="card">
-    <!-- انتخاب ماده (چگالی) -->
-    <label>نوع ماده (چگالی)
-      <select id="w-mat">
-        <option value="7800">فولاد (حدود 7800kg/m³)</option>
-        <option value="8050">فولاد زنگ‌نزن (8050kg/m³)</option>
-        <option value="7100">چدن (7100kg/m³)</option>
-        <option value="2700">آلومینیوم (2700kg/m³)</option>
-        <option value="8900">مس (حدود 8900kg/m³)</option>
-        <option value="8600">برنج (8600kg/m³)</option>
-        <option value="8900">فسفر برنز (8900kg/m³)</option>
-        <option value="4430">تیتانیوم (4430kg/m³)</option>
-        <option value="7140">گالوانیزه (7140kg/m³)</option>
-      </select>
-    </label>
+  <form id="allowanceForm" class="card">
 
     <!-- انتخاب مقطع -->
     <label>نوع مقطع
-      <select id="w-sec">
+      <select id="sec">
         <option value="round">میله‌گرد (Round)</option>
         <option value="pipe">لوله (Pipe)</option>
         <option value="hex">شش‌گوش (Hex)</option>
@@ -163,38 +140,30 @@
     </label>
 
     <!-- وضعیت یا کیفیت سطح (برای تعیین اضافه‌ماشین‌کاری) -->
-    <label>وضعیت یا کیفیت سطح
-      <select id="w-condition">
+    <label>کیفیت سطح
+      <select id="condition">
         <option value="black">سیاه (نورد گرم معمولی)</option>
-        <option value="rough">خشن‌تراشی شده (پوسته‌گیری)</option>
+        <option value="rough">خشن‌تراشی (پوسته‌گیری)</option>
         <option value="bright">کشش سرد / سطح دقیق</option>
       </select>
     </label>
 
     <!-- فیلدهای ابعاد -->
-    <label id="f-d1">قطر/ضخامت (mm)
-      <input id="w-d1" type="number" placeholder="مثلاً 40">
+    <label id="f-d1">بعد اول (mm)
+      <input id="d1" type="number" placeholder="مثلاً قطر بیرونی 80">
     </label>
-    <label id="f-d2">ابعاد فرعی (mm)
-      <input id="w-d2" type="number" placeholder="مثلاً قطر داخلی یا بال">
-    </label>
-
-    <label>طول قطعه (cm)
-      <input id="w-len" type="number" placeholder="مثلاً 100">
-    </label>
-    <label>تعداد
-      <input id="w-qty" type="number" value="1">
+    <label id="f-d2">بعد دوم (mm)
+      <input id="d2" type="number" placeholder="مثلاً قطر داخلی 70">
     </label>
 
-    <button id="w-calc" type="button" class="btn-submit row-2">محاسبه</button>
-    <div id="w-warn" class="warning row-2"></div>
+    <button id="calcBtn" type="button" class="btn-submit row-2">محاسبه تلرانس</button>
+    <div id="warn" class="warning row-2"></div>
   </form>
 
-  <!-- بخش نمایش نتایج -->
+  <!-- نمایش نتیجه -->
   <section id="results">
-    <div id="resTheoretical"></div>
-    <div id="resUpper"></div>
-    <div id="resDiff"></div>
+    <div id="resDim1" class="hidden"></div>
+    <div id="resDim2" class="hidden"></div>
   </section>
 
   <!-- دکمه بازگشت -->
@@ -203,256 +172,132 @@
 
 <script>
 /***********************************************************
- * نمایش/پنهان کردن فیلدهای ابعاد بر اساس نوع مقطع
+ * تغییر نمایش فیلدهای ابعاد بر اساس نوع مقطع
  ***********************************************************/
-const secSelect    = document.getElementById('w-sec');
-const f_d1         = document.getElementById('f-d1');
-const f_d2         = document.getElementById('f-d2');
-const w_d1         = document.getElementById('w-d1');
-const w_d2         = document.getElementById('w-d2');
+const secSelect = document.getElementById('sec');
+const f_d1     = document.getElementById('f-d1');
+const f_d2     = document.getElementById('f-d2');
+const d1Input  = document.getElementById('d1');
+const d2Input  = document.getElementById('d2');
 
 function updateSecFields(){
-  // پیش‌فرض همه پنهان
+  // پیش‌فرض: هردو پنهان
   f_d1.classList.add('hidden');
   f_d2.classList.add('hidden');
-  w_d1.required=false;
-  w_d2.required=false;
+  d1Input.required = false;
+  d2Input.required = false;
 
   switch(secSelect.value){
     case 'round': 
-      // میله گرد → فقط قطر
-      f_d1.classList.remove('hidden');
-      w_d1.required = true;
-      break;
-    case 'pipe':
-      // لوله: قطر بیرونی + قطر داخلی
-      f_d1.classList.remove('hidden');
-      f_d2.classList.remove('hidden');
-      w_d1.required = true;
-      w_d2.required = true;
-      break;
     case 'hex':
     case 'square':
     case 'sheet':
     case 'flat':
-      // شش‌گوش، چهارگوش، ورق، تسمه → یک بعد
+      // فقط یک بعد
       f_d1.classList.remove('hidden');
-      w_d1.required = true;
+      d1Input.required = true;
       break;
+    case 'pipe':
     case 'angle':
     case 'channel':
     case 'ibeam':
     case 'box':
-      // نبشی، ناودونی، تیرآهن، قوطی → حداقل دو بعد
+      // دو بعد
       f_d1.classList.remove('hidden');
       f_d2.classList.remove('hidden');
-      w_d1.required = true;
-      w_d2.required = true;
+      d1Input.required = true;
+      d2Input.required = true;
       break;
   }
 }
 secSelect.addEventListener('change', updateSecFields);
 updateSecFields(); // بارگیری اولیه
 
-
 /***********************************************************
- * توابع هندسی ساده برای مساحت سطح مقطع
+ * تابع محاسبه اضافه تراش بر اساس بُعد و کیفیت سطح
  ***********************************************************/
-function areaRound(d) {
-  // میله گرد
-  return Math.PI * d*d / 4;
-}
-function areaPipe(od, id) {
-  // لوله: A = π*(OD^2 - ID^2)/4
-  return areaRound(od) - areaRound(id);
-}
-function areaHex(a){
-  // شش گوش = (3√3 / 2)* a^2 ≈ 2.598*a*a
-  return 2.598 * a*a; 
-}
-function areaSquare(a){ 
-  return a*a; 
-}
-function areaSheet(thick, width){ 
-  return thick * width; 
-}
-function areaFlat(thick, width){ 
-  return thick * width; 
-}
-// نبشی، ناودونی، تیرآهن، قوطی: مدل ساده‌شده
-function areaAngle(a, t){ 
-  return 2*a*t - t*t; 
-}
-function areaChannel(h, t){ 
-  return 2*h*t;
-}
-function areaI(h, b){ 
-  return h*b; 
-}
-function areaBox(w, h){ 
-  return w*h; 
-}
+function getMachiningAllowance(dSize, condition){
+  // dSize بر حسب mm → بزرگ‌ترین یا همان بعد قطعه
+  // خروجی: مقدار اضافه‌تراش بر حسب میلی‌متر
 
-/** برمی‌گرداند مساحت (mm^2) */
-function getAreaMM2(sec, d1, d2){
-  switch(sec){
-    case 'round':   return areaRound(d1);
-    case 'pipe':    return areaPipe(d1,d2);
-    case 'hex':     return areaHex(d1);
-    case 'square':  return areaSquare(d1);
-    case 'sheet':   return areaSheet(d1,d2);
-    case 'flat':    return areaFlat(d1,d2);
-    case 'angle':   return areaAngle(d1,d2);
-    case 'channel': return areaChannel(d1,d2);
-    case 'ibeam':   return areaI(d1,d2);
-    case 'box':     return areaBox(d1,d2);
-    default:        return 0;
-  }
-}
-
-
-/***********************************************************
- * تابع محاسبه اضافه تراش
- * بسته به بُعد اصلی و وضعیت سطح
- ***********************************************************/
-function getMachiningAllowance(dMain, condition){
-  // dMain برحسب mm → بزرگترین بُعد یا قطر
   let baseAllowance = 0;
-  if(dMain < 10){
+  if(dSize < 10){
     baseAllowance = 1; 
-  } else if(dMain < 30){
+  } else if(dSize < 30){
     baseAllowance = 3; 
-  } else if(dMain < 100){
+  } else if(dSize < 100){
     baseAllowance = 5;
-  } else if(dMain < 300){
+  } else if(dSize < 300){
     baseAllowance = 10;
-  } else if(dMain < 500){
+  } else if(dSize < 500){
     baseAllowance = 15; 
   } else {
     baseAllowance = 20; 
   }
 
-  // بر اساس کیفیت سطح
+  // ضرایب برای کیفیت سطح
+  // سیاه: 1.0 | خشن‌تراشی: 0.6 | کشش‌سرد: 0.3
   let factor = 1;
   switch(condition){
-    case 'black':  factor = 1.0; break;  // سیاه (نورد گرم)
-    case 'rough':  factor = 0.6; break;  // خشن‌تراش (پوسته‌گیری)
-    case 'bright': factor = 0.3; break;  // کشش سرد / دقیق
+    case 'black':  factor = 1.0;  break;
+    case 'rough':  factor = 0.6;  break;
+    case 'bright': factor = 0.3;  break;
   }
 
   return baseAllowance * factor;
 }
 
-
 /***********************************************************
- * محاسبه وزن با ابعاد داده‌شده
- * d1,d2 برحسب mm - length برحسب cm - rho برحسب kg/m^3
+ * محاسبه و نمایش نتیجه
  ***********************************************************/
-function calcWeightCore(rho, sec, d1, d2, lengthCm, qty){
-  // تبدیل cm به mm
-  const lengthMM = lengthCm * 10;
-  // مساحت مقطع (mm^2)
-  const A = getAreaMM2(sec, d1, d2);
-  if(A<=0) return null;
+const $warn    = document.getElementById('warn');
+const $resDim1 = document.getElementById('resDim1');
+const $resDim2 = document.getElementById('resDim2');
+document.getElementById('calcBtn').addEventListener('click', ()=>{
+  $warn.textContent = "";
+  $resDim1.classList.add('hidden');
+  $resDim2.classList.add('hidden');
+  $resDim1.textContent = "";
+  $resDim2.textContent = "";
 
-  // حجم (mm^3)
-  const volumeMM3 = A * lengthMM;
-  // تبدیل mm^3 به m^3
-  const volumeM3 = volumeMM3 * 1e-9;
+  const secType   = secSelect.value;
+  const cond      = document.getElementById('condition').value;
+  const val1      = parseFloat(d1Input.value||"0");
+  const val2      = parseFloat(d2Input.value||"0");
 
-  // وزن یک قطعه
-  const wEach = rho * volumeM3;
-  return wEach * qty;
-}
-
-
-/***********************************************************
- * انیمیشن ساده برای نمایش اعداد
- ***********************************************************/
-function animateNumberObj(el, fromVal, toVal, label){
-  const dur=700, start=Date.now();
-  (function step(){
-    const p = Math.min((Date.now()-start)/dur,1);
-    const val = fromVal + (toVal - fromVal)*p;
-    el.innerHTML = `${label}: <strong>${val.toFixed(2)} کیلوگرم</strong>`;
-    if(p<1) requestAnimationFrame(step);
-  })();
-}
-
-
-/***********************************************************
- * رویداد محاسبه
- ***********************************************************/
-const $warn = document.getElementById('w-warn');
-const $resTheoretical = document.getElementById('resTheoretical');
-const $resUpper       = document.getElementById('resUpper');
-const $resDiff        = document.getElementById('resDiff');
-
-document.getElementById('w-calc').addEventListener('click', ()=>{
-  $warn.textContent="";
-
-  const rho       = parseFloat(document.getElementById('w-mat').value || "0");
-  const sec       = document.getElementById('w-sec').value;
-  const condition = document.getElementById('w-condition').value;
-  const d1        = parseFloat(document.getElementById('w-d1').value || "0");
-  const d2        = parseFloat(document.getElementById('w-d2').value || "0");
-  const len       = parseFloat(document.getElementById('w-len').value||"0");
-  const qty       = parseInt(document.getElementById('w-qty').value||"1",10);
-
-  // کنترل ورودی‌ها
-  if(rho<=0 || len<=0 || qty<=0){
-    $warn.textContent="ورودی نامعتبر یا ناقص است.";
-    $resTheoretical.textContent="";
-    $resUpper.textContent="";
-    $resDiff.textContent="";
+  // بررسی صحت ورودی
+  if(val1 <= 0){
+    $warn.textContent="حداقل بعد اول را وارد کنید.";
     return;
   }
-  if(d1<=0){
-    $warn.textContent="بعد/قطر مقطع را وارد کنید.";
-    $resTheoretical.textContent="";
-    $resUpper.textContent="";
-    $resDiff.textContent="";
+  // اگر مقطع دو بعدی باشد ولی بعد دوم وارد نشده باشد
+  if( (secType==='pipe' || secType==='angle' || secType==='channel' 
+       || secType==='ibeam' || secType==='box') 
+      && val2<=0 ){
+    $warn.textContent="بعد دوم هم باید وارد شود.";
     return;
   }
 
-  // وزن تئوری
-  const wTheo = calcWeightCore(rho, sec, d1, d2, len, qty);
-  if(wTheo===null){
-    $warn.textContent="ابعاد نامعتبر یا فرمول مقطع ناشناس.";
-    $resTheoretical.textContent="";
-    $resUpper.textContent="";
-    $resDiff.textContent="";
+  // حالت تک بعدی
+  if(secType==='round' || secType==='hex' || secType==='square' 
+     || secType==='sheet' || secType==='flat'){
+    // فقط یک تلرانس
+    const allow1 = getMachiningAllowance(val1, cond);
+    $resDim1.textContent = `تلرانس ماشین‌کاری برای بعد ${val1} میلی‌متر: حدود ${allow1.toFixed(1)} میلی‌متر`;
+    $resDim1.classList.remove('hidden');
     return;
   }
 
-  // محاسبه وزن با تلرانس:
-  // تلرانس را بر اساس بزرگترین بعد در نظر می‌گیریم
-  const mainDim = Math.max(d1, d2, 0);
-  const allowance = getMachiningAllowance(mainDim, condition);
-
-  // اگر قطعه فقط یک بعد دارد (مثلاً round)، همان d1 را بزرگ می‌کنیم
-  // در لوله (pipe) یا حالت‌هایی که دو بعد داریم، بزرگ‌ترین را تغییر می‌دهیم.
-  let d1Allow = d1;
-  let d2Allow = d2;
-  if(d1>=d2){
-    d1Allow = d1 + allowance;
-  } else {
-    d2Allow = d2 + allowance;
-  }
-
-  // همچنین برای طول هم فرضاً 1cm اضافه بگیریم
-  let lenAllow = len + 1;
-
-  const wUpper = calcWeightCore(rho, sec, d1Allow, d2Allow, lenAllow, qty);
-  const diff = wUpper - wTheo;
-
-  // نمایش
-  animateNumberObj($resTheoretical, 0, wTheo, "وزن تئوری");
-  animateNumberObj($resUpper, 0, wUpper, "وزن دست‌بالا");
+  // حالت دو بعدی:
+  // برای هر بعد جداگانه محاسبه می‌کنیم
+  const allow1 = getMachiningAllowance(val1, cond);
+  const allow2 = getMachiningAllowance(val2, cond);
   
-  $resDiff.innerHTML =
-    `اختلاف این دو وزن: <strong>${diff.toFixed(2)} کیلوگرم</strong>.
-     <br>ناشی از لحاظ‌کردن تلرانس ساخت و اضافه‌ماشین‌کاری است.`;
+  $resDim1.textContent = `تلرانس ماشین‌کاری بعد اول (${val1}mm): حدود ${allow1.toFixed(1)} میلی‌متر`;
+  $resDim2.textContent = `تلرانس ماشین‌کاری بعد دوم (${val2}mm): حدود ${allow2.toFixed(1)} میلی‌متر`;
+
+  $resDim1.classList.remove('hidden');
+  $resDim2.classList.remove('hidden');
 });
 </script>
 </body>
