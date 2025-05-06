@@ -2,46 +2,8 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>لیست بانک‌ها | Metalloine</title>
-
-  <!-- 
-   =================== راهنمایی و پیشنهادات ===================
-   ۱) ممکن است تاریخ سیستم شما با تاریخ چک‌ها همخوانی نداشته باشد:
-      - اگر از new Date() (بدون پارامتر) استفاده کنید، تاریخ امروز را از سیستم کاربر می‌گیرد.
-        ممکن است چک‌ها در گذشته یا آیندهٔ دورتری باشند.
-      - در این مثال، تاریخ امروز را به شکل ثابت "2025-05-06" قرار داده‌ایم (getStartOfToday)،
-        تا بتوانید تست کنید و نتیجه صفر نباشد.
-
-   ۲) اختلاف ساعت یا TimeZone:
-      - برای جلوگیری از خطا در محاسبه، ابتدای روز را "2025-05-06T00:00:00" 
-        و انتهای یک ماه بعد را "2025-06-06T23:59:59" تنظیم کرده‌ایم.
-        اگر حتی چکی برای 2025-06-06 ثبت شده، در طول این روز محاسبه شود.
-
-   ۳) تعریف "یک ماه" یا "۳۰ روز":
-      - در کد زیر، ما واقعا یک ماه در تقویم را جلو رفته‌ایم (از 05-06 تا 06-06).
-        بسته به اینکه می‌خواهید ۳۰ روز بعد یا روز مشابه ماه بعد باشد، می‌توانید اصلاح کنید.
-
-   ۴) تاریخ چک‌ها:
-      - تاریخ چک‌ها را همگی در فاصله 2025-05-07 تا 2025-06-06 گذاشته‌ایم تا محاسبه شوند.
-      - اگر یک تاریخ بیرون از این بازه باشد (مثلا 2025-06-15)، در جمع لحاظ نمی‌شود.
-      - اگر به ساعت هم نیاز دارید، می‌توانید "YYYY-MM-DDTHH:mm:ss" بنویسید تا دقیق باشد.
-
-   ۵) فرمت شمسی و میلادی:
-      - این کد، تاریخ پایه (today) را میلادی ثابت کرده است، ولی با toLocaleDateString("fa-IR")
-        در خروجی بخش note، تاریخ یک ماه بعد را به شکل شمسی نشان می‌دهد.
-      - در عمل، بهتر است همه تاریخ‌ها را میلادی-UTC نگهدارید و فقط در نمایش آن‌ها را شمسی کنید.
-
-   ۶) اگر اعداد باز هم طبق انتظار نبود:
-      - بازه تاریخ را با console.log بررسی کنید.
-      - تاریخ چک‌ها را ببینید آیا واقعا در آن بازه هستند یا نه.
-      - اگر اختلاف یکی دو روز وجود داشت، ممکن است مشکل منطقهٔ زمانی باشد.
-
-   ۷) این یک نمونه است:
-      - در پروژه واقعی، می‌توانید داده‌های بانک و چک‌ها را از API بگیرید و در آرایه‌ی banksData بریزید.
-      - یا بهتر است محاسبات را در بک‌اند انجام دهید و فقط نتیجه را اینجا نمایش دهید.
-   ===========================================================
-  -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Metalloine | دریافت چک‌ها از حسابفا و نمایش لیست بانک‌ها</title>
 
   <!-- فونت فارسی Vazirmatn -->
   <link
@@ -50,26 +12,27 @@
   />
 
   <style>
+    /* =========== استایل‌های کلی و تم Metalloine =========== */
     :root {
       --c-primary: #8E1F61;   /* رنگ اصلی */
       --c-accent:  #8FA2B2;   /* رنگ فرعی */
       --glass: rgba(255,255,255,0.1);
-      --r: 24px;
-      --g: 12px;
+      --r: 24px;   /* گردی گوشه‌ها */
+      --g: 12px;   /* فاصله‌ی پایه */
     }
     * {
       box-sizing: border-box;
-      margin: 0;
+      margin: 0; 
       padding: 0;
     }
     body {
-      background: #000;
+      background: #000; 
       color: #fff;
       font-family: "Vazirmatn", sans-serif;
-      min-height: 100vh;
+      min-height: 100vh; 
       line-height: 1.6;
     }
-    /* هدر بالای صفحه */
+    /* هدر بالای صفحه با لوگوی Metalloine */
     #topbar {
       display: flex;
       justify-content: center;
@@ -97,13 +60,13 @@
     .brand {
       color: var(--c-primary);
     }
-
     main {
-      max-width: 480px;
+      max-width: 600px;
       margin: 0 auto;
       padding: var(--g);
     }
 
+    /* =========== استایل کارت‌ها =========== */
     .card {
       background: var(--glass);
       backdrop-filter: blur(24px);
@@ -117,14 +80,48 @@
       margin-bottom: 8px;
       font-size: 1.2rem;
     }
-    .card .note {
+    .card p {
+      margin-bottom: 12px;
+      line-height: 1.8;
+    }
+    .note {
       text-align: center;
       font-size: 0.9rem;
       opacity: 0.7;
       margin-bottom: 12px;
     }
 
-    /* استایل لیست بانک‌ها */
+    /* =========== دکمه‌ها =========== */
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none; 
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+      color: #fff; 
+      font-weight: 700;
+      text-decoration: none;
+      margin-top: 8px;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* =========== استایل نمایش وضعیت و نتیجه =========== */
+    .status {
+      margin-top: 10px; 
+      color: #ff8888;
+      min-height: 1.2em;
+    }
+    .result-value {
+      margin-top: 10px; 
+      font-size: 1.2rem;
+      color: #ffcc66;
+      font-weight: 600;
+    }
+
+    /* =========== استایل لیست بانک‌ها =========== */
     .bank-list {
       display: flex;
       flex-direction: column;
@@ -132,7 +129,7 @@
     }
     .bank-row {
       display: grid;
-      grid-template-columns: 1.3fr 1.3fr 1.8fr; /* سه ستون */
+      grid-template-columns: 1.3fr 1.3fr 1.8fr; 
       align-items: center;
       background: #111;
       padding: 12px;
@@ -144,12 +141,12 @@
       font-weight: 600;
     }
     .bank-balance {
-      color: #56ff56; 
+      color: #56ff56; /* رنگ سبز موجودی */
       font-weight: 700;
       text-align: center;
     }
     .bank-check {
-      color: #ffcc66; 
+      color: #ffcc66; /* رنگ زرد چک‌ها */
       font-weight: 700;
       text-align: center;
     }
@@ -172,6 +169,8 @@
 </head>
 
 <body>
+
+  <!-- هدر بالا -->
   <header id="topbar">
     <span class="logo">
       <span class="ring"></span>
@@ -180,49 +179,140 @@
   </header>
 
   <main>
+    <!-- کارت اول: دریافت چک‌ها از حسابفا -->
+    <div class="card">
+      <h2>جمع چک‌های پرداختی حسابفا در یک ماه آینده</h2>
+      <p>
+        با کلیک بر دکمهٔ زیر، درخواست GET به حســابفا ارسال می‌شود. تاریخ چک‌های مربوط به امروز تا
+        یک ماه آینده بررسی شده و جمع آن نمایش داده می‌شود.
+      </p>
+      <button id="fetchBtn" class="btn">دریافت و جمع‌زدن چک‌ها</button>
+      <div id="status" class="status"></div>
+      <div>مجموع چک‌های یک ماه آینده: <span id="result" class="result-value">--</span></div>
+    </div>
+
+    <!-- کارت دوم: نمایش لیست بانک‌ها (نمونه ثابت) -->
     <div class="card">
       <h2>لیست بانک‌ها</h2>
-      <!-- در اینجا تاریخ انتهایی بازه (یک ماه بعد) را نشان می‌دهیم -->
       <p class="note">
         مبالغ چک‌های پرداختی تا تاریخ 
         <span id="dueDate">—</span>
+        (تاریخ ثابت ۲۰۲۵/۰۵/۰۶ و یک ماه بعد)
       </p>
 
-      <!-- لیست بانک‌ها در اینجا قرار می‌گیرد -->
+      <!-- اینجا لیست بانک‌ها نمایش داده می‌شود -->
       <div id="bankList" class="bank-list"></div>
     </div>
 
-    <!-- دکمهٔ بازگشت -->
-    <a href="index.html" class="btn-back">⬅ بازگشت</a>
+    <!-- (اختیاری) دکمه بازگشت یا لینک دیگر -->
+    <a href="#" class="btn-back">⬅ بازگشت</a>
   </main>
 
   <script>
-    /*
-      در این کد، امروز را به صورت ثابت 2025-05-06T00:00:00 در نظر می‌گیریم.
-      برای محاسبه انتهای یک ماه بعد هم از 2025-06-06T23:59:59 استفاده می‌کنیم.
+    /* 
+     ******************** بخش اول: دریافت چک‌ها از حسابفا ********************
+     API Key و Login Token 
     */
+    const API_KEY = "XYeyCb0ImFsL8hr97IjLcJyBy7NImVm4";
+    const LOGIN_TOKEN = "09a16a9e8feb473bacb8ccfe1a0b2ecac9798d486193bac994022ba9e4697524d5b8de6dec5ad2af79cbae77d4ca2af0";
 
-    // تاریخ شروع (امروز) و پایان (یک ماه بعد) به شکل ثابت
+    // آدرس سرویس حسابفا
+    const HESABFA_CHECKS_URL =
+      "https://app.hesabfa.com/app/d4579cf1a94d6a693b8ab660089b8297y1/paid-checks-list";
+
+    // تاریخ امروز محلی و انتهای یک ماه بعد
     function getStartOfToday() {
-      return new Date("2025-05-06T00:00:00");
+      const d = new Date();
+      d.setHours(0,0,0,0);
+      return d;
     }
     function getEndOfNextMonth() {
-      // ابتدا تاریخ امروز ثابت
-      const d = new Date("2025-05-06T00:00:00");
-      // یک ماه به ماه آن اضافه می‌کنیم
+      const d = getStartOfToday();
       d.setMonth(d.getMonth() + 1);
-      // روز را آخر همان روز (23:59:59) قرار می‌دهیم
-      d.setHours(23, 59, 59, 999);
+      d.setHours(23,59,59,999);
       return d;
     }
 
-    // تاریخ انتهایی را به فرمت شمسی نمایش می‌دهیم
-    function getNextMonthDateFA() {
-      return getEndOfNextMonth().toLocaleDateString("fa-IR");
+    // بررسی اینکه تاریخ چک در بازهٔ یک ماه آینده باشد
+    function isCheckInNextMonth(dueDateString) {
+      const due = new Date(dueDateString);
+      const start = getStartOfToday();
+      const end   = getEndOfNextMonth();
+      return (due >= start && due <= end);
     }
 
-    // داده‌های بانک‌ها (هر بانک: نام، موجودی، لیست چک‌ها)
-    // تاریخ چک‌ها همگی در بازه 2025-05-07 تا 2025-06-06 هستند
+    async function fetchAndSumChecks() {
+      const statusEl = document.getElementById("status");
+      const resultEl = document.getElementById("result");
+
+      statusEl.textContent = "در حال دریافت اطلاعات چک‌ها...";
+      resultEl.textContent = "--";
+
+      try {
+        const resp = await fetch(HESABFA_CHECKS_URL, {
+          method: "GET",
+          headers: {
+            "Api-Key": API_KEY,
+            "Authorization": `Bearer ${LOGIN_TOKEN}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!resp.ok) {
+          throw new Error("خطا در پاسخ سرور (status=" + resp.status + ")");
+        }
+
+        // انتظار داریم پاسخ، فرمت JSON داشته باشد
+        const data = await resp.json();
+        console.log("داده‌های دریافتی از حسابفا:", data);
+
+        /*
+         * فرض می‌کنیم data آرایه‌ای از چک‌هاست، 
+         * و هر آبجکت چک دارای dueDate و amount.
+         * اگر نام فیلدها متفاوت است، اینجا اصلاح کنید.
+         */
+        let sum = 0;
+        for (const chk of data) {
+          if (chk.dueDate && chk.amount) {
+            if (isCheckInNextMonth(chk.dueDate)) {
+              sum += chk.amount;
+            }
+          }
+        }
+
+        // نمایش نتیجه
+        resultEl.textContent = sum.toLocaleString("fa-IR") + " ریال";
+        statusEl.textContent = "";
+
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = "خطا: " + err.message;
+      }
+    }
+
+    document.getElementById("fetchBtn").addEventListener("click", fetchAndSumChecks);
+
+    /* 
+     ******************** بخش دوم: لیست بانک‌ها و چک‌های ثابت ********************
+     در این کد، امروز را به صورت ثابت 2025-05-06 در نظر می‌گیریم تا محاسبهٔ 
+     چک‌های یک ماه بعد (تا 2025-06-06) صفر نباشد.
+    */
+
+    // تاریخ امروز و پایان ماه بعد به صورت ثابت
+    function getStartOfTodayFixed() {
+      return new Date("2025-05-06T00:00:00");
+    }
+    function getEndOfNextMonthFixed() {
+      const d = new Date("2025-05-06T00:00:00");
+      d.setMonth(d.getMonth() + 1);
+      d.setHours(23,59,59,999);
+      return d;
+    }
+    function getNextMonthDateFA() {
+      return getEndOfNextMonthFixed().toLocaleDateString("fa-IR");
+    }
+
+    // داده‌های نمونه بانک‌ها
     const banksData = [
       {
         name: "ملت",
@@ -275,7 +365,7 @@
         balance: 3200273253,
         checks: [
           { dueDate: "2025-05-20", amount: 150000000 },
-          // این چک در تاریخ 15 ژوئن خارج از بازه 06 ژوئن قرار می‌گیرد، پس حساب نمی‌شود
+          // چک خارج از بازه
           { dueDate: "2025-06-15", amount: 300000000 }
         ]
       },
@@ -296,12 +386,11 @@
       }
     ];
 
-    // تابع محاسبه جمع چک‌های یک ماه آینده
-    function sumChecksNextMonth(checks) {
-      const start = getStartOfToday();    // 2025-05-06 00:00:00
-      const end   = getEndOfNextMonth();  // 2025-06-06 23:59:59
+    // محاسبه جمع چک‌های یک ماه آینده (در تاریخ ثابت)
+    function sumChecksNextMonthFixed(checks) {
+      const start = getStartOfTodayFixed();   
+      const end   = getEndOfNextMonthFixed(); 
       let sum = 0;
-
       for (let c of checks) {
         const due = new Date(c.dueDate);
         if (due >= start && due <= end) {
@@ -311,28 +400,28 @@
       return sum;
     }
 
-    // ساخت سطرهای بانک و درج در bankList
+    // ساخت ردیف‌های بانک‌ها
     function buildBankRows() {
       const bankListDiv = document.getElementById("bankList");
 
       banksData.forEach(bank => {
-        const sumChecks = sumChecksNextMonth(bank.checks);
+        const sumChecks = sumChecksNextMonthFixed(bank.checks);
 
         const row = document.createElement("div");
         row.className = "bank-row";
 
-        // نام بانک
+        // ستون ۱: نام بانک
         const nameSpan = document.createElement("span");
         nameSpan.className = "bank-name";
         nameSpan.textContent = bank.name;
 
-        // موجودی بانک
+        // ستون ۲: موجودی
         const balanceSpan = document.createElement("span");
         balanceSpan.className = "bank-balance";
         balanceSpan.textContent = 
           bank.balance.toLocaleString("fa-IR") + " ریال";
 
-        // مجموع چک‌های یک ماه آینده
+        // ستون ۳: مجموع چک‌های یک ماه آینده
         const checkSpan = document.createElement("span");
         checkSpan.className = "bank-check";
         checkSpan.textContent = 
@@ -341,14 +430,12 @@
         row.appendChild(nameSpan);
         row.appendChild(balanceSpan);
         row.appendChild(checkSpan);
-
         bankListDiv.appendChild(row);
       });
     }
 
-    // نمایش تاریخ شمسی انتهای بازه (مثلاً ۱۴ خرداد ۱۴۰۴ یا مشابه)
+    // در لحظه لود: تاریخ انتهای بازه را نمایش دهیم و جدول بانک‌ها بسازیم
     document.getElementById("dueDate").textContent = getNextMonthDateFA();
-    // ساخت لیست بانک‌ها
     buildBankRows();
   </script>
 </body>
