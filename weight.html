@@ -101,6 +101,17 @@
 
     .hidden { display: none !important; }
 
+    /* بخش نتیجه: سه خروجی (تئوری، دست‌بالا، و توضیح اختلاف) */
+    #results {
+      margin-top: 1rem; 
+    }
+    #resTheoretical, #resUpper, #resDiff {
+      background: #222; margin-top: 8px;
+      border-radius: var(--r); padding: 12px;
+      border: 1px solid rgba(255,255,255,0.3);
+      font-size: 0.9rem; line-height:1.4;
+    }
+
     @media (max-width: 600px) {
       .card {
         grid-template-columns: 1fr !important;
@@ -157,7 +168,7 @@
     <label id="f-d2">ابعاد فرعی (mm)
       <input id="w-d2" type="number" placeholder="مثلاً قطر داخلی یا بال">
     </label>
-    <!-- اگر لازم شد، f-d3, f-d4 هم اضافه کنید -->
+
     <label>طول قطعه (cm)
       <input id="w-len" type="number" placeholder="مثلاً 100">
     </label>
@@ -166,10 +177,17 @@
     </label>
 
     <button id="w-calc" type="button" class="btn-submit row-2">محاسبه</button>
-    <output id="w-out" class="row-2" aria-live="polite" data-val="0">—</output>
-    <div id="w-warn" class="warning"></div>
+    <div id="w-warn" class="warning row-2"></div>
   </form>
 
+  <!-- بخش نمایش نتایج سه‌گانه -->
+  <section id="results">
+    <div id="resTheoretical"></div>
+    <div id="resUpper"></div>
+    <div id="resDiff"></div>
+  </section>
+
+  <!-- دکمه بازگشت -->
   <a href="index.html" class="btn-icon">⬅ بازگشت</a>
 </main>
 
@@ -197,7 +215,7 @@ function updateSecFields(){
       w_d1.required = true;
       break;
     case 'pipe':
-      // لوله: قطر خارجی + قطر داخلی
+      // لوله: قطر بیرونی + قطر داخلی
       f_d1.classList.remove('hidden');
       f_d2.classList.remove('hidden');
       w_d1.required = true;
@@ -238,23 +256,146 @@ function areaPipe(od, id) {
   return areaRound(od) - areaRound(id);
 }
 function areaHex(a){
-  // شش گوش (فاصله بین دو سطح روبروی هم = a)
-  // مساحت = (3*√3 / 2)* a^2 ~ 2.598 * a^2
+  // شش گوش = (3√3 / 2)* a^2 ≈ 2.598*a^2
   return 2.598 * a*a; 
 }
 function areaSquare(a){ return a*a; }
 function areaSheet(thick, width){ return thick*width; }
 function areaFlat(thick, width){ return thick*width; }
 
-/* این توابع ساده‌اند؛ برای نبشی، ناودونی، تیرآهن و قوطی 
-   شما باید با توجه به شکل دقیق، فرمول را اصلاح کنید */
-function areaAngle(a, t){
-  // مثال ساده نبشی: 2*a*t - t^2
-  return 2*a*t - t*t;
+// نبشی، ناودونی، تیرآهن، قوطی ساده‌سازی شده:
+function areaAngle(a, t){ return 2*a*t - t*t; }
+function areaChannel(h, t){ return h*t*2; }
+function areaI(h, b){ return h*b; }
+function areaBox(w, h){ return w*h; }
+
+function getAreaMM2(sec, d1, d2){
+  switch(sec){
+    case 'round':   return areaRound(d1);
+    case 'pipe':    return areaPipe(d1,d2);
+    case 'hex':     return areaHex(d1);
+    case 'square':  return areaSquare(d1);
+    case 'sheet':   return areaSheet(d1,d2);
+    case 'flat':    return areaFlat(d1,d2);
+    case 'angle':   return areaAngle(d1,d2);
+    case 'channel': return areaChannel(d1,d2);
+    case 'ibeam':   return areaI(d1,d2);
+    case 'box':     return areaBox(d1,d2);
+    default:        return 0;
+  }
 }
-function areaChannel(h, t){
-  // ناودونی ساده (فرضی)
-  return h * t * 2;
+
+/***********************************************************
+ * محاسبه وزن تئوری یا دست‌بالا
+ * d1,d2 بر حسب mm / length بر حسب cm / rho بر حسب kg/m^3
+ ***********************************************************/
+function calcWeightCore(rho, sec, d1, d2, lengthCm, qty){
+  // ابتدا طول(cm) را به mm تبدیل
+  const lengthMM = lengthCm * 10;
+  // مساحت مقطع (mm^2)
+  const A = getAreaMM2(sec, d1, d2);
+  if(A<=0) return null;
+
+  // حجم(mm^3) = A(mm^2)* length(mm)
+  const volumeMM3 = A * lengthMM;
+  // تبدیل mm^3 به m^3 => *1e-9
+  const volumeM3 = volumeMM3 * 1e-9;
+
+  // وزن هر قطعه = حجم(m^3)* چگالی(kg/m^3)
+  const wEach = rho * volumeM3;
+  return wEach * qty; // وزن کل
 }
-function areaI(h, b){
-  //
+
+/***********************************************************
+ * انیمیشن ساده عدد
+ ***********************************************************/
+function animateNumber(el, fromVal, toVal){
+  const dur = 700;
+  const start = Date.now();
+  (function step(){
+    const p = Math.min((Date.now()-start)/dur, 1);
+    const val = fromVal + (toVal - fromVal)*p;
+    el.textContent = val.toFixed(2); 
+    if(p<1) requestAnimationFrame(step);
+  })();
+}
+
+/***********************************************************
+ * رویداد محاسبه
+ * - وزن تئوری
+ * - وزن دست‌بالا
+ * - نمایش اختلاف و توضیح
+ ***********************************************************/
+const $warn = document.getElementById('w-warn');
+const $resTheoretical = document.getElementById('resTheoretical');
+const $resUpper = document.getElementById('resUpper');
+const $resDiff = document.getElementById('resDiff');
+
+document.getElementById('w-calc').addEventListener('click', ()=>{
+  $warn.textContent="";
+
+  const rho = parseFloat(document.getElementById('w-mat').value||"0");
+  const sec = document.getElementById('w-sec').value;
+  const d1  = parseFloat(document.getElementById('w-d1').value||"0");
+  const d2  = parseFloat(document.getElementById('w-d2').value||"0");
+  const len = parseFloat(document.getElementById('w-len').value||"0");
+  const qty = parseInt(document.getElementById('w-qty').value||"1",10);
+
+  // اعتبارسنجی
+  if(rho<=0 || len<=0 || qty<=0){
+    $warn.textContent="ورودی‌ها کافی نیست.";
+    $resTheoretical.textContent="";
+    $resUpper.textContent="";
+    $resDiff.textContent="";
+    return;
+  }
+  if(d1<=0){
+    $warn.textContent="ابعاد مقطع وارد نشده.";
+    $resTheoretical.textContent="";
+    $resUpper.textContent="";
+    $resDiff.textContent="";
+    return;
+  }
+
+  // ۱) وزن تئوری
+  const wTheo = calcWeightCore(rho, sec, d1, d2, len, qty);
+  if(wTheo===null){
+    $warn.textContent="فرمول مقطع ناشناخته یا ابعاد نامعتبر.";
+    $resTheoretical.textContent="";
+    $resUpper.textContent="";
+    $resDiff.textContent="";
+    return;
+  }
+
+  // ۲) وزن دست‌بالا: +1mm به d1,d2 اگر>0 / +1cm به len
+  //   (فرض بر این‌که d1,d2 میلی‌متر، len سانتی‌متر)
+  const d1up = (d1>0)? d1+1 : d1;
+  const d2up = (d2>0)? d2+1 : d2;
+  const lenUp= len+1; 
+  const wUpper = calcWeightCore(rho, sec, d1up, d2up, lenUp, qty);
+
+  // ۳) اختلاف
+  const diff = wUpper - wTheo;
+
+  // نمایش با انیمیشن
+  // (یا ساده می‌توانید فقط textContent بگذارید)
+  animateNumberObj($resTheoretical, 0, wTheo, "وزن تئوری");
+  animateNumberObj($resUpper, 0, wUpper, "وزن دست‌بالا");
+  $resDiff.innerHTML =
+    `اختلاف این دو وزن: <strong>${diff.toFixed(2)} کیلوگرم</strong>. 
+     <br>این اختلاف به دلیل فورج بودن یا تلرانس ساخت است.`;
+});
+
+/** انیمیشن عدد با عنوان */
+function animateNumberObj(el, fromVal, toVal, label){
+  const dur=700, start=Date.now();
+  (function step(){
+    const p = Math.min((Date.now()-start)/dur,1);
+    const val = fromVal + (toVal - fromVal)*p;
+    el.innerHTML = `${label}: <strong>${val.toFixed(2)} کیلوگرم</strong>`;
+    if(p<1) requestAnimationFrame(step);
+  })();
+}
+</script>
+</body>
+</html>
