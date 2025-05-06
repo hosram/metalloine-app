@@ -1,43 +1,157 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>Bank Balance App</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>نمایش موجودی بانک | Metalloine</title>
+
+  <!-- فونت فارسی Vazirmatn -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+
   <style>
+    :root {
+      --c-primary: #8E1F61;
+      --c-accent:  #8FA2B2;
+      --glass: rgba(255,255,255,0.1);
+      --r: 24px;  /* میزان گردی گوشه‌ها */
+      --g: 12px;  /* فاصله پایه */
+    }
+    * {
+      box-sizing: border-box; margin: 0; padding: 0;
+    }
     body {
-      font-family: sans-serif;
-      margin: 20px;
+      background: #000; color: #fff;
+      font-family: "Vazirmatn", sans-serif;
+      min-height: 100vh; line-height: 1.6;
     }
-    #balance {
-      margin-top: 10px;
-      font-size: 1.2em;
-      color: #333;
+    /* هدر بالای صفحه */
+    #topbar {
+      display: flex; justify-content: center; align-items: center;
+      height: 64px; margin: var(--g);
+      background: var(--glass); backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: var(--r);
     }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 1.4rem; font-weight: 700;
+    }
+    .ring {
+      width: 22px; height: 22px;
+      border: 6px solid var(--c-accent); border-radius: 50%;
+    }
+    .brand { color: var(--c-primary); }
+
+    main {
+      max-width: 420px; margin: 0 auto; padding: var(--g);
+    }
+
+    .card {
+      background: var(--glass); backdrop-filter: blur(24px);
+      border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 16px; 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 12px; 
+      margin-top: var(--g);
+    }
+    .card > h2 {
+      grid-column: span 2;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
     button {
-      padding: 10px;
-      font-size: 1em;
-      cursor: pointer;
+      border: none; 
+      border-radius: var(--r);
+      background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+      color: #fff; font-weight: 600;
+      padding: 12px; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      width: 100%;
+    }
+    button:hover { opacity: 0.9; }
+
+    output {
+      grid-column: span 2;
+      display: block; background: #111; text-align: center;
+      padding: 14px; border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 1.2rem; font-weight: 700;
+      min-height: 1.4em;
+    }
+
+    .warning {
+      grid-column: span 2;
+      color: #ff8080; 
+      text-align: center; 
+      min-height: 1.2em; 
+      font-size: 0.8rem;
+    }
+
+    .btn-back {
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      background: #444; color: #fff;
+      border-radius: var(--r);
+      padding: 12px; 
+      margin-top: 16px;
+    }
+    .btn-back:hover { background: #555; }
+
+    @media (max-width: 600px) {
+      .card {
+        grid-template-columns: 1fr !important; /* در موبایل یک ستونی */
+      }
     }
   </style>
 </head>
 
 <body>
-  <h1>برنامه نمایش موجودی بانک</h1>
-  
-  <button id="btnBalance">دریافت موجودی</button>
-  <div id="balance">موجودی: --</div>
+  <!-- هدر -->
+  <header id="topbar">
+    <span class="logo">
+      <span class="ring"></span>
+      <span class="brand">Metalloine</span>
+    </span>
+  </header>
+
+  <main>
+    <!-- کارت نمایش موجودی بانک -->
+    <div class="card">
+      <h2>نمایش موجودی بانک</h2>
+      <button id="btnBalance" type="button">دریافت موجودی</button>
+      <output id="balance" aria-live="polite">—</output>
+      <div id="warn" class="warning"></div>
+    </div>
+
+    <!-- لینک بازگشت به صفحه اصلی -->
+    <a href="index.html" class="btn-back">⬅ بازگشت</a>
+  </main>
 
   <script>
     // API Key و Login Token برنامه حسابداری
     const API_KEY = "XYeyCb0ImFsL8hr97IjLcJyBy7NImVm4";
     const LOGIN_TOKEN = "09a16a9e8feb473bacb8ccfe1a0b2ecac9798d486193bac994022ba9e4697524d5b8de6dec5ad2af79cbae77d4ca2af0";
 
-    // آدرس (Endpoint) فرضی برای گرفتن موجودی؛ در پروژه واقعی جایگزین کنید
+    // آدرس (Endpoint) فرضی برای گرفتن موجودی
+    // در پروژه واقعی جایگزین کنید
     const BALANCE_ENDPOINT = "https://example.com/api/bank/balance";
 
-    document.getElementById("btnBalance").addEventListener("click", async () => {
+    const btnBalance = document.getElementById("btnBalance");
+    const balanceOut = document.getElementById("balance");
+    const warnElem   = document.getElementById("warn");
+
+    btnBalance.addEventListener("click", async () => {
       try {
-        // درخواست به سرور حسابداری یا سرور واسط
+        // ابتدا خروجی و هشدار قبلی را خالی کنیم
+        balanceOut.textContent = "در حال دریافت...";
+        warnElem.textContent   = "";
+
         const response = await fetch(BALANCE_ENDPOINT, {
           method: "GET",
           headers: {
@@ -49,15 +163,20 @@
         });
 
         if (!response.ok) {
-          throw new Error("خطا در درخواست موجودی");
+          throw new Error("پاسخ سرور معتبر نیست");
         }
 
         const data = await response.json();
-        // فرض می‌کنیم موجودی در فیلد data.balance است
-        document.getElementById("balance").textContent = `موجودی: ${data.balance} تومان`;
+        // فرض می‌کنیم موجودی در فیلد data.balance باشد
+        if (!("balance" in data)) {
+          throw new Error("فیلد balance در پاسخ وجود ندارد");
+        }
+
+        balanceOut.textContent = `${data.balance} تومان`;
       } catch (error) {
         console.error(error);
-        document.getElementById("balance").textContent = "خطا در دریافت موجودی یا ارتباط با سرور";
+        balanceOut.textContent = "—";
+        warnElem.textContent = "خطا در دریافت موجودی یا ارتباط با سرور";
       }
     });
   </script>
