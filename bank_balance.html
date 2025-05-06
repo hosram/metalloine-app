@@ -11,8 +11,8 @@
 
   <style>
     :root {
-      --c-primary: #8E1F61;   /* رنگ اصلی */
-      --c-accent:  #8FA2B2;   /* رنگ فرعی */
+      --c-primary: #8E1F61;   
+      --c-accent:  #8FA2B2;   
       --glass: rgba(255,255,255,0.1);
       --r: 24px;
       --g: 12px;
@@ -88,7 +88,7 @@
     }
     .bank-row {
       display: grid;
-      /* سه ستون: نام بانک | موجودی بانک | مجموع چک یک ماه آینده */
+      /* سه ستون: نام بانک | موجودی | چک یک ماه آینده */
       grid-template-columns: 1.3fr 1.3fr 1.8fr;
       align-items: center;
       background: #111;
@@ -101,12 +101,12 @@
       font-weight: 600;
     }
     .bank-balance {
-      color: #56ff56; /* رنگ سبز برای موجودی */
+      color: #56ff56; /* رنگ سبز موجودی */
       font-weight: 700;
       text-align: center;
     }
     .bank-check {
-      color: #ffcc66; /* رنگ زرد/نارنجی برای چک‌های پرداختی */
+      color: #ffcc66; /* رنگ زرد چک‌ها */
       font-weight: 700;
       text-align: center;
     }
@@ -140,13 +140,11 @@
   <main>
     <div class="card">
       <h2>لیست بانک‌ها</h2>
-      <!-- این متن به‌صورت پویا تاریخ یک ماه بعد از 2025-05-06 را درج می‌کند -->
       <p class="note">
         مبالغ چک‌های پرداختی تا تاریخ 
         <span id="dueDate">—</span>
       </p>
 
-      <!-- لیست بانک‌ها اینجا قرار می‌گیرد -->
       <div id="bankList" class="bank-list"></div>
     </div>
 
@@ -154,28 +152,33 @@
   </main>
 
   <script>
-    /*************************************************************************
-     * ۱) «امروز» را به صورت ثابت تعریف می‌کنیم تا نتیجه صفر نباشد
-     *************************************************************************/
-    function getToday() {
-      // مثلاً فرض کنیم امروز ۲۰۲۵/۰۵/۰۶ میلادی است
-      return new Date("2025-05-06");
+    /*******************************************
+     * تاریخ امروز به صورت ثابت
+     * فرض می‌کنیم امروز ۲۰۲۵/۰۵/۰۶
+     *******************************************/
+    function getStartOfToday() {
+      // روز را به 00:00:00 تنظیم می‌کنیم
+      const d = new Date("2025-05-06T00:00:00");
+      return d;
     }
 
-    function getOneMonthLater() {
-      const dt = new Date("2025-05-06");
-      dt.setMonth(dt.getMonth() + 1); 
-      return dt; // 2025-06-06
+    function getEndOfNextMonth() {
+      // تاریخ پایه هم 2025-05-06
+      const d = new Date("2025-05-06T00:00:00");
+      d.setMonth(d.getMonth() + 1); 
+      // روز را به 23:59:59 تنظیم می‌کنیم تا کل آن روز را شامل شود
+      d.setHours(23,59,59,999);
+      return d;
     }
 
-    // تبدیل تاریخ میلادی به شمسی (در مرورگرهای مدرن)
-    function getOneMonthLaterFA() {
-      return getOneMonthLater().toLocaleDateString("fa-IR");
+    // تبدیل تاریخ به شمسی برای نمایش
+    function getNextMonthDateFA() {
+      return getEndOfNextMonth().toLocaleDateString("fa-IR");
     }
 
-    /*************************************************************************
-     * ۲) آرایهٔ نمونه بانک‌ها (موجودی و چک‌ها با تاریخ سررسید بین 2025-05-07 و 2025-06-06)
-     *************************************************************************/
+    /*******************************************
+     * داده‌های نمونهٔ بانک‌ها و چک‌ها
+     *******************************************/
     const banksData = [
       {
         name: "ملت",
@@ -228,7 +231,7 @@
         balance: 3200273253,
         checks: [
           { dueDate: "2025-05-20", amount: 150000000 },
-          { dueDate: "2025-06-15", amount: 300000000 } /* بیرون از بازه یک ماهه */
+          { dueDate: "2025-06-15", amount: 300000000 } // بیرون از بازه 2025-06-06 23:59:59
         ]
       },
       {
@@ -248,27 +251,27 @@
       }
     ];
 
-    /*************************************************************************
-     * ۳) محاسبهٔ جمع چک‌های یک ماه آینده (بین getToday() و getOneMonthLater())
-     *************************************************************************/
+    /*******************************************
+     * محاسبه جمع چک‌های بین
+     * getStartOfToday() و getEndOfNextMonth()
+     *******************************************/
     function sumChecksNextMonth(checks) {
-      const today = getToday();
-      const nextMonth = getOneMonthLater();
-      let sum = 0;
+      const start = getStartOfToday();     // 2025-05-06 00:00:00
+      const end   = getEndOfNextMonth();   // 2025-06-06 23:59:59
 
+      let sum = 0;
       for (let c of checks) {
         const due = new Date(c.dueDate);
-        // اگر تاریخ چک >= today و <= nextMonth باشد، جمع می‌شود
-        if (due >= today && due <= nextMonth) {
+        if (due >= start && due <= end) {
           sum += c.amount;
         }
       }
       return sum;
     }
 
-    /*************************************************************************
-     * ۴) ساختن رابط کاربری
-     *************************************************************************/
+    /*******************************************
+     * ساختن سطرهای بانک
+     *******************************************/
     function buildBankRows() {
       const bankListDiv = document.getElementById("bankList");
 
@@ -295,22 +298,18 @@
         checkSpan.textContent = 
           sumChecks.toLocaleString("fa-IR") + " ریال";
 
-        // اضافه به ردیف
         row.appendChild(nameSpan);
         row.appendChild(balanceSpan);
         row.appendChild(checkSpan);
 
-        // درج در bankList
         bankListDiv.appendChild(row);
       });
     }
 
-    // درج تاریخ یک ماه بعد (۲۰۲۵/۰۶/۰۶) به صورت شمسی
-    document.getElementById("dueDate").textContent = getOneMonthLaterFA();
-
-    // ساخت سطرهای بانک
+    // نمایش تاریخ «یک ماه بعد» (تا انتهای روز) در بالای جدول
+    document.getElementById("dueDate").textContent = getNextMonthDateFA();
+    // ساخت لیست بانک‌ها
     buildBankRows();
   </script>
-
 </body>
 </html>
