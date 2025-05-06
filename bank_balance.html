@@ -11,19 +11,23 @@
 
   <style>
     :root {
-      --c-primary: #8E1F61;
-      --c-accent:  #8FA2B2;
-      --glass: rgba(255,255,255,0.1);
+      --c-primary: #8E1F61;   /* رنگ اصلی */
+      --c-accent:  #8FA2B2;   /* رنگ فرعی */
+      --glass: rgba(255,255,255,0.1); /* پس‌زمینه شفاف */
       --r: 24px;  /* گردی گوشه‌ها */
       --g: 12px;  /* فاصله پایه */
     }
     * {
-      box-sizing: border-box; margin: 0; padding: 0;
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0;
     }
     body {
-      background: #000; color: #fff;
+      background: #000; 
+      color: #fff;
       font-family: "Vazirmatn", sans-serif;
-      min-height: 100vh; line-height: 1.6;
+      min-height: 100vh; 
+      line-height: 1.6;
     }
     /* هدر بالای صفحه */
     #topbar {
@@ -45,10 +49,14 @@
       font-weight: 700;
     }
     .ring {
-      width: 22px; height: 22px;
-      border: 6px solid var(--c-accent); border-radius: 50%;
+      width: 22px; 
+      height: 22px;
+      border: 6px solid var(--c-accent); 
+      border-radius: 50%;
     }
-    .brand { color: var(--c-primary); }
+    .brand { 
+      color: var(--c-primary); 
+    }
 
     main {
       max-width: 480px; 
@@ -150,113 +158,103 @@
   </main>
 
   <script>
-    /*************************************
-     * نمونهٔ داده‌های بانک و چک‌ها
-     * فرض می‌کنیم امروز مثلاً ۲۵ اردیبهشت است.
-     * زمان جاوااسکریپت به میلادی است، لذا تاریخ
-     * را باید به فرمت مناسب وارد کنید.
-     *************************************/
+    /*******************************************
+     * با فرض اینکه امروز 2025-05-06 میلادی است
+     * تا یک ماه بعد یعنی 2025-06-06
+     *******************************************/
     const banksData = [
       {
         name: "ملت",
         balance: 2689480250,
         checks: [
-          // تاریخ سررسید چک‌ها (فرمت میلادی YYYY-MM-DD)
-          { dueDate: "2023-05-30", amount: 100000000 },
-          { dueDate: "2023-06-10", amount: 200000000 },
-          { dueDate: "2023-08-01", amount: 50000000 }  // بعد از یک ماه، حساب نشود
+          // چک‌هایی که همگی بین امروز (2025-05-06) و 2025-06-06 سررسید دارند
+          { dueDate: "2025-05-10", amount: 100000000 },
+          { dueDate: "2025-05-25", amount: 200000000 },
+          { dueDate: "2025-06-03", amount: 50000000 }
         ]
       },
       {
         name: "صادرات",
         balance: 6891785053,
         checks: [
-          { dueDate: "2023-05-28", amount: 75000000 },
-          { dueDate: "2023-06-20", amount: 100000000 }
+          { dueDate: "2025-05-15", amount: 75000000 },
+          { dueDate: "2025-06-06", amount: 100000000 }
         ]
       },
       {
         name: "ملی",
         balance: 2527758403,
         checks: [
-          { dueDate: "2023-06-05", amount: 200000000 },
-          { dueDate: "2023-06-24", amount: 320000000 }
+          { dueDate: "2025-05-29", amount: 200000000 },
+          { dueDate: "2025-06-05", amount: 320000000 }
         ]
       },
       {
         name: "آینده",
         balance: 1870232397,
         checks: [
-          { dueDate: "2023-05-29", amount: 90000000 }
+          { dueDate: "2025-05-28", amount: 90000000 }
         ]
       },
       {
         name: "قرض الحسنه مهر",
         balance: 1868110730,
         checks: [
-          { dueDate: "2023-06-18", amount: 250000000 }
+          { dueDate: "2025-06-02", amount: 250000000 }
         ]
       },
       {
         name: "تجارت",
         balance: 4875311801,
         checks: [
-          { dueDate: "2023-06-01", amount: 130000000 }
+          { dueDate: "2025-06-01", amount: 130000000 }
         ]
       },
       {
         name: "سامان",
         balance: 3200273253,
         checks: [
-          { dueDate: "2023-06-03", amount: 150000000 },
-          { dueDate: "2023-07-01", amount: 300000000 } // این یکی خارج از بازه 1 ماه است
+          { dueDate: "2025-05-20", amount: 150000000 },
+          { dueDate: "2025-06-15", amount: 300000000 } // این یکی بعد از 06-06 است و حساب نشود
         ]
       },
       {
         name: "مسکن",
         balance: 3997141363,
         checks: [
-          { dueDate: "2023-05-30", amount: 200000000 },
-          { dueDate: "2023-06-15", amount: 450000000 }
+          { dueDate: "2025-05-30", amount: 200000000 },
+          { dueDate: "2025-06-06", amount: 450000000 }
         ]
       },
       {
         name: "قرض الحسنه رسالت",
         balance: 2970532462,
         checks: [
-          { dueDate: "2023-06-25", amount: 200000000 }
+          { dueDate: "2025-06-05", amount: 200000000 }
         ]
       }
     ];
 
-    /****************************************************
-     * تابع محاسبهٔ یک ماه بعد از امروز
-     ****************************************************/
+    // تابعی برای محاسبهٔ یک ماه بعد از امروز
     function oneMonthLater() {
-      const now = new Date();
-      now.setMonth(now.getMonth() + 1); // یک ماه اضافه می‌کنیم
-      return now; // Date یک ماه بعد
+      const now = new Date(); // امروز (فرضاً 2025-05-06)
+      now.setMonth(now.getMonth() + 1); 
+      return now; 
     }
 
-    /****************************************************
-     * تبدیل تاریخ میلادی به شمسی: toLocaleDateString("fa-IR")
-     ****************************************************/
+    // تبدیل تاریخ میلادی به شمسی (در مرورگرهای مدرن)
     function oneMonthLaterFA() {
       return oneMonthLater().toLocaleDateString("fa-IR");
     }
 
-    /****************************************************
-     * محاسبهٔ جمع چک‌های هر بانک که در فاصلهٔ
-     * امروز تا یک ماه آینده سررسید دارند
-     ****************************************************/
+    // محاسبهٔ جمع چک‌های در فاصلهٔ امروز تا یک ماه بعد
     function sumChecksNextMonth(checks) {
-      const today = new Date();           // تاریخ امروز
-      const nextMonth = oneMonthLater();  // تاریخ یک ماه بعد
+      const today = new Date();         
+      const nextMonth = oneMonthLater();
 
       let sum = 0;
       for (let c of checks) {
-        const due = new Date(c.dueDate); // تاریخ چک
-        // اگر تاریخ چک >= امروز و <= یک ماه بعد باشد:
+        const due = new Date(c.dueDate);
         if (due >= today && due <= nextMonth) {
           sum += c.amount;
         }
@@ -264,50 +262,44 @@
       return sum;
     }
 
-    /****************************************************
-     * ساخت رابط کاربری جدول بانک‌ها
-     ****************************************************/
+    // ساخت ردیف‌های بانک‌ها در DOM
     function buildBankRows() {
       const bankListDiv = document.getElementById("bankList");
 
-      // برای هر بانک یک ردیف بساز
       banksData.forEach(bank => {
-        // جمع چک‌های یک ماه آینده
         const sumChecks = sumChecksNextMonth(bank.checks);
 
-        // ایجاد یک سطر
         const row = document.createElement("div");
         row.className = "bank-row";
 
-        // ستونی: نام بانک
+        // نام بانک
         const nameSpan = document.createElement("span");
         nameSpan.className = "bank-name";
         nameSpan.textContent = bank.name;
 
-        // ستونی: موجودی
+        // موجودی
         const balanceSpan = document.createElement("span");
         balanceSpan.className = "bank-balance";
         balanceSpan.textContent = bank.balance.toLocaleString("fa-IR") + " ریال";
 
-        // ستونی: جمع چک‌های یک ماه آینده
+        // جمع چک‌های یک ماه آینده
         const checkSpan = document.createElement("span");
         checkSpan.className = "bank-check";
         checkSpan.textContent = sumChecks.toLocaleString("fa-IR") + " ریال";
 
-        // اضافه کردن ستون‌ها به ردیف
+        // قرار دادن ستون‌ها در ردیف
         row.appendChild(nameSpan);
         row.appendChild(balanceSpan);
         row.appendChild(checkSpan);
 
-        // درج در بانک-لیست
+        // افزودن به bankList
         bankListDiv.appendChild(row);
       });
     }
 
-    // در بدو لود: تاریخ یک ماه بعد را نشان بده
+    // درج تاریخ یک ماه بعد در صفحه
     document.getElementById("dueDate").textContent = oneMonthLaterFA();
-
-    // و جدول بانک‌ها را بساز
+    // ساخت لیست بانک‌ها
     buildBankRows();
   </script>
 </body>
