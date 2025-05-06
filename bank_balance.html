@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Metalloine | لیست بانک‌های حسابفا</title>
 
+<!-- فونت Vazirmatn -->
 <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
 
 <style>
 :root{--c1:#8E1F61;--c2:#8FA2B2;--glass:rgba(255,255,255,.1);--r:22px}
@@ -45,7 +46,7 @@ main{max-width:500px;margin:0 auto;padding:12px}
 <main>
   <div class="card">
     <h2>لیست بانک‌های حسابفا</h2>
-    <p>روی دکمه کلیک کنید تا فهرست حساب‌های بانکی به‌همراه موجودی فعلی نمایش داده شود.</p>
+    <p>روی دکمه کلیک کنید تا حساب‌های بانکی و موجودی فعلی آن‌ها نمایش داده شود.</p>
 
     <button id="loadBtn" class="btn">دریافت لیست بانک‌ها</button>
     <div id="status" class="status"></div>
@@ -55,70 +56,60 @@ main{max-width:500px;margin:0 auto;padding:12px}
 </main>
 
 <script>
-/* ====== اطلاعات احراز هویت ====== */
+/* ============== کلیدها ============== */
 const API_KEY     = "XYeyCb0ImFsL8hr97IjLcJyBy7NImVm4";
 const LOGIN_TOKEN = "09a16a9e8feb473bacb8ccfe1a0b2ecac9798d486193bac994022ba9e4697524d5b8de6dec5ad2af79cbae77d4ca2af0";
 
-/* ====== آدرس صحیح لیست حساب‌های بانکی در حسابفا (متد POST) ======
-   مستندات رسمی: POST https://api.hesabfa.com/v1/bankAccount/list         */
-const BANKS_URL = "https://api.hesabfa.com/v1/bankAccount/list";
+/* ============== مسیر رسمی حسابفا (v1/BankAccount/GetAll) ============== */
+const BANKS_URL   = "https://api.hesabfa.com/v1/BankAccount/GetAll";
 
-/* ====== المان‌ها ====== */
+/* ============== المان‌ها ============== */
 const statusEl = document.getElementById("status");
 const listEl   = document.getElementById("bankList");
 const btn      = document.getElementById("loadBtn");
 
-/* ====== رویداد کلیک ====== */
+/* ============== رویداد کلیک ============== */
 btn.addEventListener("click", async () => {
   listEl.innerHTML = "";
   statusEl.innerHTML = '<span class="loader"></span>در حال دریافت...';
 
-  /* بدنهٔ درخواستی طبق مستندات حسابفا */
-  const body = JSON.stringify({
-    apiKey: API_KEY,
-    token : LOGIN_TOKEN,
-    /* اگر خواستید فیلتر بفرستید اینجا اضافه کنید */
-    filter: {}
-  });
+  const body = JSON.stringify({ apiKey: API_KEY, token: LOGIN_TOKEN });
 
-  try{
-    const res = await fetch(BANKS_URL,{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
+  try {
+    const res = await fetch(BANKS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body
     });
 
-    if(!res.ok){
-      throw new Error("کد پاسخ "+res.status);
-    }
+    if (!res.ok) throw new Error("کد پاسخ " + res.status);
 
     const json = await res.json();
-    /* پاسخ استاندارد حسابفا: { "Result": [ ...BankAccounts ] } */
-    const banks = json.Result || json || [];
-    if(!Array.isArray(banks) || !banks.length){
+    const banks = json.Result || [];
+
+    if (!Array.isArray(banks) || !banks.length) {
       statusEl.textContent = "هیچ حساب بانکی برنگشت!";
       return;
     }
 
-    banks.forEach(b=>{
-      /* ==== نگاشت فیلدها: Title و Balance طبق حسابفا ==== */
-      const name = b.Title   || b.bankName || "بدون‌نام";
+    banks.forEach(b => {
+      /* فیلدهای معمول در خروجی حسابفا */
+      const name = b.Title   || b.bankName || "—";
       const bal  = b.Balance || b.balance  || 0;
 
       const row = document.createElement("div");
       row.className = "bank-row";
-      row.innerHTML = `
-        <span>${name}</span>
-        <span class="bank-balance">${bal.toLocaleString("fa-IR")} ریال</span>
-      `;
+      row.innerHTML =
+        `<span>${name}</span>
+         <span class="bank-balance">${bal.toLocaleString("fa-IR")} ریال</span>`;
       listEl.appendChild(row);
     });
     statusEl.textContent = "";
-
-  }catch(e){
+  } catch (e) {
     console.error(e);
-    statusEl.textContent = "خطا: "+e.message+
-      " (اگر «CORS» در کنسول دیدید باید از سرور واسط استفاده کنید)";
+    statusEl.textContent =
+      "خطا: " + e.message +
+      " — اگر در کنسول پیغام CORS دیدید، باید از یک سرور واسط استفاده کنید.";
   }
 });
 </script>
