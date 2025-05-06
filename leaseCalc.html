@@ -2,106 +2,75 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>محاسبه لیزینگ فلزات | Metalloine (تترلند)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metalloine | صفحهٔ اصلی</title>
 
-  <!-- فونت فارسی Vazirmatn -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"
-  />
+  <!-- فونت Vazirmatn -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
 
   <style>
-    :root {
-      --c-primary: #8E1F61;
-      --c-accent:  #8FA2B2;
-      --glass: rgba(255,255,255,0.1);
-      --r: 24px;
-      --g: 12px;
-    }
-    * {
-      box-sizing: border-box; margin: 0; padding: 0;
-    }
-    body {
-      background: #000; color: #fff;
-      font-family: "Vazirmatn", sans-serif;
-      min-height: 100vh; line-height: 1.6;
-    }
-    #topbar {
-      display: flex; justify-content: center; align-items: center;
-      height: 64px; margin: var(--g);
-      background: var(--glass); backdrop-filter: blur(24px);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: var(--r);
-    }
-    .logo {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 1.4rem; font-weight: 700;
-    }
-    .ring {
-      width: 22px; height: 22px;
-      border: 6px solid var(--c-accent); border-radius: 50%;
-    }
-    .brand { color: var(--c-primary); }
+  :root{
+    --c-primary:#8E1F61;
+    --c-accent:#8FA2B2;
+    --glass:rgba(255,255,255,.1);
+    --r:24px;
+    --g:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;
+    min-height:100vh;line-height:1.6
+  }
+  /*––– هدر –––*/
+  #topbar{
+    display:flex;justify-content:center;align-items:center;
+    height:64px;margin:var(--g);
+    background:var(--glass);backdrop-filter:blur(24px);
+    border:1px solid rgba(255,255,255,.25);border-radius:var(--r)
+  }
+  .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
+  .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+  .brand{color:var(--c-primary)}
 
-    main {
-      max-width: 420px; margin: 0 auto; padding: var(--g);
-    }
-    .card {
-      background: var(--glass); backdrop-filter: blur(24px);
-      border-radius: var(--r);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 16px;
-      margin-top: var(--g);
-      display: flex; flex-direction: column;
-      gap: 1rem;
-    }
-    h2 {
-      text-align: center; margin-bottom: var(--g);
-    }
-    label {
-      display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem;
-    }
-    input, select, button {
-      border: none; border-radius: var(--r);
-      background: var(--glass); color: #fff; font: inherit;
-      padding: 10px;
-    }
-    input:focus, select:focus {
-      outline: 2px solid var(--c-primary);
-    }
-    select {
-      background: #333; color: #fff;
-    }
-    option {
-      background: #333; color: #fff;
-    }
-    .btn-submit {
-      background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
-      color: #fff; cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      font-weight: 600; text-align: center;
-      margin-top: 8px;
-    }
-    .result-box {
-      background: #111; margin-top: 12px;
-      padding: 12px; border-radius: var(--r);
-      border: 1px solid rgba(255,255,255,0.2);
-      font-size: 0.9rem; white-space: pre-line;
-      display: flex; flex-direction: column; gap: 6px;
-      min-height: 4em;
-    }
-    .btn-back {
-      display: inline-block; margin-top: 20px;
-      background: #444; color: #fff; border-radius: var(--r);
-      padding: 10px 20px; text-decoration: none; text-align: center;
-    }
-    .sepNumber {
-      text-align: right;
-    }
+  /*––– محتوای اصلی –––*/
+  #landing{
+    min-height:calc(100vh - 64px - 2*var(--g) - 140px);
+    display:grid;place-items:center;text-align:center
+  }
+  .btn-main{
+    padding:14px 32px;border:none;border-radius:var(--r);
+    cursor:pointer;font-weight:700;font-size:1rem;
+    background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+    color:#fff;box-shadow:0 4px 10px rgba(0,0,0,.4);text-decoration:none;
+    display:inline-block;transition:all .2s
+  }
+  .btn-main:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(0,0,0,.5)}
+
+  /*––– باکس قیمت تتر –––*/
+  #tetherBox{
+    margin:2rem auto 3rem;max-width:420px;padding:16px;
+    background:var(--glass);backdrop-filter:blur(24px);
+    border-radius:var(--r);border:1px solid rgba(255,255,255,.25);
+    display:flex;flex-direction:column;gap:12px;align-items:center
+  }
+  #tetherPrice{
+    width:220px;text-align:center;border:none;border-radius:var(--r);
+    background:#222;color:#fff;padding:12px;font-size:1rem
+  }
+
+  footer{
+    text-align:center;font-size:.8rem;opacity:.7;
+    padding:.5rem 0
+  }
+  @media(max-width:540px){
+    .btn-main{width:100%}
+  }
   </style>
 </head>
 <body>
+
+<!--–––– Header ––––-->
 <header id="topbar">
   <span class="logo">
     <span class="ring"></span>
@@ -109,288 +78,47 @@
   </span>
 </header>
 
-<main>
-  <h2>محاسبه لیزینگ فلزات (تترلند)</h2>
-  <div class="card">
-    <!-- نام متریال -->
-    <label>نام متریال
-      <select id="mat">
-        <option>فولاد ساده</option>
-        <option>فولاد زنگ‌نزن</option>
-        <option>مس</option>
-        <option>آلومینیوم</option>
-        <option>برنج</option>
-        <option>فسفر برنز</option>
-        <option>تیتانیوم</option>
-      </select>
-    </label>
-
-    <!-- مبلغ کلی فاکتور -->
-    <label>مبلغ کلی فاکتور (تومان)
-      <input id="invoicePrice" type="text" class="sepNumber" placeholder="مثلاً 5,000,000"/>
-    </label>
-
-    <!-- مبلغ امروز تتر (خودکار از تترلند) -->
-    <label>مبلغ امروز تتر (تومان) <small>(خودکار)</small>
-      <input id="tetherToday" type="text" class="sepNumber" placeholder="در حال دریافت..." readonly/>
-    </label>
-
-    <!-- مبلغ هر کیلو متریال پایه جهانی (تومان) -->
-    <label>مبلغ هر کیلو متریال پایه جهانی (تومان) <small>(خودکار)</small>
-      <input id="globalMetalPrice" type="text" class="sepNumber" placeholder="در حال دریافت..." readonly/>
-    </label>
-
-    <!-- برآورد قیمت احتمالی دلار تتر (مثلاً +5,000 یا -5,000) -->
-    <label>برآورد قیمت دلار (تومان) <small>(افزایش/کاهش)</small>
-      <input id="predictedDollar" type="text" class="sepNumber" placeholder="مثلاً +5,000 یا -5,000"/>
-    </label>
-
-    <button id="btnCalc" class="btn-submit">محاسبه</button>
-
-    <!-- کادر اول نتایج -->
-    <div class="result-box" id="box1"></div>
-    <!-- کادر دوم نتایج -->
-    <div class="result-box" id="box2"></div>
-    <!-- کادر سوم نتایج -->
-    <div class="result-box" id="box3"></div>
-
-    <a href="index.html" class="btn-back">⬅ بازگشت</a>
+<!--–––– Landing links ––––-->
+<section id="landing">
+  <div style="display:flex;flex-direction:column;gap:1rem;">
+    <a href="weight.html"               class="btn-main">محاسبه وزن</a>
+    <a href="scrap.html"                class="btn-main">محاسبه ضایعات</a>
+    <a href="hardness.html"             class="btn-main">تبدیل سختی</a>
+    <a href="machining-allowances.html" class="btn-main">تلرانس ماشین‌کاری</a>
+    <a href="leaseCalc.html"            class="btn-main">محاسبه لیزینگ</a>
+    <a href="bank_balance.html"         class="btn-main">نمایش موجودی بانک</a>
   </div>
-</main>
+</section>
+
+<!--–––– Tether price box ––––-->
+<section id="tetherBox">
+  <h3 style="margin-bottom:.5rem">دریافت قیمت تتر</h3>
+  <button id="btnLoadTether" class="btn-main" style="width:200px;">به‌روزرسانی قیمت</button>
+  <input  id="tetherPrice"  type="text" class="sepNumber" readonly placeholder="—"/>
+</section>
+
+<footer>ورژن ۱٫۰۰</footer>
 
 <script>
-/***********************************************************
- * جداکننده سه‌رقمی
- **********************************************************/
-function formatNumber(str) {
-  let sign = "";
-  if(str.trim().startsWith("-")) {
-    sign = "-";
-    str = str.substring(1);
-  }
-  const numericVal = str.replace(/\D/g, "");
-  if(!numericVal) return sign;
-  const n = parseInt(numericVal, 10);
-  return sign + n.toLocaleString("en-US");
-}
+/* جداکننده سه‌رقمی */
+function formatNumber(n){return (+n||0).toLocaleString("en-US")}
 
-function getNumericValue(str) {
-  if(!str) return 0;
-  let sign = 1;
-  let tmp = str.trim();
-  if(tmp.startsWith("-")) {
-    sign = -1;
-    tmp = tmp.substring(1);
-  }
-  const n = parseInt(tmp.replace(/\D/g, ""), 10) || 0;
-  return sign * n;
-}
-
-document.querySelectorAll(".sepNumber").forEach((el) => {
-  el.addEventListener("input", () => {
-    const pos = el.selectionStart;
-    const oldLength = el.value.length;
-    el.value = formatNumber(el.value);
-    const newLength = el.value.length;
-    el.selectionEnd = pos + (newLength - oldLength);
-  });
-});
-
-/***********************************************************
- * API گرفتن قیمت تتر از تترلند
- *  - آدرس جدید: https://api.tetherland.com/currencies
- **********************************************************/
-async function fetchTetherPriceFromTetherland() {
-  const apiKey = "RwhiHcpmdrOPYZjtOfdMLeIERPilFNMwFfO2XsgB"; // کلید API شما
-  const url = "https://api.tetherland.com/currencies";
-  try {
-    const res = await fetch(url, {
-      method: "GET",
-      headers: {
-        "accept": "application/json",
-        "X-API-Key": apiKey
-      }
-    });
-    if(!res.ok) {
-      throw new Error("HTTP status " + res.status);
-    }
-    const data = await res.json();
-    /*
-      ساختار پاسخ احتمالی (مثال):
-      {
-        "success": true,
-        "message": "...",
-        "data": [
-          {
-            "symbol": "USDT",
-            "buy": 49500,
-            "sell": 50000,
-            ...
-          },
-          ...
-        ]
-      }
-    */
-    const tetherObj = data?.data?.find(item => item.symbol === "USDT");
-    if(!tetherObj) {
-      throw new Error("قیمت USDT پیدا نشد");
-    }
-    // در اینجا از قیمت فروش (sell) به عنوان معیار استفاده می‌کنیم
-    return parseInt(tetherObj.sell, 10);
-  } catch (err) {
-    console.error("Tetherland API error:", err);
-    alert("خطا در دریافت قیمت تتر از تترلند!");
-    // مقدار پیشفرض
-    return 100000;
+/* فراخوانی سرورلس /api/tetherland */
+async function loadTetherPrice(){
+  try{
+    const res=await fetch("/api/tetherland");
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const data=await res.json();
+    if(!data.success) throw new Error(data.message||"API Error");
+    document.getElementById("tetherPrice").value = formatNumber(data.tetherPrice);
+  }catch(e){
+    alert("خطا در دریافت قیمت تتر: "+e.message);
   }
 }
+document.getElementById("btnLoadTether").addEventListener("click",loadTetherPrice);
 
-/***********************************************************
- * API گرفتن قیمت فلز از MetalpriceAPI
- **********************************************************/
-async function fetchMetalPriceFromMetalpriceAPI(metalKey) {
-  const apiKey = "c2f59c2d961f1da98265a3acd9dfe431"; // نمونه
-  const symbolMap = {
-    "فولاد ساده":     "STEEL-SC",
-    "فولاد زنگ‌نزن":  "STEEL-SC",
-    "مس":             "XCU",
-    "آلومینیوم":      "ALU",
-    "برنج":           "BRASS",
-    "فسفر برنز":      "BRONZE",
-    "تیتانیوم":       "TITANIUM"
-  };
-  const symbol = symbolMap[metalKey] || "STEEL-SC";
-
-  const url = `https://api.metalpriceapi.com/v1/latest?api_key=${apiKey}&base=USD&currencies=${symbol}`;
-  try {
-    const res = await fetch(url);
-    if(!res.ok) {
-      throw new Error("HTTP status " + res.status);
-    }
-    const data = await res.json();
-    const usdPrice = data?.rates?.[`USD${symbol}`];
-    if(!usdPrice) throw new Error("قیمت فلز پیدا نشد.");
-
-    // 1) قیمت فلز در دلار
-    // 2) قیمت تتر (دلار به تومان)
-    const tetherInToman = await fetchTetherPriceFromTetherland();
-    return Math.round(usdPrice * tetherInToman);
-  } catch(err) {
-    console.error("MetalpriceAPI error:", err);
-    alert("خطا در دریافت قیمت فلز از MetalpriceAPI!");
-    return 50000;
-  }
-}
-
-/***********************************************************
- * نرخ سود یک ماهه = 7٪
- **********************************************************/
-const monthlyInterest = 0.07;
-
-/***********************************************************
- * محاسبه نسیه
- **********************************************************/
-function calcPriceNoPrepay(basePrice) {
-  return basePrice * (1 + monthlyInterest);
-}
-
-function calcPriceWith50Prepay(basePrice) {
-  const dp = basePrice * 0.5;    // پیش‌پرداخت
-  const remain = basePrice - dp; // باقیمانده
-  return dp + remain * (1 + monthlyInterest);
-}
-
-/***********************************************************
- * محاسبه و نمایش نتایج
- **********************************************************/
-function computeAndDisplay() {
-  const mat = document.getElementById("mat").value;
-  const invoicePrice = getNumericValue(document.getElementById("invoicePrice").value);
-  const tetherToday = getNumericValue(document.getElementById("tetherToday").value);
-  const globalMetalPrice = getNumericValue(document.getElementById("globalMetalPrice").value);
-  const predictedDollar = getNumericValue(document.getElementById("predictedDollar").value);
-
-  if(invoicePrice <= 0) {
-    alert("لطفاً مبلغ کلی فاکتور را وارد کنید.");
-    return;
-  }
-  if(tetherToday <= 0) {
-    alert("قیمت تتر نامعتبر (تترلند).");
-    return;
-  }
-  if(globalMetalPrice <= 0) {
-    alert("قیمت جهانی متریال نامعتبر (MetalpriceAPI).");
-    return;
-  }
-
-  // ====== کادر اول ======
-  const box1 = document.getElementById("box1");
-  box1.textContent =
-    "متریال: " + mat + "\n" +
-    "مبلغ کلی فاکتور (تومان): " + invoicePrice.toLocaleString("en-US") + "\n" +
-    "مبلغ امروز تتر (تومان): " + tetherToday.toLocaleString("en-US") + "\n" +
-    "مبلغ هر کیلو متریال پایه جهانی (تومان): " + globalMetalPrice.toLocaleString("en-US");
-
-  // ========= کادر دوم =========
-  const noPrepay = calcPriceNoPrepay(invoicePrice);
-  const halfPrepay = calcPriceWith50Prepay(invoicePrice);
-
-  const box2 = document.getElementById("box2");
-  box2.textContent =
-    "نسیه یک ماه بدون پیش‌پرداخت: " + noPrepay.toLocaleString("en-US") + " تومان\n" +
-    "نسیه یک ماه با پیش‌پرداخت 50٪: " + halfPrepay.toLocaleString("en-US") + " تومان\n\n" +
-    "قیمت‌های فوق با دلار امروز محاسبه شده.\n" +
-    "در صورت افزایش قیمت دلار به همان درصد قسمت‌ها افزایش پیدا می‌کنند.";
-
-  // ========= کادر سوم =========
-  const newTether = tetherToday + predictedDollar;
-  let ratio = 1;
-  if(newTether > 0) {
-    ratio = newTether / tetherToday;
-  }
-
-  const noPrepayNew = noPrepay * ratio;
-  const halfPrepayNew = halfPrepay * ratio;
-
-  const box3 = document.getElementById("box3");
-  box3.textContent =
-    "با تغییر قیمت تتر (+/-): " + predictedDollar.toLocaleString("en-US") + " تومان\n" +
-    "نسیه بدون پیش‌پرداخت: " + noPrepayNew.toLocaleString("en-US") + " تومان\n" +
-    "نسیه با پیش‌پرداخت 50٪: " + halfPrepayNew.toLocaleString("en-US") + " تومان\n" +
-    "\n(مبلغ بابت افزایش/کاهش قیمت تتر نیز در ارقام بالا لحاظ شده است.)";
-}
-
-/***********************************************************
- * رویداد دکمه محاسبه
- **********************************************************/
-document.getElementById("btnCalc").addEventListener("click", () => {
-  computeAndDisplay();
-});
-
-/***********************************************************
- * بارگذاری اولیه قیمت‌ها
- **********************************************************/
-async function loadInitialData() {
-  // قیمت تتر از تترلند
-  const tetherPrice = await fetchTetherPriceFromTetherland();
-  document.getElementById("tetherToday").value = tetherPrice.toLocaleString("en-US");
-
-  // قیمت متریال جهانی
-  const matSelect = document.getElementById("mat");
-  const currentMat = matSelect.value;
-  const gPrice = await fetchMetalPriceFromMetalpriceAPI(currentMat);
-  document.getElementById("globalMetalPrice").value = gPrice.toLocaleString("en-US");
-}
-
-/* اگر کاربر متریال را تغییر داد، قیمت جهانی را دوباره بگیریم */
-document.getElementById("mat").addEventListener("change", async (e) => {
-  const matName = e.target.value;
-  const gPrice = await fetchMetalPriceFromMetalpriceAPI(matName);
-  document.getElementById("globalMetalPrice").value = gPrice.toLocaleString("en-US");
-});
-
-/* اجرای بارگذاری اولیه */
-loadInitialData();
+/* در بدو ورود یک‌بار تلاش می‌کنیم قیمت تتر را بگیریم */
+loadTetherPrice();
 </script>
 </body>
 </html>
