@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>محاسبه لیزینگ فلزات | Metalloine</title>
+  <title>محاسبه لیزینگ فلزات | Metalloine (با لاگ دیباگ)</title>
 
   <!-- فونت فارسی Vazirmatn -->
   <link
@@ -101,6 +101,17 @@
     .sepNumber {
       text-align: right;
     }
+    /* باکس ساده برای نمایش لاگ (اختیاری) */
+    #debugLog {
+      font-size: 0.8rem; 
+      background: #222; 
+      margin-top: 1rem; 
+      padding: 12px; 
+      border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,0.2);
+      min-height: 60px;
+      white-space: pre-line;
+    }
   </style>
 </head>
 <body>
@@ -112,7 +123,7 @@
 </header>
 
 <main>
-  <h2>محاسبه لیزینگ فلزات</h2>
+  <h2>محاسبه لیزینگ فلزات (دیباگ)</h2>
   <div class="card">
     <!-- نام متریال -->
     <label>نام متریال
@@ -156,13 +167,16 @@
     <!-- کادر سوم نتایج -->
     <div class="result-box" id="box3"></div>
 
+    <!-- بخش دیباگ -->
+    <div id="debugLog">Log:</div>
+
     <a href="index.html" class="btn-back">⬅ بازگشت</a>
   </div>
 </main>
 
 <script>
 /***********************************************************
- * توابع کمکی: جداکننده سه‌رقمی
+ * 1) جداسازی سه‌رقمی
  **********************************************************/
 function formatNumber(str) {
   let sign = "";
@@ -175,7 +189,6 @@ function formatNumber(str) {
   const n = parseInt(numericVal, 10);
   return sign + n.toLocaleString("en-US");
 }
-
 function getNumericValue(str) {
   if(!str) return 0;
   let sign = 1;
@@ -187,10 +200,6 @@ function getNumericValue(str) {
   const n = parseInt(tmp.replace(/\D/g, ""), 10) || 0;
   return sign * n;
 }
-
-/***********************************************************
- * فرمت آنی ورودی‌های عددی
- **********************************************************/
 document.querySelectorAll(".sepNumber").forEach((el) => {
   el.addEventListener("input", () => {
     const pos = el.selectionStart; 
@@ -202,77 +211,106 @@ document.querySelectorAll(".sepNumber").forEach((el) => {
 });
 
 /***********************************************************
- * API گرفتن قیمت تتر از Nobitex (بدون نیاز به کلید)
+ * 2) المان دیباگ
+ **********************************************************/
+const debugEl = document.getElementById("debugLog");
+function logDebug(msg) {
+  console.log(msg); // نمایش در کنسول
+  debugEl.textContent += "\n" + msg; // افزودن به باکس debugLog
+}
+
+/***********************************************************
+ * 3) API گرفتن قیمت تتر از Nobitex
  **********************************************************/
 async function fetchTetherPriceFromNobitex() {
   try {
-    const res = await fetch("https://api.nobitex.ir/market/stats?srcCurrency=usdt&dstCurrency=rls");
+    logDebug("درحال دریافت قیمت تتر از Nobitex...");
+    const url = "https://api.nobitex.ir/market/stats?srcCurrency=usdt&dstCurrency=rls";
+    logDebug("GET " + url);
+
+    const res = await fetch(url);
+    logDebug("وضعیت پاسخ Nobitex: " + res.status);
     const data = await res.json();
+    logDebug("Nobitex پاسخ دریافتی: " + JSON.stringify(data));
+
     const latestPrice = data?.stats?.["usdt-rls"]?.latest;
-    if(!latestPrice) throw new Error("قیمت نامعتبر از Nobitex");
-    // latestPrice بر حسب ریال => تبدیل به تومان
-    return Math.round(latestPrice / 10);
+    if(!latestPrice) throw new Error("قیمت تتر پیدا نشد (latestPrice is null)");
+    // تبدیل به تومان
+    const tetherInToman = Math.round(latestPrice / 10);
+    logDebug("قیمت تتر به تومان: " + tetherInToman);
+    return tetherInToman;
   } catch (err) {
     console.error("Nobitex API error:", err);
-    // در صورت خطا، مقدار پیشفرض
+    logDebug("Nobitex خطا: " + err);
+    alert("خطا در دریافت قیمت تتر از Nobitex. شاید نیاز به VPN باشد.");
+    // مقدار پیشفرض
     return 100000; 
   }
 }
 
 /***********************************************************
- * API گرفتن قیمت فلز از MetalpriceAPI 
- * نیازمند API Key: c2f59c2d961f1da98265a3acd9dfe431
+ * 4) API گرفتن قیمت فلز از MetalpriceAPI
  **********************************************************/
 async function fetchMetalPriceFromMetalpriceAPI(metalKey) {
+  // کلید API شما:
   const apiKey = "c2f59c2d961f1da98265a3acd9dfe431";
+
   // نگاشت متریال به سیمبول
   const symbolMap = {
     "فولاد ساده":     "STEEL-SC", 
-    "فولاد زنگ‌نزن":  "STEEL-SC", // جهت نمونه
+    "فولاد زنگ‌نزن":  "STEEL-SC", // نمونه
     "مس":             "XCU", 
     "آلومینیوم":      "ALU",
     "برنج":           "BRASS",
-    "فسفر برنز":      "BRONZE", // یا نزدیک‌ترین گزینه
+    "فسفر برنز":      "BRONZE",
     "تیتانیوم":       "TITANIUM"
   };
   const symbol = symbolMap[metalKey] || "STEEL-SC";
 
+  // URL
   const url = `https://api.metalpriceapi.com/v1/latest?api_key=${apiKey}&base=USD&currencies=${symbol}`;
+  logDebug(`درحال دریافت قیمت جهانی فلز "${metalKey}" با نماد: ${symbol}\nGET ${url}`);
   try {
     const res = await fetch(url);
+    logDebug("MetalpriceAPI پاسخ: " + res.status);
     const data = await res.json();
-    if(!data?.rates) throw new Error("پاسخ نامعتبر از MetalpriceAPI");
+    logDebug("MetalpriceAPI JSON: " + JSON.stringify(data));
+    if(!data?.rates) throw new Error("ساختار پاسخ نامعتبر");
     const usdPrice = data.rates[`USD${symbol}`];
-    if(!usdPrice) throw new Error("قیمت فلز یافت نشد");
+    if(!usdPrice) throw new Error("قیمت فلز یافت نشد (usdPrice=null)");
 
-    // تبدیل دلار به تومان
+    // قیمت 1 واحد از آن فلز (بر حسب دلار)
+    // حالا نرخ تتر (دلار به تومان) را میگیریم
     const tetherPrice = await fetchTetherPriceFromNobitex();
-    return Math.round(usdPrice * tetherPrice);
+    const metalInToman = Math.round(usdPrice * tetherPrice);
+    logDebug("قیمت فلز به تومان: " + metalInToman);
+    return metalInToman;
   } catch(err) {
     console.error("MetalpriceAPI error:", err);
+    logDebug("MetalpriceAPI خطا: " + err);
+    alert("خطا در دریافت قیمت فلز از MetalpriceAPI. شاید نیاز به VPN باشد.");
     return 50000;
   }
 }
 
 /***********************************************************
- * نرخ سود یک ماهه = 7٪
+ * 5) نرخ سود یک ماهه = 7٪
  **********************************************************/
 const monthlyInterest = 0.07;
 
 /***********************************************************
- * محاسبات نسیه
+ * 6) محاسبات نسیه
  **********************************************************/
 function calcPriceNoPrepay(basePrice) {
   return basePrice * (1 + monthlyInterest);
 }
 function calcPriceWith50Prepay(basePrice) {
   const dp = basePrice * 0.5;
-  const remain = basePrice - dp;
-  return dp + remain * (1 + monthlyInterest);
+  return dp + (basePrice - dp) * (1 + monthlyInterest);
 }
 
 /***********************************************************
- * محاسبه و نمایش نتایج
+ * 7) محاسبه و نمایش نتایج
  **********************************************************/
 function computeAndDisplay() {
   const mat = document.getElementById("mat").value;
@@ -280,6 +318,9 @@ function computeAndDisplay() {
   const tetherToday = getNumericValue(document.getElementById("tetherToday").value);
   const globalMetalPrice = getNumericValue(document.getElementById("globalMetalPrice").value);
   const predictedDollar = getNumericValue(document.getElementById("predictedDollar").value);
+
+  logDebug("--- شروع محاسبه ---");
+  logDebug(`mat=${mat}, invoicePrice=${invoicePrice}, tetherToday=${tetherToday}, globalMetalPrice=${globalMetalPrice}, predictedDollar=${predictedDollar}`);
 
   if(invoicePrice <= 0) {
     alert("لطفاً مبلغ کلی فاکتور را وارد کنید.");
@@ -294,7 +335,6 @@ function computeAndDisplay() {
     return;
   }
 
-  // ====== کادر اول ======
   const box1 = document.getElementById("box1");
   box1.textContent =
     "متریال: " + mat + "\n" +
@@ -302,12 +342,10 @@ function computeAndDisplay() {
     "مبلغ امروز تتر (تومان): " + tetherToday.toLocaleString("en-US") + "\n" +
     "مبلغ هر کیلو متریال پایه جهانی (تومان): " + globalMetalPrice.toLocaleString("en-US");
 
-  // پایه محاسبات نسیه را مبلغ کلی فاکتور قرار می‌دهیم
-  const basePrice = invoicePrice;
-
-  // ====== کادر دوم ======
-  const noPrepay = calcPriceNoPrepay(basePrice);
-  const halfPrepay = calcPriceWith50Prepay(basePrice);
+  // نسیه بدون پیش پرداخت
+  const noPrepay = calcPriceNoPrepay(invoicePrice);
+  // نسیه با 50% پیش پرداخت
+  const halfPrepay = calcPriceWith50Prepay(invoicePrice);
 
   const box2 = document.getElementById("box2");
   box2.textContent =
@@ -316,7 +354,7 @@ function computeAndDisplay() {
     "قیمت‌های فوق با دلار امروز محاسبه شده.\n" +
     "در صورت افزایش قیمت دلار به همان درصد قسمت‌ها افزایش پیدا می‌کنند.";
 
-  // ====== کادر سوم ======
+  // تغییر قیمت تتر
   const newTether = tetherToday + predictedDollar;
   let ratio = 1;
   if(newTether > 0) {
@@ -332,33 +370,37 @@ function computeAndDisplay() {
     "نسیه بدون پیش‌پرداخت: " + noPrepayNew.toLocaleString("en-US") + " تومان\n" +
     "نسیه با پیش‌پرداخت 50٪: " + halfPrepayNew.toLocaleString("en-US") + " تومان\n" +
     "\n(مبلغ بابت افزایش/کاهش قیمت تتر نیز در ارقام بالا لحاظ شده است.)";
+
+  logDebug("--- محاسبه پایان یافت ---");
 }
 
 /***********************************************************
- * رویداد دکمه محاسبه
+ * 8) رویداد دکمه محاسبه
  **********************************************************/
 document.getElementById("btnCalc").addEventListener("click", () => {
   computeAndDisplay();
 });
 
 /***********************************************************
- * بارگذاری اولیه قیمت‌ها
+ * 9) بارگذاری اولیه قیمت‌ها
  **********************************************************/
 async function loadInitialData() {
+  logDebug("=== بارگذاری اولیه داده‌ها ===");
   // قیمت تتر از Nobitex
   const tetherPrice = await fetchTetherPriceFromNobitex();
   document.getElementById("tetherToday").value = tetherPrice.toLocaleString("en-US");
 
   // قیمت متریال جهانی براساس متریال پیش‌فرض
   const matSelect = document.getElementById("mat");
-  let currentMat = matSelect.value;
+  const currentMat = matSelect.value;
   const gPrice = await fetchMetalPriceFromMetalpriceAPI(currentMat);
   document.getElementById("globalMetalPrice").value = gPrice.toLocaleString("en-US");
 }
 
-/* اگر کاربر متریال را تغییر داد، دوباره قیمت جهانی را بگیریم */
+/* تغییر متریال -> درخواست مجدد قیمت MetalpriceAPI */
 document.getElementById("mat").addEventListener("change", async (e) => {
   const matName = e.target.value;
+  logDebug("کاربر متریال را تغییر داد => " + matName);
   const gPrice = await fetchMetalPriceFromMetalpriceAPI(matName);
   document.getElementById("globalMetalPrice").value = gPrice.toLocaleString("en-US");
 });
