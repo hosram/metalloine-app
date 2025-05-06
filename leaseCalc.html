@@ -20,124 +20,84 @@
       --g: 12px;
     }
     * {
-      box-sizing: border-box;
-      margin: 0; 
-      padding: 0;
+      box-sizing: border-box; margin: 0; padding: 0;
     }
     body {
-      background: #000;
-      color: #fff;
+      background: #000; color: #fff;
       font-family: "Vazirmatn", sans-serif;
-      min-height: 100vh;
-      line-height: 1.6;
+      min-height: 100vh; line-height: 1.6;
     }
     #topbar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 64px;
-      margin: var(--g);
-      background: var(--glass);
-      backdrop-filter: blur(24px);
+      display: flex; justify-content: center; align-items: center;
+      height: 64px; margin: var(--g);
+      background: var(--glass); backdrop-filter: blur(24px);
       border: 1px solid rgba(255,255,255,0.25);
       border-radius: var(--r);
     }
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.4rem;
-      font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 1.4rem; font-weight: 700;
     }
     .ring {
-      width: 22px;
-      height: 22px;
-      border: 6px solid var(--c-accent);
-      border-radius: 50%;
+      width: 22px; height: 22px;
+      border: 6px solid var(--c-accent); border-radius: 50%;
     }
     .brand {
       color: var(--c-primary);
     }
 
     main {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: var(--g);
+      max-width: 420px; margin: 0 auto; padding: var(--g);
     }
     .card {
-      background: var(--glass);
-      backdrop-filter: blur(24px);
+      background: var(--glass); backdrop-filter: blur(24px);
       border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
       padding: 16px;
       margin-top: var(--g);
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
       gap: 1rem;
     }
     h2 {
-      text-align: center;
-      margin-bottom: var(--g);
+      text-align: center; margin-bottom: var(--g);
     }
     label {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 0.85rem;
+      display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem;
     }
     input, select, button {
-      border: none; 
-      border-radius: var(--r);
-      background: var(--glass); 
-      color: #fff; 
-      font: inherit;
+      border: none; border-radius: var(--r);
+      background: var(--glass); color: #fff; font: inherit;
       padding: 10px;
     }
     input:focus, select:focus {
       outline: 2px solid var(--c-primary);
     }
     select {
-      background: #333;
-      color: #fff;
+      background: #333; color: #fff;
     }
     option {
-      background: #333;
-      color: #fff;
+      background: #333; color: #fff;
     }
     .btn-submit {
       background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
-      color: #fff;
-      cursor: pointer;
+      color: #fff; cursor: pointer;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      font-weight: 600;
-      text-align: center;
+      font-weight: 600; text-align: center;
       margin-top: 8px;
     }
     .result-box {
-      background: #111;
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: var(--r);
+      background: #111; margin-top: 12px;
+      padding: 12px; border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
-      font-size: 0.9rem;
-      white-space: pre-line;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      font-size: 0.9rem; white-space: pre-line;
+      display: flex; flex-direction: column; gap: 6px;
       min-height: 4em;
     }
     .btn-back {
-      display: inline-block;
-      margin-top: 20px;
-      background: #444;
-      color: #fff;
-      border-radius: var(--r);
-      padding: 10px 20px;
-      text-decoration: none;
-      text-align: center;
+      display: inline-block; margin-top: 20px;
+      background: #444; color: #fff; border-radius: var(--r);
+      padding: 10px 20px; text-decoration: none; text-align: center;
     }
-
-    /* استایل برای ورودی‌هایی که با جداکننده هزارگان نمایش داده می‌شوند */
     .sepNumber {
       text-align: right;
     }
@@ -153,7 +113,6 @@
 
 <main>
   <h2>محاسبه لیزینگ فلزات</h2>
-
   <div class="card">
     <!-- نام متریال -->
     <label>نام متریال
@@ -170,22 +129,22 @@
 
     <!-- مبلغ کلی فاکتور -->
     <label>مبلغ کلی فاکتور (تومان)
-      <input id="invoicePrice" type="text" class="sepNumber" placeholder="مثلاً 5,000,000" />
+      <input id="invoicePrice" type="text" class="sepNumber" placeholder="مثلاً 5,000,000"/>
     </label>
 
-    <!-- مبلغ امروز تتر -->
-    <label>مبلغ امروز تتر (تومان)
-      <input id="tetherToday" type="text" class="sepNumber" placeholder="مثلاً 50,000" />
+    <!-- مبلغ امروز تتر (خودکار از Nobitex) -->
+    <label>مبلغ امروز تتر (تومان) <small>(خودکار)</small>
+      <input id="tetherToday" type="text" class="sepNumber" placeholder="در حال دریافت..." readonly/>
     </label>
 
     <!-- مبلغ هر کیلو متریال پایه جهانی (تومان) -->
-    <label>مبلغ هر کیلو متریال پایه جهانی (تومان)
-      <input id="globalMetalPrice" type="text" class="sepNumber" placeholder="مثلاً 700,000" />
+    <label>مبلغ هر کیلو متریال پایه جهانی (تومان) <small>(خودکار)</small>
+      <input id="globalMetalPrice" type="text" class="sepNumber" placeholder="در حال دریافت..." readonly/>
     </label>
 
-    <!-- مبلغ برآورد قیمتی دلار (در صورت افزایش) -->
-    <label>مبلغ برآورد قیمتی دلار (تومان)
-      <input id="predictedDollar" type="text" class="sepNumber" placeholder="مثلاً 60,000" />
+    <!-- برآورد قیمت احتمالی دلار تتر (مثلاً +5,000 یا -5,000) -->
+    <label>برآورد قیمت دلار (تومان) <small>(افزایش/کاهش)</small>
+      <input id="predictedDollar" type="text" class="sepNumber" placeholder="مثلاً +5,000 یا -5,000"/>
     </label>
 
     <button id="btnCalc" class="btn-submit">محاسبه</button>
@@ -203,28 +162,38 @@
 
 <script>
 /***********************************************************
- * توابع فرمت جهت جداکننده سه‌رقمی در ورودی
+ * توابع کمکی: جداکننده سه‌رقمی
  **********************************************************/
 function formatNumber(str) {
-  // حذف همه کاراکترهای غیرعددی
+  let sign = "";
+  if(str.trim().startsWith("-")) {
+    sign = "-";
+    str = str.substring(1);
+  }
   const numericVal = str.replace(/\D/g, "");
-  if(!numericVal) return "";
-  // تبدیل به عدد
+  if(!numericVal) return sign;
   const n = parseInt(numericVal, 10);
-  // فرمت با جداکننده هزارگان
-  return n.toLocaleString("en-US");
+  return sign + n.toLocaleString("en-US");
 }
 
 function getNumericValue(str) {
-  // کاراکترهای غیرعددی حذف و سپس parseInt
   if(!str) return 0;
-  return parseInt(str.replace(/\D/g, ""), 10) || 0;
+  let sign = 1;
+  let tmp = str.trim();
+  if(tmp.startsWith("-")) {
+    sign = -1;
+    tmp = tmp.substring(1);
+  }
+  const n = parseInt(tmp.replace(/\D/g, ""), 10) || 0;
+  return sign * n;
 }
 
-/* افزودن EventListener به همه فیلدهای class="sepNumber" برای فرمت آنی */
+/***********************************************************
+ * فرمت آنی ورودی‌های عددی
+ **********************************************************/
 document.querySelectorAll(".sepNumber").forEach((el) => {
-  el.addEventListener("input", (e) => {
-    const pos = el.selectionStart; // موقعیت کاراکتر
+  el.addEventListener("input", () => {
+    const pos = el.selectionStart; 
     const oldLength = el.value.length;
     el.value = formatNumber(el.value);
     const newLength = el.value.length;
@@ -233,92 +202,169 @@ document.querySelectorAll(".sepNumber").forEach((el) => {
 });
 
 /***********************************************************
- * نرخ سود یک ماهه = 7% (در متن نمایش نمی‌دهیم)
+ * API گرفتن قیمت تتر از Nobitex (بدون نیاز به کلید)
+ **********************************************************/
+async function fetchTetherPriceFromNobitex() {
+  try {
+    const res = await fetch("https://api.nobitex.ir/market/stats?srcCurrency=usdt&dstCurrency=rls");
+    const data = await res.json();
+    const latestPrice = data?.stats?.["usdt-rls"]?.latest;
+    if(!latestPrice) throw new Error("قیمت نامعتبر از Nobitex");
+    // latestPrice بر حسب ریال => تبدیل به تومان
+    return Math.round(latestPrice / 10);
+  } catch (err) {
+    console.error("Nobitex API error:", err);
+    // در صورت خطا، مقدار پیشفرض
+    return 100000; 
+  }
+}
+
+/***********************************************************
+ * API گرفتن قیمت فلز از MetalpriceAPI 
+ * نیازمند API Key: c2f59c2d961f1da98265a3acd9dfe431
+ **********************************************************/
+async function fetchMetalPriceFromMetalpriceAPI(metalKey) {
+  const apiKey = "c2f59c2d961f1da98265a3acd9dfe431";
+  // نگاشت متریال به سیمبول
+  const symbolMap = {
+    "فولاد ساده":     "STEEL-SC", 
+    "فولاد زنگ‌نزن":  "STEEL-SC", // جهت نمونه
+    "مس":             "XCU", 
+    "آلومینیوم":      "ALU",
+    "برنج":           "BRASS",
+    "فسفر برنز":      "BRONZE", // یا نزدیک‌ترین گزینه
+    "تیتانیوم":       "TITANIUM"
+  };
+  const symbol = symbolMap[metalKey] || "STEEL-SC";
+
+  const url = `https://api.metalpriceapi.com/v1/latest?api_key=${apiKey}&base=USD&currencies=${symbol}`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if(!data?.rates) throw new Error("پاسخ نامعتبر از MetalpriceAPI");
+    const usdPrice = data.rates[`USD${symbol}`];
+    if(!usdPrice) throw new Error("قیمت فلز یافت نشد");
+
+    // تبدیل دلار به تومان
+    const tetherPrice = await fetchTetherPriceFromNobitex();
+    return Math.round(usdPrice * tetherPrice);
+  } catch(err) {
+    console.error("MetalpriceAPI error:", err);
+    return 50000;
+  }
+}
+
+/***********************************************************
+ * نرخ سود یک ماهه = 7٪
  **********************************************************/
 const monthlyInterest = 0.07;
 
 /***********************************************************
- * محاسبات اقساط
+ * محاسبات نسیه
  **********************************************************/
 function calcPriceNoPrepay(basePrice) {
-  // نسیه یک ماه بدون پیش پرداخت
   return basePrice * (1 + monthlyInterest);
 }
 function calcPriceWith50Prepay(basePrice) {
-  // نسیه یک ماه با پیش پرداخت 50%
   const dp = basePrice * 0.5;
   const remain = basePrice - dp;
-  return dp + (remain * (1 + monthlyInterest));
+  return dp + remain * (1 + monthlyInterest);
 }
 
 /***********************************************************
- * با کلیک بر دکمه محاسبه
+ * محاسبه و نمایش نتایج
  **********************************************************/
-document.getElementById("btnCalc").addEventListener("click", () => {
-  // خواندن ورودی‌ها به‌صورت عددی
+function computeAndDisplay() {
   const mat = document.getElementById("mat").value;
   const invoicePrice = getNumericValue(document.getElementById("invoicePrice").value);
   const tetherToday = getNumericValue(document.getElementById("tetherToday").value);
   const globalMetalPrice = getNumericValue(document.getElementById("globalMetalPrice").value);
   const predictedDollar = getNumericValue(document.getElementById("predictedDollar").value);
 
-  // بررسی اولیه
   if(invoicePrice <= 0) {
     alert("لطفاً مبلغ کلی فاکتور را وارد کنید.");
     return;
   }
   if(tetherToday <= 0) {
-    alert("لطفاً مبلغ امروز تتر را وارد کنید.");
+    alert("قیمت تتر نامعتبر است (Nobitex).");
     return;
   }
   if(globalMetalPrice <= 0) {
-    alert("لطفاً مبلغ متریال پایه جهانی را وارد کنید.");
-    return;
-  }
-  if(predictedDollar <= 0) {
-    alert("لطفاً مبلغ برآورد قیمتی دلار را وارد کنید.");
+    alert("قیمت جهانی متریال نامعتبر (MetalpriceAPI).");
     return;
   }
 
-  // ========== کادر اول نتایج ========== 
-  // متریال، مبلغ کلی فاکتور، مبلغ امروز تتر، مبلغ هر کیلو متریال پایه جهانی
+  // ====== کادر اول ======
   const box1 = document.getElementById("box1");
-  box1.textContent = 
+  box1.textContent =
     "متریال: " + mat + "\n" +
-    "مبلغ کلی فاکتور به تومان: " + invoicePrice.toLocaleString("en-US") + "\n" +
+    "مبلغ کلی فاکتور (تومان): " + invoicePrice.toLocaleString("en-US") + "\n" +
     "مبلغ امروز تتر (تومان): " + tetherToday.toLocaleString("en-US") + "\n" +
-    "مبلغ جهانی متریال (هر کیلو) به تومان: " + globalMetalPrice.toLocaleString("en-US");
+    "مبلغ هر کیلو متریال پایه جهانی (تومان): " + globalMetalPrice.toLocaleString("en-US");
 
-  // محاسبه‌ی قیمت پایه را می‌توان تعریف کرد؛
-  // فعلاً از invoicePrice به‌عنوان basePrice استفاده می‌کنیم
-  let basePrice = invoicePrice;
+  // پایه محاسبات نسیه را مبلغ کلی فاکتور قرار می‌دهیم
+  const basePrice = invoicePrice;
 
-  // ========== کادر دوم نتایج ==========
-  // (1) نسیه یک ماه بدون پیش‌پرداخت
-  const nasiehNoPrepay = calcPriceNoPrepay(basePrice);
-  // (2) نسیه یک ماه با 50% پیش‌پرداخت
-  const nasiehHalf = calcPriceWith50Prepay(basePrice);
+  // ====== کادر دوم ======
+  const noPrepay = calcPriceNoPrepay(basePrice);
+  const halfPrepay = calcPriceWith50Prepay(basePrice);
 
   const box2 = document.getElementById("box2");
   box2.textContent =
-    "نسیه یک ماه بدون پیش پرداخت: " + nasiehNoPrepay.toLocaleString("en-US") + " تومان\n" +
-    "نسیه یک ماه با پیش پرداخت 50%: " + nasiehHalf.toLocaleString("en-US") + " تومان\n\n" +
+    "نسیه یک ماه بدون پیش‌پرداخت: " + noPrepay.toLocaleString("en-US") + " تومان\n" +
+    "نسیه یک ماه با پیش‌پرداخت 50٪: " + halfPrepay.toLocaleString("en-US") + " تومان\n\n" +
     "قیمت‌های فوق با دلار امروز محاسبه شده.\n" +
     "در صورت افزایش قیمت دلار به همان درصد قسمت‌ها افزایش پیدا می‌کنند.";
 
-  // ========== کادر سوم نتایج ==========
-  // محاسبه نسبت (predictedDollar / tetherToday)
-  const ratio = (predictedDollar / tetherToday);
-  // همان دو مقدار اما ضربدر ratio
-  const nasiehNoPrepayNew = nasiehNoPrepay * ratio;
-  const nasiehHalfNew = nasiehHalf * ratio;
+  // ====== کادر سوم ======
+  const newTether = tetherToday + predictedDollar;
+  let ratio = 1;
+  if(newTether > 0) {
+    ratio = newTether / tetherToday;
+  }
+
+  const noPrepayNew = noPrepay * ratio;
+  const halfPrepayNew = halfPrepay * ratio;
 
   const box3 = document.getElementById("box3");
   box3.textContent =
-    "با افزایش نرخ دلار، قیمت‌ها به صورت زیر تغییر می‌کنند:\n" +
-    "نسیه بدون پیش پرداخت: " + nasiehNoPrepayNew.toLocaleString("en-US") + " تومان\n" +
-    "نسیه با پیش پرداخت 50%: " + nasiehHalfNew.toLocaleString("en-US") + " تومان\n";
+    "با تغییر قیمت تتر (+/-): " + predictedDollar.toLocaleString("en-US") + " تومان\n" +
+    "نسیه بدون پیش‌پرداخت: " + noPrepayNew.toLocaleString("en-US") + " تومان\n" +
+    "نسیه با پیش‌پرداخت 50٪: " + halfPrepayNew.toLocaleString("en-US") + " تومان\n" +
+    "\n(مبلغ بابت افزایش/کاهش قیمت تتر نیز در ارقام بالا لحاظ شده است.)";
+}
+
+/***********************************************************
+ * رویداد دکمه محاسبه
+ **********************************************************/
+document.getElementById("btnCalc").addEventListener("click", () => {
+  computeAndDisplay();
 });
+
+/***********************************************************
+ * بارگذاری اولیه قیمت‌ها
+ **********************************************************/
+async function loadInitialData() {
+  // قیمت تتر از Nobitex
+  const tetherPrice = await fetchTetherPriceFromNobitex();
+  document.getElementById("tetherToday").value = tetherPrice.toLocaleString("en-US");
+
+  // قیمت متریال جهانی براساس متریال پیش‌فرض
+  const matSelect = document.getElementById("mat");
+  let currentMat = matSelect.value;
+  const gPrice = await fetchMetalPriceFromMetalpriceAPI(currentMat);
+  document.getElementById("globalMetalPrice").value = gPrice.toLocaleString("en-US");
+}
+
+/* اگر کاربر متریال را تغییر داد، دوباره قیمت جهانی را بگیریم */
+document.getElementById("mat").addEventListener("change", async (e) => {
+  const matName = e.target.value;
+  const gPrice = await fetchMetalPriceFromMetalpriceAPI(matName);
+  document.getElementById("globalMetalPrice").value = gPrice.toLocaleString("en-US");
+});
+
+/* اجرای بارگذاری اولیه */
+loadInitialData();
 </script>
 </body>
 </html>
