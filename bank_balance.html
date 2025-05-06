@@ -77,6 +77,12 @@
       margin-bottom: 16px;
       font-size: 1.2rem;
     }
+    .card .note {
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-bottom: 12px;
+    }
 
     /* استایل لیست بانک‌ها */
     .bank-list {
@@ -85,20 +91,28 @@
       gap: 12px;
     }
     .bank-row {
-      display: flex; 
-      justify-content: space-between; 
+      display: grid;
+      grid-template-columns: 1.3fr 1.3fr 1.8fr; /* نام بانک | موجودی | چک پرداختی */
       align-items: center;
       background: #111;
       padding: 12px;
       border-radius: var(--r);
       border: 1px solid rgba(255,255,255,0.2);
+      gap: 8px;
     }
     .bank-name {
       font-weight: 600;
+      /* کمی کوچکتر یا بزرگتر هم می‌توانید بکنید */
     }
     .bank-balance {
       color: #56ff56; /* رنگ سبز برای موجودی */
       font-weight: 700;
+      text-align: center;
+    }
+    .bank-check {
+      color: #ffcc66; /* رنگ زرد/نارنجی برای چک‌های پرداختی */
+      font-weight: 700;
+      text-align: center;
     }
 
     .btn-back {
@@ -131,48 +145,59 @@
   <main>
     <div class="card">
       <h2>لیست بانک‌ها</h2>
+      <p class="note">مبالغ چک‌های پرداختی طی یک ماه آینده (مثلاً تا ۲۵ خرداد)</p>
+
       <div class="bank-list">
-        <!-- هر بانک در یک سطر -->
+        <!-- هر بانک در یک سطر: نام بانک | موجودی بانک | جمع چک‌های پرداختی یک ماه آینده -->
         <div class="bank-row">
           <span class="bank-name">ملت</span>
           <span class="bank-balance">2,689,480,250 ریال</span>
+          <span class="bank-check">300,000,000 ریال</span>
         </div>
         <div class="bank-row">
           <span class="bank-name">صادرات</span>
           <span class="bank-balance">6,891,785,053 ریال</span>
+          <span class="bank-check">175,000,000 ریال</span>
         </div>
         <div class="bank-row">
           <span class="bank-name">ملی</span>
           <span class="bank-balance">2,527,758,403 ریال</span>
+          <span class="bank-check">520,000,000 ریال</span>
         </div>
         <div class="bank-row">
           <span class="bank-name">آینده</span>
           <span class="bank-balance">1,870,232,397 ریال</span>
+          <span class="bank-check">90,000,000 ریال</span>
         </div>
         <div class="bank-row">
           <span class="bank-name">قرض الحسنه مهر</span>
           <span class="bank-balance">1,868,110,730 ریال</span>
+          <span class="bank-check">250,000,000 ریال</span>
         </div>
         <div class="bank-row">
           <span class="bank-name">تجارت</span>
           <span class="bank-balance">4,875,311,801 ریال</span>
+          <span class="bank-check">130,000,000 ریال</span>
         </div>
         <div class="bank-row">
           <span class="bank-name">سامان</span>
           <span class="bank-balance">3,200,273,253 ریال</span>
+          <span class="bank-check">450,000,000 ریال</span>
         </div>
         <div class="bank-row">
           <span class="bank-name">مسکن</span>
           <span class="bank-balance">3,997,141,363 ریال</span>
+          <span class="bank-check">650,000,000 ریال</span>
         </div>
         <div class="bank-row">
           <span class="bank-name">قرض الحسنه رسالت</span>
           <span class="bank-balance">2,970,532,462 ریال</span>
+          <span class="bank-check">200,000,000 ریال</span>
         </div>
       </div>
     </div>
 
-    <!-- لینک بازگشت -->
+    <!-- لینک بازگشت به صفحه اصلی -->
     <a href="index.html" class="btn-back">⬅ بازگشت</a>
   </main>
 
