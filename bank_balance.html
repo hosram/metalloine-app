@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bank Balance App</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    #balance {
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: #333;
+    }
+    button {
+      padding: 10px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>برنامه نمایش موجودی بانک</h1>
+  
+  <button id="btnBalance">دریافت موجودی</button>
+  <div id="balance">موجودی: --</div>
+
+  <script>
+    // API Key و Login Token برنامه حسابداری
+    const API_KEY = "XYeyCb0ImFsL8hr97IjLcJyBy7NImVm4";
+    const LOGIN_TOKEN = "09a16a9e8feb473bacb8ccfe1a0b2ecac9798d486193bac994022ba9e4697524d5b8de6dec5ad2af79cbae77d4ca2af0";
+
+    // آدرس (Endpoint) فرضی برای گرفتن موجودی؛ در پروژه واقعی جایگزین کنید
+    const BALANCE_ENDPOINT = "https://example.com/api/bank/balance";
+
+    document.getElementById("btnBalance").addEventListener("click", async () => {
+      try {
+        // درخواست به سرور حسابداری یا سرور واسط
+        const response = await fetch(BALANCE_ENDPOINT, {
+          method: "GET",
+          headers: {
+            // بسته به مستندات API ممکن است نام هدر متفاوت باشد
+            "Api-Key": API_KEY,
+            "Authorization": `Bearer ${LOGIN_TOKEN}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("خطا در درخواست موجودی");
+        }
+
+        const data = await response.json();
+        // فرض می‌کنیم موجودی در فیلد data.balance است
+        document.getElementById("balance").textContent = `موجودی: ${data.balance} تومان`;
+      } catch (error) {
+        console.error(error);
+        document.getElementById("balance").textContent = "خطا در دریافت موجودی یا ارتباط با سرور";
+      }
+    });
+  </script>
+</body>
+</html>
