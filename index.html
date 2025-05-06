@@ -19,103 +19,129 @@
       --r: 24px; 
       --g: 12px;
     }
-    * {
-      box-sizing: border-box;
-      margin: 0; 
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #000; 
-      color: #fff;
-      font-family: "Vazirmatn", sans-serif;
-      min-height: 100vh; 
-      line-height: 1.6;
+      background: #000; color: #fff; font-family: "Vazirmatn", sans-serif;
+      min-height: 100vh; line-height: 1.6;
+      display:flex; flex-direction:column;
     }
-    /* هدر */
-    #topbar {
-      display: flex; 
-      justify-content: center; 
-      align-items: center;
-      height: 64px; 
-      margin: var(--g);
-      background: var(--glass); 
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: var(--r);
-    }
-    .logo {
-      display: flex; 
-      align-items: center; 
-      gap: 8px;
-      font-size: 1.4rem; 
-      font-weight: 700;
-    }
-    .ring {
-      width: 22px; 
-      height: 22px;
-      border: 6px solid var(--c-accent); 
-      border-radius: 50%;
-    }
-    .brand { 
-      color: var(--c-primary); 
-    }
-
-    /* صفحه فرود */
-    #landing {
-      height: calc(100vh - 64px - 2*var(--g));
-      display: grid; 
-      place-items: center;
-      text-align: center;
-    }
+    /* ===== Components ===== */
+    .hidden { display:none !important; }
 
     .btn-main {
-      padding: 14px 32px;
-      border: none; 
-      border-radius: var(--r);
-      cursor: pointer; 
-      font-weight: 700;
-      background: linear-gradient(
-        135deg,
-        var(--c-primary),
-        var(--c-accent)
-      );
-      color: #fff; 
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      text-decoration: none;
-      display: inline-block;
+      padding: 14px 32px; border: none; border-radius: var(--r);
+      cursor: pointer; font-weight: 700; font-size:1.1rem;
+      background: linear-gradient(135deg,var(--c-primary),var(--c-accent));
+      color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      text-decoration: none; display: inline-block; text-align:center;
+    }
+    .btn-main.disabled,
+    .btn-main:disabled {
+      opacity:.4; pointer-events:none;
+      background: var(--glass);
+    }
+    .btn-back {
+      margin-top:2rem; background:none; border:1px solid var(--c-accent);
+      color:var(--c-accent); padding:.75rem 2rem; border-radius:var(--r);
+      cursor:pointer; font-weight:700;
     }
 
-    footer {
-      margin-top: 1rem; 
-      text-align: center; 
-      font-size: 0.8rem; 
-      opacity: 0.7;
-      position: fixed; 
-      left: 0; 
-      right: 0; 
-      bottom: 8px;
+    /* ===== Layout Sections ===== */
+    .view { flex:1; display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center; padding:2rem; }
+
+    #topbar {
+      display: flex; justify-content: center; align-items: center;
+      height: 64px; margin: var(--g);
+      background: var(--glass); backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.25); border-radius: var(--r);
     }
+    .logo { display:flex; align-items:center; gap:8px; font-size:1.4rem; font-weight:700; }
+    .ring { width:22px; height:22px; border:6px solid var(--c-accent); border-radius:50%; }
+    .brand { color:var(--c-primary); }
+
+    /* Grid menu buttons */
+    .grid { display:grid; gap:var(--g); width:100%; max-width:840px;
+            grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); }
+
+    footer { margin:1rem auto .5rem; text-align:center; font-size:.8rem; opacity:.7; }
   </style>
 </head>
 <body>
+  <!-- ===== Header ===== -->
+  <header id="topbar">
+    <span class="logo">
+      <span class="ring"></span>
+      <span class="brand">Metalloine</span>
+    </span>
+  </header>
 
-<header id="topbar">
-  <span class="logo">
-    <span class="ring"></span>
-    <span class="brand">Metalloine</span>
-  </span>
-</header>
+  <!-- ===== Welcome Screen ===== -->
+  <section id="welcome" class="view">
+    <h1 style="font-size:2.2rem; margin-bottom:1rem;">به متال‌لاین خوش آمدید</h1>
+    <p style="max-width:32ch; margin-inline:auto;">این اپ متعلق به <strong>مشاوران پخش برخط فولاد</strong> است و در خدمت شما مهندسین، مدیران و کارشناسان صنعت فولاد می‌باشد.</p>
+    <small style="opacity:.7; margin-top:2.5rem;">برای ادامه روی صفحه کلیک کنید</small>
+  </section>
 
-<section id="landing">
-  <div style="display:flex; flex-direction:column; gap:1rem;">
-    <a href="weight.html" class="btn-main">محاسبه وزن</a>
-    <a href="scrap.html" class="btn-main">محاسبه ضایعات</a>
+  <!-- ===== Assistants Menu ===== -->
+  <section id="menu" class="view hidden">
+    <h2 style="font-size:1.8rem; margin-bottom:2rem;">انتخاب دستیار</h2>
+    <div class="grid">
+      <button class="btn-main" data-target="engineering">دستیار مهندسی</button>
+      <button class="btn-main" data-target="technical">دستیار فنی</button>
+      <button class="btn-main" data-target="financial">دستیار مالی</button>
+      <button class="btn-main disabled" disabled>دستیار فروش</button>
+      <button class="btn-main disabled" disabled>دستیار انبار</button>
+      <button class="btn-main disabled" disabled>دستیار خرید و تامین</button>
+      <button class="btn-main disabled" disabled>دستیار منابع انسانی</button>
+    </div>
+  </section>
+
+  <!-- ===== Engineering Assistant ===== -->
+  <section id="engineering" class="view hidden">
+    <h2 style="font-size:1.8rem; margin-bottom:2rem;">دستیار مهندسی</h2>
     <a href="hardness.html" class="btn-main">تبدیل سختی</a>
-    <a href="machining-allowances.html" class="btn-main">تلرانس ماشین‌کاری</a>
-    <a href="leaseCalc.html" class="btn-main">محاسبه لیزینگ</a>
-  </div>
-</section>
+    <button class="btn-back">بازگشت</button>
+  </section>
 
-<footer>ورژن ۱.۰۰</footer>
+  <!-- ===== Technical Assistant ===== -->
+  <section id="technical" class="view hidden">
+    <h2 style="font-size:1.8rem; margin-bottom:2rem;">دستیار فنی</h2>
+    <div class="grid" style="max-width:600px;">
+      <a href="weight.html" class="btn-main">محاسبه وزن</a>
+      <a href="scrap.html" class="btn-main">محاسبه ضایعات</a>
+      <a href="machining-allowances.html" class="btn-main">تلرانس ماشین‌کاری</a>
+    </div>
+    <button class="btn-back">بازگشت</button>
+  </section>
+
+  <!-- ===== Financial Assistant ===== -->
+  <section id="financial" class="view hidden">
+    <h2 style="font-size:1.8rem; margin-bottom:2rem;">دستیار مالی</h2>
+    <a href="leaseCalc.html" class="btn-main">محاسبه لیزینگ</a>
+    <button class="btn-back">بازگشت</button>
+  </section>
+
+  <footer>ورژن ۱.۰.۱</footer>
+
+  <script>
+    // Helper to switch views
+    function show(id){
+      document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    // Welcome click = go to menu
+    document.getElementById('welcome').addEventListener('click', ()=>show('menu'));
+
+    // Menu buttons => target section
+    document.querySelectorAll('#menu [data-target]').forEach(btn=>{
+      btn.addEventListener('click', ()=> show(btn.dataset.target));
+    });
+
+    // Back buttons
+    document.querySelectorAll('.btn-back').forEach(btn=>{
+      btn.addEventListener('click', ()=> show('menu'));
+    });
+  </script>
 </body>
 </html>
