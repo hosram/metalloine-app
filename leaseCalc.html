@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Metalloine | لیزینگ ۱٫۰۴</title>
+<title>Metalloine | لیزینگ ۱٫۰۵</title>
 
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
 
 <style>
 :root{--c-primary:#8E1F61;--c-accent:#8FA2B2;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
@@ -16,7 +15,7 @@ header{display:flex;justify-content:center;align-items:center;height:64px;margin
   background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
 .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
 .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c-primary)}
-main{max-width:680px;margin:0 auto;padding:var(--g);display:grid;gap:var(--g)}
+main{max-width:680px;margin:0 auto;padding:var(--g)}
 .card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.2);
   border-radius:var(--r);padding:16px}
 label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
@@ -38,8 +37,6 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
 <header><span class="ring"></span><span class="brand">Metalloine</span></header>
 
 <main>
-
-<!-- فرم محاسبه -->
 <div class="card">
   <h3>محاسبۀ لیزینگ فلزات</h3>
 
@@ -52,7 +49,7 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
     <span id="dpVal">۵۰٪</span>
   </label>
 
-  <label>برآورد تغییر قیمت دلار (تومان) <small>(+ یا −)</small>
+  <label>برآورد تغییر قیمت دلار (تومان)
     <input id="predict" class="sep" placeholder="+5,000 یا -3,000"/>
   </label>
 
@@ -61,65 +58,68 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
 
   <div id="resultBox" style="margin-top:1rem;"></div>
 </div>
-
 </main>
-<footer>Metalloine — ۱٫۰۴ آزمایشی</footer>
+
+<footer>Metalloine — نسخه ۱٫۰۵</footer>
 
 <script>
-/* جداکنندۀ سه‌رقمی هنگام تایپ */
+/* جداکنندۀ آنی سه‌رقمی */
 function format(el){
-  const p=el.selectionStart,l=el.value.length,neg=el.value.trim().startsWith("-");
-  const clean=el.value.replace(/\D/g,"");
-  el.value=(neg?"-":"")+(clean?parseInt(clean,10).toLocaleString("en-US"):"");
-  el.selectionEnd=p+(el.value.length-l);
+  const pos=el.selectionStart,len=el.value.length;
+  const neg=el.value.trim().startsWith("-");
+  const num=el.value.replace(/\D/g,"");
+  el.value=(neg?"-":"")+(num?parseInt(num,10).toLocaleString("en-US"):"");
+  el.selectionEnd=pos+(el.value.length-len);
 }
-document.querySelectorAll(".sep").forEach(i=>i.addEventListener("input",()=>format(i)));
+document.querySelectorAll(".sep").forEach(el=>el.addEventListener("input",()=>format(el)));
 
 const sep=n=>(+n||0).toLocaleString("en-US");
 const raw=s=>parseInt(String(s).replace(/\D/g,"")||"0",10);
 
+/* اسلایدر */
+dpSlider.oninput=()=>dpVal.textContent=dpSlider.value+"٪";
+
+/* نرخ سود */
 const r=0.07,
       oneM=a=>Math.round(a*(1+r)),
       twoM=a=>Math.round(a*Math.pow(1+r,2)),
       withDP=(b,p,m)=>Math.round(b*p/100+(b-b*p/100)*Math.pow(1+r,m));
 
-dpSlider.oninput=()=>dpVal.textContent=dpSlider.value+"٪";
-
+/* محاسبه */
 calcBtn.onclick=()=>{
-  const invoice=raw(invoice.value);
-  if(!invoice){alert("مبلغ فاکتور؟");return;}
+  const invoiceVal=document.getElementById("invoice").value;
+  const invoice=raw(invoiceVal);
+  if(!invoice){alert("مبلغ فاکتور را وارد کنید!");return;}
+
   const dp=+dpSlider.value;
   const deltaStr=predict.value.trim();
   const delta=raw(deltaStr)*(deltaStr.startsWith("-")?-1:1);
 
-  const cash=invoice,
-        n1=oneM(invoice),
-        n1dp=withDP(invoice,dp,1),
-        n2=twoM(invoice),
-        n2dp=withDP(invoice,dp,2);
+  const cash = invoice;
+  const n1   = oneM(invoice);
+  const n1dp = withDP(invoice,dp,1);
+  const n2   = twoM(invoice);
+  const n2dp = withDP(invoice,dp,2);
 
-  const ratio=delta? (invoice+delta)/invoice:1,
-        n1x=Math.round(n1*ratio),
-        n1dpx=Math.round(n1dp*ratio),
-        n2x=Math.round(n2*ratio),
-        n2dpx=Math.round(n2dp*ratio);
+  const ratio=delta? (invoice+delta)/invoice : 1;
+  const n1x  = Math.round(n1*ratio);
+  const n1dpx= Math.round(n1dp*ratio);
+  const n2x  = Math.round(n2*ratio);
+  const n2dpx= Math.round(n2dp*ratio);
 
-  /* جدول مقایسه */
   resultBox.innerHTML=
 `<table>
-<thead><tr>
-<th>نوع پرداخت</th><th>مبلغ (تومان)</th><th>با تغییر دلار (تومان)</th>
-</tr></thead>
+<thead><tr><th>نوع پرداخت</th><th>مبلغ (تومان)</th><th>با تغییر دلار</th></tr></thead>
 <tbody>
 <tr><td>نقدی</td><td>${sep(cash)}</td><td>${sep(Math.round(cash*ratio))}</td></tr>
 <tr><td>۱ ماه بدون پیش</td><td>${sep(n1)}</td><td>${sep(n1x)}</td></tr>
-<tr><td>۱ ماه با پیش ${dp}٪</td><td>${sep(n1dp)}</td><td>${sep(n1dpx)}</td></tr>
+<tr><td>۱ ماه با پیش ${dp}%</td><td>${sep(n1dp)}</td><td>${sep(n1dpx)}</td></tr>
 <tr><td>۲ ماه بدون پیش</td><td>${sep(n2)}</td><td>${sep(n2x)}</td></tr>
-<tr><td>۲ ماه با پیش ${dp}٪</td><td>${sep(n2dp)}</td><td>${sep(n2dpx)}</td></tr>
+<tr><td>۲ ماه با پیش ${dp}%</td><td>${sep(n2dp)}</td><td>${sep(n2dpx)}</td></tr>
 </tbody>
 </table>
-<p style="margin-top:8px;font-size:.85rem">
-تغییر دلاری فرضی: ${sep(delta)} تومان (نسبت ×${ratio.toFixed(3)})
+<p style="margin-top:6px;font-size:.85rem">
+تغییر دلار فرضی: ${sep(delta)} تومان (ضریب ×${ratio.toFixed(3)})
 </p>`;
 };
 </script>
