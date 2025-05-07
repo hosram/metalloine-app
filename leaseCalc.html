@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Metalloine | لیزینگ ۱٫۰۵</title>
+<title>Metalloine | محاسبۀ لیزینگ فلزات ۱٫۱</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
 
 <style>
 :root{--c-primary:#8E1F61;--c-accent:#8FA2B2;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
@@ -15,11 +16,11 @@ header{display:flex;justify-content:center;align-items:center;height:64px;margin
   background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
 .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
 .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c-primary)}
-main{max-width:680px;margin:0 auto;padding:var(--g)}
+main{max-width:750px;margin:0 auto;padding:var(--g)}
 .card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.2);
   border-radius:var(--r);padding:16px}
 label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
-input[type=text],input[type=range]{background:#222;border:none;border-radius:var(--r);
+input[type=text],input[type=number],input[type=range]{background:#222;border:none;border-radius:var(--r);
   color:#fff;padding:10px;font:inherit;direction:ltr}
 .btn{cursor:pointer;border:none;border-radius:var(--r);padding:12px 24px;
   background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
@@ -38,10 +39,22 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
 
 <main>
 <div class="card">
-  <h3>محاسبۀ لیزینگ فلزات</h3>
+  <h3>فرم محاسبهٔ لیزینگ فلزات</h3>
 
-  <label>مبلغ کلی فاکتور (تومان)
-    <input id="invoice" class="sep" placeholder="5,000,000"/>
+  <label>وزن قطعه (کیلوگرم)
+    <input id="weight" class="sep" placeholder="120"/>
+  </label>
+
+  <label>قیمت هر کیلو (تومان)
+    <input id="priceKg" class="sep" placeholder="95,000"/>
+  </label>
+
+  <label>تعداد برش
+    <input id="cutCount" class="sep" placeholder="3"/>
+  </label>
+
+  <label>قیمت هر برش (تومان)
+    <input id="priceCut" class="sep" placeholder="12,000"/>
   </label>
 
   <label>درصد پیش‌پرداخت
@@ -49,8 +62,8 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
     <span id="dpVal">۵۰٪</span>
   </label>
 
-  <label>برآورد تغییر قیمت دلار (تومان)
-    <input id="predict" class="sep" placeholder="+5,000 یا -3,000"/>
+  <label>برآورد تغییر دلار بر هر کیلو (تومان) <small>(+ یا −)</small>
+    <input id="deltaKg" class="sep" placeholder="+4,000 یا -2,000"/>
   </label>
 
   <button class="btn" id="calcBtn">محاسبه</button>
@@ -60,67 +73,98 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
 </div>
 </main>
 
-<footer>Metalloine — نسخه ۱٫۰۵</footer>
+<footer>Metalloine — ۱٫۱</footer>
 
 <script>
-/* جداکنندۀ آنی سه‌رقمی */
+/* جداکنندهٔ زنده سه‌رقمی */
 function format(el){
   const pos=el.selectionStart,len=el.value.length;
   const neg=el.value.trim().startsWith("-");
-  const num=el.value.replace(/\D/g,"");
-  el.value=(neg?"-":"")+(num?parseInt(num,10).toLocaleString("en-US"):"");
+  const clean=el.value.replace(/\D/g,"");
+  el.value=(neg?"-":"")+(clean?parseInt(clean,10).toLocaleString("en-US"):"");
   el.selectionEnd=pos+(el.value.length-len);
 }
-document.querySelectorAll(".sep").forEach(el=>el.addEventListener("input",()=>format(el)));
+document.querySelectorAll(".sep").forEach(i=>i.addEventListener("input",()=>format(i)));
 
 const sep=n=>(+n||0).toLocaleString("en-US");
 const raw=s=>parseInt(String(s).replace(/\D/g,"")||"0",10);
 
-/* اسلایدر */
-dpSlider.oninput=()=>dpVal.textContent=dpSlider.value+"٪";
+/* نمایش درصد اسلایدر */
+dpSlider.oninput=_=>dpVal.textContent=dpSlider.value+"٪";
 
-/* نرخ سود */
-const r=0.07,
-      oneM=a=>Math.round(a*(1+r)),
-      twoM=a=>Math.round(a*Math.pow(1+r,2)),
-      withDP=(b,p,m)=>Math.round(b*p/100+(b-b*p/100)*Math.pow(1+r,m));
+/* نرخ سود ماهانه */
+const r=0.07;
+const grow=(amount,months)=>Math.round(amount*Math.pow(1+r,months));
+const withDP=(base,dp,months)=>{
+  const down=base*dp/100;
+  return Math.round(down + (base-down)*Math.pow(1+r,months));
+};
 
-/* محاسبه */
-calcBtn.onclick=()=>{
-  const invoiceVal=document.getElementById("invoice").value;
-  const invoice=raw(invoiceVal);
-  if(!invoice){alert("مبلغ فاکتور را وارد کنید!");return;}
+calcBtn.onclick=_=>{
+  /* ورودی‌ها */
+  const weight   = raw(weight.value);
+  const priceKg  = raw(priceKg.value);
+  const cuts     = raw(cutCount.value);
+  const priceCut = raw(priceCut.value);
+  const dp       = +dpSlider.value;
+  const deltaStr = deltaKg.value.trim();
+  const delta    = raw(deltaStr)*(deltaStr.startsWith("-")?-1:1);
 
-  const dp=+dpSlider.value;
-  const deltaStr=predict.value.trim();
-  const delta=raw(deltaStr)*(deltaStr.startsWith("-")?-1:1);
+  if(!weight||!priceKg){alert("وزن و قیمت هر کیلو الزامی است");return;}
 
-  const cash = invoice;
-  const n1   = oneM(invoice);
-  const n1dp = withDP(invoice,dp,1);
-  const n2   = twoM(invoice);
-  const n2dp = withDP(invoice,dp,2);
+  /* هزینه‌های پایه */
+  const metalCost  = weight*priceKg;
+  const cutCost    = cuts*priceCut;
+  const baseTotal  = metalCost + cutCost;
 
-  const ratio=delta? (invoice+delta)/invoice : 1;
-  const n1x  = Math.round(n1*ratio);
-  const n1dpx= Math.round(n1dp*ratio);
-  const n2x  = Math.round(n2*ratio);
-  const n2dpx= Math.round(n2dp*ratio);
+  /* هزینه‌ها با تغییر دلار (فقط روی فلز) */
+  const metalCostΔ = weight*(priceKg+delta);
+  const totalΔ     = metalCostΔ + cutCost;
 
-  resultBox.innerHTML=
+  /* گزینه‌های لیزینگ برای مبلغ پایه */
+  const cash   = baseTotal;
+  const m1np   = grow(baseTotal,1);
+  const m1dp   = withDP(baseTotal,dp,1);
+  const m2np   = grow(baseTotal,2);
+  const m2dp   = withDP(baseTotal,dp,2);
+
+  /* گزینه‌های لیزینگ برای مبلغ با Δ دلار */
+  const cashΔ = totalΔ;
+  const m1npΔ = grow(totalΔ,1);
+  const m1dpΔ = withDP(totalΔ,dp,1);
+  const m2npΔ = grow(totalΔ,2);
+  const m2dpΔ = withDP(totalΔ,dp,2);
+
+  /* جدول جزییات (پایه) */
+  const detail=
 `<table>
-<thead><tr><th>نوع پرداخت</th><th>مبلغ (تومان)</th><th>با تغییر دلار</th></tr></thead>
+<thead><tr><th>جزئیات</th><th>مبلغ (تومان)</th></tr></thead>
 <tbody>
-<tr><td>نقدی</td><td>${sep(cash)}</td><td>${sep(Math.round(cash*ratio))}</td></tr>
-<tr><td>۱ ماه بدون پیش</td><td>${sep(n1)}</td><td>${sep(n1x)}</td></tr>
-<tr><td>۱ ماه با پیش ${dp}%</td><td>${sep(n1dp)}</td><td>${sep(n1dpx)}</td></tr>
-<tr><td>۲ ماه بدون پیش</td><td>${sep(n2)}</td><td>${sep(n2x)}</td></tr>
-<tr><td>۲ ماه با پیش ${dp}%</td><td>${sep(n2dp)}</td><td>${sep(n2dpx)}</td></tr>
-</tbody>
-</table>
+<tr><td>وزن × قیمت kg</td><td>${sep(metalCost)}</td></tr>
+<tr><td>تعداد برش × قیمت برش</td><td>${sep(cutCost)}</td></tr>
+<tr><td><b>جمع فاکتور نقدی</b></td><td><b>${sep(cash)}</b></td></tr>
+<tr><td>۱ ماه بدون پیش‌پرداخت</td><td>${sep(m1np)}</td></tr>
+<tr><td>۱ ماه با پیش‌پرداخت ${dp}%</td><td>${sep(m1dp)}</td></tr>
+<tr><td>۲ ماه بدون پیش‌پرداخت</td><td>${sep(m2np)}</td></tr>
+<tr><td>۲ ماه با پیش‌پرداخت ${dp}%</td><td>${sep(m2dp)}</td></tr>
+</tbody></table>`;
+
+  /* جدول مقایسه با Δ دلار */
+  const comp=
+`<table style="margin-top:20px">
+<thead><tr><th>پرداخت</th><th>مبلغ پایه</th><th>با Δ دلار</th></tr></thead>
+<tbody>
+<tr><td>نقدی</td><td>${sep(cash)}</td><td>${sep(cashΔ)}</td></tr>
+<tr><td>۱ ماه بدون پیش</td><td>${sep(m1np)}</td><td>${sep(m1npΔ)}</td></tr>
+<tr><td>۱ ماه با پیش ${dp}%</td><td>${sep(m1dp)}</td><td>${sep(m1dpΔ)}</td></tr>
+<tr><td>۲ ماه بدون پیش</td><td>${sep(m2np)}</td><td>${sep(m2npΔ)}</td></tr>
+<tr><td>۲ ماه با پیش ${dp}%</td><td>${sep(m2dp)}</td><td>${sep(m2dpΔ)}</td></tr>
+</tbody></table>
 <p style="margin-top:6px;font-size:.85rem">
-تغییر دلار فرضی: ${sep(delta)} تومان (ضریب ×${ratio.toFixed(3)})
+Δ دلار بر هر کیلو: ${sep(delta)} تومان
 </p>`;
+
+  resultBox.innerHTML = detail + comp;
 };
 </script>
 </body>
