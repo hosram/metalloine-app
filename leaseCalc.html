@@ -1,228 +1,206 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Metalloine | لیزینگ ۲٫۰ (نسخۀ آزمایشی)</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Metalloine | لیزینگ (نسخۀ آزمایشی)</title>
 
-  <!-- فونت فارسی -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
 
-  <!-- React + Recharts UMD -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+<!-- React + Recharts UMD -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
 
-  <style>
-  :root{
-    --c-primary:#8E1F61;
-    --c-accent:#8FA2B2;
-    --glass:rgba(255,255,255,.08);
-    --r:24px;--g:12px
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif}
-  header{
-    display:flex;justify-content:center;align-items:center;
-    height:64px;margin:var(--g);
-    background:var(--glass);backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,.25);border-radius:var(--r)
-  }
-  .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
-  .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c-primary)}
-  main{max-width:920px;margin:0 auto;padding:var(--g);display:grid;gap:var(--g)}
-  .card{
-    background:var(--glass);backdrop-filter:blur(24px);
-    border:1px solid rgba(255,255,255,.2);border-radius:var(--r);
-    padding:16px
-  }
-  label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
-  input,select{
-    border:none;border-radius:var(--r);background:#222;color:#fff;padding:10px;font:inherit
-  }
-  select{direction:rtl}
-  .btn{
-    cursor:pointer;border:none;border-radius:var(--r);padding:12px 24px;
-    background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
-    color:#fff;font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.4)
-  }
-  #chartBox{height:260px}
-  table{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:12px}
-  th,td{border:1px solid rgba(255,255,255,.2);padding:6px;text-align:center}
-  .sep{text-align:right}
-  </style>
+<style>
+:root{--c-primary:#8E1F61;--c-accent:#8FA2B2;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6}
+
+header{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
+  background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
+.ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+.brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c-primary)}
+
+main{max-width:900px;margin:0 auto;padding:var(--g);display:grid;gap:var(--g)}
+.card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.2);
+  border-radius:var(--r);padding:16px}
+label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
+input[type=number],input[type=text],input[type=range]{background:#222;border:none;border-radius:var(--r);
+  color:#fff;padding:10px;font:inherit;direction:ltr}
+.btn{cursor:pointer;border:none;border-radius:var(--r);padding:12px 24px;
+  background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+  color:#fff;font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.4)}
+.btn:hover{transform:translateY(-2px)}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
+th,td{border:1px solid rgba(255,255,255,.2);padding:6px;text-align:center}
+#chartBox{height:260px}
+.sep{text-align:right}
+footer{text-align:center;font-size:.8rem;opacity:.7;padding:.7rem 0}
+@media(max-width:540px){.btn{width:100%}}
+</style>
 </head>
 <body>
 
-<header>
-  <span class="ring"></span><span class="brand">Metalloine</span>
-</header>
+<header><span class="ring"></span><span class="brand">Metalloine</span></header>
 
 <main>
 
-  <!-- ۱ / داشبورد ساده -->
-  <div class="card" id="dash">
-    <h3 style="margin-bottom:6px">داشبورد لیزینگ</h3>
-    <p id="dashTotal">مجموع فاکتورهای ثبت‌شده: ۰ تومان</p>
-    <table id="dashTable" style="display:none">
-      <thead><tr><th>#</th><th>متریال</th><th>مبلغ فاکتور</th><th>نسیه بدون پیش</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </div>
+<!-- داشبورد ساده -->
+<div class="card" id="dash">
+  <h3 style="margin-bottom:6px">داشبورد خلاصه</h3>
+  <p id="dashTotal">هیچ فاکتوری ثبت نشده است.</p>
+  <table id="dashTable" style="display:none">
+    <thead><tr><th>#</th><th>مبلغ فاکتور</th><th>نسیه ۱ ماه (بدون پیش)</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
 
-  <!-- ۲ / فرم محاسبه -->
-  <div class="card" id="formCard">
-    <h3>فرم محاسبهٔ جدید</h3>
+<!-- فرم محاسبه -->
+<div class="card">
+  <h3>فرم محاسبهٔ لیزینگ</h3>
 
-    <label>انتخاب یا افزودن متریال
-      <select id="matSelect"></select>
-    </label>
+  <label>مبلغ کلی فاکتور (تومان)
+    <input id="invoice" class="sep" placeholder="5,000,000"/>
+  </label>
 
-    <label>افزودن متریال جدید (نام لاتین/فارسی)
-      <input id="newMat" placeholder="مثلاً Inconel-625"/>
-    </label>
+  <label>درصد پیش‌پرداخت
+    <input type="range" id="dpSlider" min="0" max="100" value="50"/>
+    <span id="dpVal">۵۰٪</span>
+  </label>
 
-    <label>مبلغ فاکتور (تومان)
-      <input id="invoice" class="sep" placeholder="5,000,000"/>
-    </label>
+  <label>برآورد تغییر قیمت دلار (تومان) <small>(+ یا -)</small>
+    <input id="predict" class="sep" placeholder="+5,000 یا -3,000"/>
+  </label>
 
-    <label>درصد پیش‌پرداخت
-      <input type="range" id="dpSlider" min="0" max="100" value="50"/>
-      <span id="dpVal">۵۰٪</span>
-    </label>
+  <button class="btn" id="calcBtn">محاسبۀ لیزینگ و ثبت در داشبورد</button>
+  <button class="btn" style="margin-top:8px;background:#444" onclick="location='index.html'">⬅ بازگشت</button>
 
-    <button class="btn" id="calcBtn">محاسبه و ثبت</button>
+  <div id="resultBox" style="margin-top:1rem;white-space:pre-line"></div>
+</div>
 
-    <div id="calcResult" style="margin-top:1rem;white-space:pre-line"></div>
-  </div>
-
-  <!-- ۳ / چارت مقایسه -->
-  <div class="card">
-    <h3 style="margin-bottom:6px">نمودار مقایسهٔ نقد و نسیه</h3>
-    <div id="chartBox"></div>
-  </div>
+<!-- نمودار مقایسه -->
+<div class="card">
+  <h3 style="margin-bottom:6px">نمودار مقایسهٔ گزینه‌ها</h3>
+  <div id="chartBox"></div>
+</div>
 
 </main>
 
+<footer>Metalloine — نسخهٔ آزمایشی ۱٫۰۱</footer>
+
 <script>
-/*–– ابزارهای عددی ––*/
+/* ابزارهای عددی */
 const sep=(n)=>(+n||0).toLocaleString("en-US");
 const raw=(s)=>parseInt(String(s).replace(/\D/g,"")||"0",10);
 
-/*–– ۴ / کالکشن متریال در LocalStorage ––*/
-const MAT_KEY="metalloine_mats";
-function loadMats(){
-  const def=["فولاد ساده","فولاد زنگ‌نزن","مس","آلومینیوم","برنج","فسفر برنز","تیتانیوم"];
-  return JSON.parse(localStorage.getItem(MAT_KEY)||"null")||def;
-}
-function saveMats(arr){localStorage.setItem(MAT_KEY,JSON.stringify(arr))}
-
-/*–– ۵ / انبارهٔ فاکتورها ––*/
-const DB_KEY="metalloine_invoices";
-function loadDB(){return JSON.parse(localStorage.getItem(DB_KEY)||"[]")}
-function pushDB(obj){
-  const db=loadDB();db.push(obj);localStorage.setItem(DB_KEY,JSON.stringify(db))
-}
-
-/*–– ۶ / UI متریال */
-function refreshMatSelect(){
-  const sel=document.getElementById("matSelect");
-  sel.innerHTML="";
-  loadMats().forEach(m=>{
-    const o=document.createElement("option");o.textContent=m;sel.appendChild(o);
-  });
-}
-refreshMatSelect();
-
-/*–– ۷ / افزودن متریال */
-document.getElementById("newMat").addEventListener("change",e=>{
-  const name=e.target.value.trim();
-  if(name){
-    const mats=loadMats();
-    if(!mats.includes(name)){
-      mats.push(name);saveMats(mats);refreshMatSelect();
-    }
-    e.target.value="";
-    document.getElementById("matSelect").value=name;
-  }
-});
-
-/*–– ۸ / اسلایدر درصد پیش‌پرداخت */
+/* اسلایدر پیش‌پرداخت */
 const slider=document.getElementById("dpSlider");
 const dpLabel=document.getElementById("dpVal");
 slider.addEventListener("input",()=>dpLabel.textContent=slider.value+"٪");
 
-/*–– ۹ / محاسبه و ثبت––*/
-function calc(base,dpPerc){
-  const r=0.07;
-  const cash=base;
-  const noDP=Math.round(base*(1+r));
+/* پایگاه محلی */
+const DB_KEY="metalloine_db";
+const db=JSON.parse(localStorage.getItem(DB_KEY)||"[]");
+function saveDB(){localStorage.setItem(DB_KEY,JSON.stringify(db));}
+
+/* نرخ سود ماهانه */
+const r=0.07;
+function oneMonth(amount){return Math.round(amount*(1+r));}
+function twoMonth(amount){return Math.round(amount*Math.pow(1+r,2));}
+function withDP(base,dpPerc,months){
   const dp=base*dpPerc/100;
-  const withDP=Math.round(dp+(base-dp)*(1+r));
-  return {cash,noDP,withDP};
+  const remain=base-dp;
+  const factor=Math.pow(1+r,months);
+  return Math.round(dp+remain*factor);
 }
+
+/* محاسبه و ثبت */
 document.getElementById("calcBtn").addEventListener("click",()=>{
-  const mat=document.getElementById("matSelect").value;
   const invoice=raw(document.getElementById("invoice").value);
   const dpP=+slider.value;
+  const delta=raw(document.getElementById("predict").value)* (document.getElementById("predict").value.trim().startsWith("-")?-1:1);
+
   if(invoice<=0){alert("مبلغ فاکتور را وارد کنید");return;}
 
-  const {cash,noDP,withDP}=calc(invoice,dpP);
+  // محاسبات
+  const cash=invoice;
+  const n1=noPre=oneMonth(invoice);
+  const n1dp=withDP(invoice,dpP,1);
+  const n2=twoMonth(invoice);
+  const n2dp=withDP(invoice,dpP,2);
 
-  /* نمایش */
-  const res=`متریال: ${mat}
-مبلغ فاکتور: ${sep(invoice)} تومان
-نسیه بدون پیش‌پرداخت: ${sep(noDP)} تومان
-نسیه با پیش‌پرداخت ${dpP}٪: ${sep(withDP)} تومان`;
-  document.getElementById("calcResult").textContent=res;
+  // نسبت تغییر دلار
+  const ratio=delta? (invoice+delta)/invoice : 1;
+  const n1x = Math.round(n1*ratio);
+  const n1dpx=Math.round(n1dp*ratio);
+  const n2x = Math.round(n2*ratio);
+  const n2dpx=Math.round(n2dp*ratio);
 
-  /* ذخیره */
-  pushDB({mat,invoice,noDP,ts:Date.now()});
+  // خروجی متنی
+  const out=`📄 مبلغ فاکتور: ${sep(invoice)} تومان
+➖ نقدی: ${sep(cash)} تومان
+➖ ۱ ماه بدون پیش‌پرداخت: ${sep(n1)} تومان
+➖ ۱ ماه با پیش‌پرداخت ${dpP}٪ : ${sep(n1dp)} تومان
+➖ ۲ ماه بدون پیش‌پرداخت: ${sep(n2)} تومان
+➖ ۲ ماه با پیش‌پرداخت ${dpP}٪ : ${sep(n2dp)} تومان
+────────────────────
+تغییر دلاری فرضی: ${sep(delta)} ⇒ نسبت ×${ratio.toFixed(3)}
+🟢 ۱ ماه بدون پیش:  ${sep(n1x)} تومان
+🟢 ۱ ماه با پیش‌پرداخت:  ${sep(n1dpx)} تومان
+🟢 ۲ ماه بدون پیش:  ${sep(n2x)} تومان
+🟢 ۲ ماه با پیش‌پرداخت:  ${sep(n2dpx)} تومان`;
+  document.getElementById("resultBox").textContent=out;
+
+  // ذخیرهٔ خلاصه در داشبورد
+  db.push({invoice,n1,ts:Date.now()});
+  if(db.length>50) db.shift();
+  saveDB();
   refreshDash();
-  drawChart(cash,noDP,withDP);
+
+  // چارت
+  drawChart([
+    {name:"نقدی",amt:cash},
+    {name:"۱M بدون‌پیش",amt:n1},
+    {name:`۱M با ${dpP}%`,amt:n1dp},
+    {name:"۲M بدون‌پیش",amt:n2},
+    {name:`۲M با ${dpP}%`,amt:n2dp}
+  ]);
 });
 
-/*–– ۱۰ / داشبورد */
+/* داشبورد */
 function refreshDash(){
-  const db=loadDB();
   const total=db.reduce((s,x)=>s+x.invoice,0);
-  document.getElementById("dashTotal").textContent="مجموع فاکتورهای ثبت‌شده: "+sep(total)+" تومان";
+  const dashTot=document.getElementById("dashTotal");
+  dashTot.textContent="مجموع فاکتورهای ثبت شده: "+sep(total)+" تومان";
 
   const tbody=document.querySelector("#dashTable tbody");
   tbody.innerHTML="";
   db.slice(-5).reverse().forEach((it,i)=>{
     const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${db.length-i}</td><td>${it.mat}</td><td>${sep(it.invoice)}</td><td>${sep(it.noDP)}</td>`;
+    tr.innerHTML=`<td>${db.length-i}</td><td>${sep(it.invoice)}</td><td>${sep(it.n1)}</td>`;
     tbody.appendChild(tr);
   });
-  document.getElementById("dashTable").style.display=db.length?"" : "none";
+  document.getElementById("dashTable").style.display=db.length?"" :"none";
 }
 refreshDash();
 
-/*–– ۱۱ / چارت Recharts */
-function drawChart(cash,noDP,withDP){
-  const {BarChart,Bar,CartesianGrid,XAxis,YAxis,Tooltip,Legend,ResponsiveContainer}=Recharts;
+/* چارت با Recharts */
+function drawChart(arr){
+  const {BarChart,Bar,XAxis,YAxis,Tooltip,ResponsiveContainer,CartesianGrid}=Recharts;
   ReactDOM.render(
     React.createElement(ResponsiveContainer,{width:"100%",height:"100%"},
-      React.createElement(BarChart,{data:[
-        {name:"نقدی",amount:cash},
-        {name:"نسیه بدون پیش",amount:noDP},
-        {name:`نسیه با ${slider.value}٪`,amount:withDP}
-      ]},
+      React.createElement(BarChart,{data:arr},
         React.createElement(CartesianGrid,{strokeDasharray:"3 3",stroke:"#555"}),
         React.createElement(XAxis,{dataKey:"name",stroke:"#fff",fontSize:12}),
         React.createElement(YAxis,{stroke:"#fff",fontSize:12,tickFormatter:sep}),
         React.createElement(Tooltip,{formatter:sep}),
-        React.createElement(Legend,null),
-        React.createElement(Bar,{dataKey:"amount",fill:"#8E1F61",radius:[4,4,0,0]})
+        React.createElement(Bar,{dataKey:"amt",fill:"#8E1F61",radius:[4,4,0,0]})
       )
-    ),
-    document.getElementById("chartBox")
-  );
+    ),document.getElementById("chartBox"));
 }
-/* چارت اولیه خالی */
-drawChart(0,0,0);
+/* چارت خالی اولیه */
+drawChart([]);
 </script>
 </body>
 </html>
