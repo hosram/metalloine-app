@@ -44,7 +44,7 @@
     <label>وزن قطعه (کیلوگرم)<input id="inputW" class="sep" placeholder="120"/></label>
     <label>قیمت هر کیلو (تومان)<input id="inputPK" class="sep" placeholder="95,000"/></label>
     <label>تعداد برش<input id="inputCuts" class="sep" placeholder="3"/></label>
-    <label>قیمت هر برش (تومان)<input id="inputPC" class="sep" placeholder="12,000"/></label>
+    <label>قیمت هر برش (تومان)<input id="inputPC" class="sep" placeholder="120,000"/></label>
 
     <label>درصد پیش‌پرداخت
       <input type="range" id="inputDp" min="0" max="100" value="50"/>
@@ -69,6 +69,7 @@ const fa2en = s => s.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).re
 const sep = n => (+n||0).toLocaleString("en-US");
 const raw = s => parseInt(fa2en(s).replace(/\D/g,"")||"0",10);
 
+/* جداکننده زنده */
 document.querySelectorAll(".sep").forEach(el=>{
   el.addEventListener("input",()=>{
     const p=el.selectionStart,l=el.value.length;
@@ -94,42 +95,36 @@ calcBtn.onclick = () => {
   if (!w || !pk) return alert("وزن و قیمت هر کیلو الزامی است");
 
   const metalΔ = w * (pk + dkg);
-  const pcΔ    = pc + dkg;
-  const brsh_0 = cuts * pcΔ;
-  const brsh_1 = cuts * pcΔ * 1.07;
-  const brsh_2 = cuts * pcΔ * 1.07 * 1.07;
+  const perCutFinal = pc + dkg;
+  const perCutN1 = perCutFinal * 1.07;
+  const perCutN2 = perCutFinal * Math.pow(1.07,2);
 
-  const total0 = metalΔ + brsh_0;
-  const total1 = metalΔ + brsh_1;
-  const total1dp = withDP(total0, dp, 1);
-  const total2 = metalΔ + brsh_2;
-  const total2dp = withDP(total0, dp, 2);
+  const totalBase = w * pk + cuts * pc;
+  const totalNow  = metalΔ + cuts * perCutFinal;
+  const totalN1   = metalΔ + cuts * perCutN1;
+  const totalN1dp = withDP(totalNow, dp, 1);
+  const totalN2   = metalΔ + cuts * perCutN2;
+  const totalN2dp = withDP(totalNow, dp, 2);
 
   const rows = [
-    ["قیمت اولیه", w * pk + cuts * pc],
-    ["قیمت نهایی نقدی", total0],
-    ["نسیه ۱ ماه بدون پیش‌پرداخت", total1],
-    [`نسیه ۱ ماه با پیش‌پرداخت ${dp}%`, total1dp],
-    ["نسیه ۲ ماه بدون پیش‌پرداخت", total2],
-    [`نسیه ۲ ماه با پیش‌پرداخت ${dp}%`, total2dp]
+    ["قیمت اولیه", totalBase, pk, pc],
+    ["قیمت نهایی نقدی", totalNow, pk + dkg, perCutFinal],
+    ["نسیه ۱ ماه بدون پیش‌پرداخت", totalN1, pk + dkg, perCutN1],
+    [`نسیه ۱ ماه با پیش‌پرداخت ${dp}%`, totalN1dp, pk + dkg, perCutN1],
+    ["نسیه ۲ ماه بدون پیش‌پرداخت", totalN2, pk + dkg, perCutN2],
+    [`نسیه ۲ ماه با پیش‌پرداخت ${dp}%`, totalN2dp, pk + dkg, perCutN2]
   ];
 
   const table1 = `<table>
     <thead><tr>
       <th>نوع پرداخت</th><th>قیمت هر کیلو</th><th>قیمت هر برش</th>
     </tr></thead><tbody>${
-      rows.map(r=>{
-        const perKg = r[1]/w;
-        const perCut = cuts ? r[1]/cuts : 0;
-        return `<tr><td>${r[0]}</td><td>${sep(Math.round(perKg))}</td><td>${sep(Math.round(perCut))}</td></tr>`;
-      }).join("")
+      rows.map(r=>`<tr><td>${r[0]}</td><td>${sep(Math.round(r[2]))}</td><td>${sep(Math.round(r[3]))}</td></tr>`).join("")
     }</tbody></table>`;
 
   const table2 = `<table style="margin-top:16px">
     <thead><tr><th>نوع پرداخت</th><th>مبلغ کل (تومان)</th></tr></thead>
-    <tbody>${
-      rows.map(r=>`<tr><td>${r[0]}</td><td>${sep(r[1])}</td></tr>`).join("")
-    }</tbody></table>`;
+    <tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td>${sep(r[1])}</td></tr>`).join("")}</tbody></table>`;
 
   out.innerHTML = table1 + table2 + `<p style="margin-top:6px;font-size:.85rem">افزایش دلار بر هر کیلو: ${sep(dkg)} تومان</p>`;
 };
