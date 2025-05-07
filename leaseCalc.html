@@ -1,3 +1,4 @@
+<!--  leaseCalc.html  -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -13,8 +14,8 @@
     header{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
       background:var(--glass);backdrop-filter:blur(20px);
       border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
-    header .ring{width:22px;height:22px;border:6px solid var(--c2);border-radius:50%}
-    header .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c1)}
+    .ring{width:22px;height:22px;border:6px solid var(--c2);border-radius:50%}
+    .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c1)}
     main{max-width:840px;margin:0 auto;padding:var(--g)}
     .card{background:var(--glass);backdrop-filter:blur(24px);
       border:1px solid rgba(255,255,255,.2);border-radius:var(--r);padding:16px;margin-bottom:var(--g)}
@@ -41,21 +42,21 @@
   <div class="card">
     <h3>فرم محاسبهٔ لیزینگ فلزات</h3>
 
-    <label>وزن قطعه (کیلوگرم)<input id="inputW" class="sep" placeholder="120"/></label>
-    <label>قیمت هر کیلو (تومان)<input id="inputPK" class="sep" placeholder="95,000"/></label>
-    <label>تعداد برش<input id="inputCuts" class="sep" placeholder="3"/></label>
-    <label>قیمت هر برش (تومان)<input id="inputPC" class="sep" placeholder="120,000"/></label>
+    <label>وزن قطعه (کیلوگرم)<input id="w"  class="sep" placeholder="120"/></label>
+    <label>قیمت هر کیلو (تومان)<input id="pk" class="sep" placeholder="95,000"/></label>
+    <label>تعداد برش<input id="cuts" class="sep" placeholder="3"/></label>
+    <label>قیمت هر برش (تومان)<input id="pc" class="sep" placeholder="120,000"/></label>
 
     <label>درصد پیش‌پرداخت
-      <input type="range" id="inputDp" min="0" max="100" value="50"/>
+      <input type="range" id="dp" min="0" max="100" value="50"/>
       <span id="dpVal">۵۰٪</span>
     </label>
 
     <label>افزایش دلار بر هر کیلو (تومان)
-      <input id="inputDkg" class="sep" placeholder="+1,000 یا -500"/>
+      <input id="dkg" class="sep" placeholder="+1,000 یا -500"/>
     </label>
 
-    <button class="btn" id="calcBtn">محاسبه</button>
+    <button class="btn" id="calc">محاسبه</button>
     <a href="index.html" class="btn btn-back" style="margin-top:12px;">⬅ بازگشت</a>
 
     <div id="out" style="margin-top:1rem"></div>
@@ -65,75 +66,79 @@
 <footer>© 2025 Metalloine</footer>
 
 <script>
-const fa2en = s => s.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
-const sep = n => (+n||0).toLocaleString("en-US");
-const raw = s => parseInt(fa2en(s).replace(/\D/g,"")||"0",10);
+/* — کمکی‌ها —*/
+const fa2en = s => s.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+                    .replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
+const sep   = n => (+n||0).toLocaleString("en-US");
+const raw   = s => parseInt(fa2en(s).replace(/\D/g,"")||"0",10);
 
-/* جداکننده زنده */
+/* جداکنندۀ زنده اعداد */
 document.querySelectorAll(".sep").forEach(el=>{
   el.addEventListener("input",()=>{
-    const p=el.selectionStart,l=el.value.length;
-    const neg=el.value.trim().startsWith("-"),c=fa2en(el.value).replace(/\D/g,"");
-    el.value=(neg?"-":"")+(c ? parseInt(c,10).toLocaleString("en-US") : "");
-    el.selectionEnd=p+(el.value.length-l);
+    const p=el.selectionStart,len=el.value.length;
+    const neg=el.value.trim().startsWith("-"),num=fa2en(el.value).replace(/\D/g,"");
+    el.value=(neg?"-":"")+(num?parseInt(num,10).toLocaleString("en-US"):"");
+    el.selectionEnd=p+(el.value.length-len);
   });
 });
-inputDp.oninput = () => dpVal.textContent = inputDp.value + "٪";
 
-const r = 0.07;
-const grow = (x, m) => Math.round(x * Math.pow(1 + r, m));
-const withDP = (b, p, m) => Math.round(b * p / 100 + (b - b * p / 100) * Math.pow(1 + r, m));
+/* اسلایدر درصد پیش‌پرداخت */
+dp.oninput = ()=> dpVal.textContent = dp.value + "٪";
 
-calcBtn.onclick = () => {
-  const w    = raw(inputW.value);
-  const pk   = raw(inputPK.value);
-  const cuts = raw(inputCuts.value);
-  const pc   = raw(inputPC.value);
-  const dp   = +inputDp.value;
-  const dkg  = raw(inputDkg.value) * (inputDkg.value.trim().startsWith("-") ? -1 : 1);
+/* سود ماهانه ۷ ٪ */
+const r=0.07;
+const grow   = (x,m)=>Math.round(x*Math.pow(1+r,m));
+const withDP = (base,p,m)=>Math.round(base*p/100 + (base-base*p/100)*Math.pow(1+r,m));
 
-  if (!w || !pk) return alert("وزن و قیمت هر کیلو الزامی است");
+/* محاسبه */
+calc.onclick = () => {
+  const weight   = raw(w.value);
+  const priceKg  = raw(pk.value);
+  const cutNum   = raw(cuts.value);
+  const priceCut = raw(pc.value);
+  const advPct   = +dp.value;
+  const delta    = raw(dkg.value) * (dkg.value.trim().startsWith("-")? -1 : 1);
 
-  const pkΔ = pk + dkg;
-  const pcΔ = pc + dkg;
+  if(!weight || !priceKg){alert("وزن و قیمت هر کیلو الزامی است");return;}
 
-  const pcN1 = pcΔ * 1.07;
-  const pcN2 = pcΔ * 1.07 * 1.07;
+  /* فی‌های نهایی */
+  const pkCash = priceKg + delta;
+  const pkN1   = pkCash * 1.07;
+  const pkN2   = pkCash * 1.07 * 1.07;
 
-  const pkN1 = pkΔ * 1.07;
-  const pkN2 = pkΔ * 1.07 * 1.07;
+  const pcCash = priceCut + delta;
+  const pcN1   = pcCash * 1.07;
+  const pcN2   = pcCash * 1.07 * 1.07;
 
-  const total0 = w * pk + cuts * pc;
-  const total1 = w * pkΔ + cuts * pcΔ;
-  const totalN1 = w * pkN1 + cuts * pcN1;
-  const totalN1dp = withDP(total1, dp, 1);
-  const totalN2 = w * pkN2 + cuts * pcN2;
-  const totalN2dp = withDP(total1, dp, 2);
+  /* مبالغ کل */
+  const totInit = weight*priceKg + cutNum*priceCut;
+  const totCash = weight*pkCash  + cutNum*pcCash;
+  const totN1   = weight*pkN1    + cutNum*pcN1;
+  const totN1dp = withDP(totCash,advPct,1);
+  const totN2   = weight*pkN2    + cutNum*pcN2;
+  const totN2dp = withDP(totCash,advPct,2);
 
-  const rows = [
-    ["قیمت اولیه", total0, pk, pc],
-    ["قیمت نهایی نقدی", total1, pkΔ, pcΔ],
-    ["نسیه ۱ ماه بدون پیش‌پرداخت", totalN1, pkN1, pcN1],
-    [`نسیه ۱ ماه با پیش‌پرداخت ${dp}%`, totalN1dp, pkN1, pcN1],
-    ["نسیه ۲ ماه بدون پیش‌پرداخت", totalN2, pkN2, pcN2],
-    [`نسیه ۲ ماه با پیش‌پرداخت ${dp}%`, totalN2dp, pkN2, pcN2]
+  const rows=[
+    ["قیمت اولیه",                     totInit, priceKg,  priceCut ],
+    ["قیمت نهایی نقدی",               totCash, pkCash,   pcCash   ],
+    ["نسیه ۱ ماه بدون پیش‌پرداخت",     totN1,   pkN1,     pcN1     ],
+    [`نسیه ۱ ماه با پیش‌پرداخت ${advPct}%`, totN1dp, pkN1, pcN1 ],
+    ["نسیه ۲ ماه بدون پیش‌پرداخت",     totN2,   pkN2,     pcN2     ],
+    [`نسیه ۲ ماه با پیش‌پرداخت ${advPct}%`, totN2dp, pkN2, pcN2 ]
   ];
 
-  const table1 = `<table>
-    <thead><tr><th>نوع پرداخت</th><th>قیمت هر کیلو</th><th>قیمت هر برش</th></tr></thead>
-    <tbody>${
-      rows.map(r=>
-        `<tr><td>${r[0]}</td><td>${sep(Math.round(r[2]))}</td><td>${sep(Math.round(r[3]))}</td></tr>`
-      ).join("")
-    }</tbody></table>`;
+  /* جدول فی‌ها */
+  const t1=`<table>
+  <thead><tr><th>نوع پرداخت</th><th>قیمت هر کیلو</th><th>قیمت هر برش</th></tr></thead>
+  <tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td>${sep(Math.round(r[2]))}</td><td>${sep(Math.round(r[3]))}</td></tr>`).join("")}</tbody></table>`;
 
-  const table2 = `<table style="margin-top:16px">
-    <thead><tr><th>نوع پرداخت</th><th>مبلغ کل (تومان)</th></tr></thead>
-    <tbody>${
-      rows.map(r=>`<tr><td>${r[0]}</td><td>${sep(r[1])}</td></tr>`).join("")
-    }</tbody></table>`;
+  /* جدول مبالغ کل */
+  const t2=`<table style="margin-top:16px">
+  <thead><tr><th>نوع پرداخت</th><th>مبلغ کل (تومان)</th></tr></thead>
+  <tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td>${sep(r[1])}</td></tr>`).join("")}</tbody></table>`;
 
-  out.innerHTML = table1 + table2 + `<p style="margin-top:6px;font-size:.85rem">افزایش دلار بر هر کیلو: ${sep(dkg)} تومان</p>`;
+  out.innerHTML = t1 + t2 +
+    `<p style="margin-top:6px;font-size:.85rem">افزایش دلار بر هر کیلو: ${sep(delta)} تومان</p>`;
 };
 </script>
 </body>
