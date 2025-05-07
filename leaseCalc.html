@@ -3,29 +3,20 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Metalloine | لیزینگ ۱٫۰۳</title>
+<title>Metalloine | لیزینگ ۱٫۰۴</title>
 
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
-
-<!-- React + Recharts (نسخه UMD) -->
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
 
 <style>
 :root{--c-primary:#8E1F61;--c-accent:#8FA2B2;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6}
-
-/* هدر */
 header{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
   background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
 .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
 .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c-primary)}
-
-/* بدنه */
-main{max-width:900px;margin:0 auto;padding:var(--g);display:grid;gap:var(--g)}
+main{max-width:680px;margin:0 auto;padding:var(--g);display:grid;gap:var(--g)}
 .card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.2);
   border-radius:var(--r);padding:16px}
 label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
@@ -35,11 +26,10 @@ input[type=text],input[type=range]{background:#222;border:none;border-radius:var
   background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
   color:#fff;font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.4)}
 .btn:hover{transform:translateY(-2px)}
-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
-th,td{border:1px solid rgba(255,255,255,.2);padding:6px;text-align:center}
-#chartBox{height:260px}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.9rem}
+th,td{border:1px solid rgba(255,255,255,.25);padding:6px;text-align:center}
 .sep{text-align:right}
-footer{text-align:center;font-size:.8rem;opacity:.7;padding:.7rem 0}
+footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
 @media(max-width:540px){.btn{width:100%}}
 </style>
 </head>
@@ -49,19 +39,9 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:.7rem 0}
 
 <main>
 
-<!-- داشبورد -->
-<div class="card" id="dash">
-  <h3>داشبورد خلاصه</h3>
-  <p id="dashTotal">هیچ فاکتوری ثبت نشده است.</p>
-  <table id="dashTable" style="display:none">
-    <thead><tr><th>#</th><th>مبلغ فاکتور</th><th>۱ ماه بدون پیش</th></tr></thead>
-    <tbody></tbody>
-  </table>
-</div>
-
 <!-- فرم محاسبه -->
 <div class="card">
-  <h3>فرم محاسبهٔ لیزینگ</h3>
+  <h3>محاسبۀ لیزینگ فلزات</h3>
 
   <label>مبلغ کلی فاکتور (تومان)
     <input id="invoice" class="sep" placeholder="5,000,000"/>
@@ -76,129 +56,72 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:.7rem 0}
     <input id="predict" class="sep" placeholder="+5,000 یا -3,000"/>
   </label>
 
-  <button class="btn" id="calcBtn">محاسبه و ثبت</button>
+  <button class="btn" id="calcBtn">محاسبه</button>
   <button class="btn" style="margin-top:8px;background:#444" onclick="location='index.html'">⬅ بازگشت</button>
 
-  <div id="resultBox" style="margin-top:1rem;white-space:pre-line"></div>
-</div>
-
-<!-- نمودار -->
-<div class="card">
-  <h3>نمودار مقایسهٔ گزینه‌ها</h3>
-  <div id="chartBox"></div>
+  <div id="resultBox" style="margin-top:1rem;"></div>
 </div>
 
 </main>
-<footer>Metalloine — ۱٫۰۳ آزمایشی</footer>
+<footer>Metalloine — ۱٫۰۴ آزمایشی</footer>
 
 <script>
-/* ۱ ) جداکنندهٔ سه‌رقمی هنگام تایپ */
-function formatInput(el){
-  const pos=el.selectionStart,len=el.value.length;
-  const neg=el.value.trim().startsWith("-");          // نگه‌داشتن علامت منفی
+/* جداکنندۀ سه‌رقمی هنگام تایپ */
+function format(el){
+  const p=el.selectionStart,l=el.value.length,neg=el.value.trim().startsWith("-");
   const clean=el.value.replace(/\D/g,"");
   el.value=(neg?"-":"")+(clean?parseInt(clean,10).toLocaleString("en-US"):"");
-  el.selectionEnd=pos+(el.value.length-len);
+  el.selectionEnd=p+(el.value.length-l);
 }
-document.querySelectorAll(".sep").forEach(inp=>{
-  inp.addEventListener("input",()=>formatInput(inp));
-});
+document.querySelectorAll(".sep").forEach(i=>i.addEventListener("input",()=>format(i)));
 
-/* ۲ ) توابع کمکی */
 const sep=n=>(+n||0).toLocaleString("en-US");
 const raw=s=>parseInt(String(s).replace(/\D/g,"")||"0",10);
 
-/* ۳ ) پیش‌پرداخت اسلایدر */
-const slider=document.getElementById("dpSlider");
-const dpVal=document.getElementById("dpVal");
-slider.oninput=()=>dpVal.textContent=slider.value+"٪";
+const r=0.07,
+      oneM=a=>Math.round(a*(1+r)),
+      twoM=a=>Math.round(a*Math.pow(1+r,2)),
+      withDP=(b,p,m)=>Math.round(b*p/100+(b-b*p/100)*Math.pow(1+r,m));
 
-/* ۴ ) پایگاه محلی داشبورد */
-const DB="metalloine_db";
-const db=JSON.parse(localStorage.getItem(DB)||"[]");
-const save=()=>localStorage.setItem(DB,JSON.stringify(db));
+dpSlider.oninput=()=>dpVal.textContent=dpSlider.value+"٪";
 
-/* ۵ ) فرمول‌ها */
-const r=0.07;
-const oneM=a=>Math.round(a*(1+r));
-const twoM=a=>Math.round(a*Math.pow(1+r,2));
-const withDP=(b,p,m)=>Math.round(b*p/100 + (b-b*p/100)*Math.pow(1+r,m));
-
-/* ۶ ) محاسبه و به‌روزرسانی */
 calcBtn.onclick=()=>{
-  const invoice=raw(document.getElementById("invoice").value);
-  if(!invoice){alert("مبلغ فاکتور را وارد کنید");return;}
+  const invoice=raw(invoice.value);
+  if(!invoice){alert("مبلغ فاکتور؟");return;}
+  const dp=+dpSlider.value;
+  const deltaStr=predict.value.trim();
+  const delta=raw(deltaStr)*(deltaStr.startsWith("-")?-1:1);
 
-  const dp=+slider.value;
-  const deltaVal=document.getElementById("predict").value.trim();
-  const delta=raw(deltaVal)*(deltaVal.startsWith("-")?-1:1);
+  const cash=invoice,
+        n1=oneM(invoice),
+        n1dp=withDP(invoice,dp,1),
+        n2=twoM(invoice),
+        n2dp=withDP(invoice,dp,2);
 
-  const cash=invoice;
-  const n1=oneM(invoice);
-  const n1dp=withDP(invoice,dp,1);
-  const n2=twoM(invoice);
-  const n2dp=withDP(invoice,dp,2);
+  const ratio=delta? (invoice+delta)/invoice:1,
+        n1x=Math.round(n1*ratio),
+        n1dpx=Math.round(n1dp*ratio),
+        n2x=Math.round(n2*ratio),
+        n2dpx=Math.round(n2dp*ratio);
 
-  const ratio=delta? (invoice+delta)/invoice : 1;
-  const n1x = Math.round(n1 * ratio);
-  const n1dpx=Math.round(n1dp* ratio);
-  const n2x = Math.round(n2 * ratio);
-  const n2dpx=Math.round(n2dp*ratio);
-
-  /* نمایش متنی */
-  resultBox.textContent =
-`مبلغ فاکتور: ${sep(invoice)} تومان
-▫ نقدی: ${sep(cash)}
-▫ ۱ ماه بدون پیش‌پرداخت: ${sep(n1)}
-▫ ۱ ماه با پیش‌پرداخت ${dp}٪: ${sep(n1dp)}
-▫ ۲ ماه بدون پیش‌پرداخت: ${sep(n2)}
-▫ ۲ ماه با پیش‌پرداخت ${dp}٪: ${sep(n2dp)}
-── تغییر دلاری فرضی: ${sep(delta)} تومان (×${ratio.toFixed(3)})
-▶ ۱ ماه بدون پیش: ${sep(n1x)}
-▶ ۱ ماه با پیش:   ${sep(n1dpx)}
-▶ ۲ ماه بدون پیش: ${sep(n2x)}
-▶ ۲ ماه با پیش:   ${sep(n2dpx)}`;
-
-  /* ذخیره در داشبورد */
-  db.push({inv:invoice,n1});
-  if(db.length>50)db.shift();
-  save();
-  refreshDash();
-
-  /* نمودار */
-  drawChart([
-    {name:"نقدی",amt:cash},
-    {name:"۱M بدون‌پیش",amt:n1},
-    {name:`۱M با ${dp}%`,amt:n1dp},
-    {name:"۲M بدون‌پیش",amt:n2},
-    {name:`۲M با ${dp}%`,amt:n2dp}
-  ]);
+  /* جدول مقایسه */
+  resultBox.innerHTML=
+`<table>
+<thead><tr>
+<th>نوع پرداخت</th><th>مبلغ (تومان)</th><th>با تغییر دلار (تومان)</th>
+</tr></thead>
+<tbody>
+<tr><td>نقدی</td><td>${sep(cash)}</td><td>${sep(Math.round(cash*ratio))}</td></tr>
+<tr><td>۱ ماه بدون پیش</td><td>${sep(n1)}</td><td>${sep(n1x)}</td></tr>
+<tr><td>۱ ماه با پیش ${dp}٪</td><td>${sep(n1dp)}</td><td>${sep(n1dpx)}</td></tr>
+<tr><td>۲ ماه بدون پیش</td><td>${sep(n2)}</td><td>${sep(n2x)}</td></tr>
+<tr><td>۲ ماه با پیش ${dp}٪</td><td>${sep(n2dp)}</td><td>${sep(n2dpx)}</td></tr>
+</tbody>
+</table>
+<p style="margin-top:8px;font-size:.85rem">
+تغییر دلاری فرضی: ${sep(delta)} تومان (نسبت ×${ratio.toFixed(3)})
+</p>`;
 };
-
-/* ۷ ) داشبورد */
-function refreshDash(){
-  const total=db.reduce((s,x)=>s+x.inv,0);
-  dashTotal.textContent=db.length?
-    "مجموع مبالغ فاکتور: "+sep(total)+" تومان":"هیچ فاکتوری ثبت نشده است.";
-
-  const tb=document.querySelector("#dashTable tbody");tb.innerHTML="";
-  db.slice(-5).reverse().forEach((x,i)=>{
-    tb.insertAdjacentHTML("beforeend",
-      `<tr><td>${db.length-i}</td><td>${sep(x.inv)}</td><td>${sep(x.n1)}</td></tr>`);
-  });
-  dashTable.style.display=db.length?"":"none";
-}
-refreshDash();
-
-/* ۸ ) نمودار Recharts */
-function drawChart(data){
-  const {BarChart,Bar,XAxis,YAxis,Tooltip,ResponsiveContainer,CartesianGrid}=Recharts;
-  ReactDOM.render(
-    React.createElement(ResponsiveContainer,{width:"100%",height:"100%"},
-      React.createElement(BarChart,{data},
-        React.createElement(CartesianGrid,{strokeDasharray:"3 3",stroke:"#555"}),
-        React.createElement(XAxis,{dataKey:"name",stroke:"#fff",fontSize:12}),
-        React.createElement(YAxis,{stroke:"#fff",fontSize:12,tickFormatter:sep}),
-        React.createElement(Tooltip,{formatter:sep}),
-        React.createElement(Bar,{dataKey:"amt",fill:"#8E1F61",radius:[4,4,0,0]}))),
-   
+</script>
+</body>
+</html>
