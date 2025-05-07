@@ -1,43 +1,42 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Metalloine | لیزینگ فلزات ۱٫۲ (پایدار)</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Metalloine | لیزینگ فلزات ۱٫۲-fix</title>
 
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
 
-  <!-- React + Recharts UMD -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+<!-- React + Recharts (UMD) -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
 
-  <style>
-  :root{--c1:#8E1F61;--c2:#8FA2B2;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6}
-  header{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
-    background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
-  .ring{width:22px;height:22px;border:6px solid var(--c2);border-radius:50%}
-  .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c1)}
-  main{max-width:840px;margin:0 auto;padding:var(--g);display:grid;gap:var(--g)}
-  .card{background:var(--glass);backdrop-filter:blur(24px);
-    border:1px solid rgba(255,255,255,.2);border-radius:var(--r);padding:16px}
-  label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
-  input[type=text],input[type=range]{background:#222;border:none;border-radius:var(--r);
-    color:#fff;padding:10px;font:inherit;direction:ltr}
-  .btn{cursor:pointer;border:none;border-radius:var(--r);padding:12px 24px;
-    background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-weight:600;
-    box-shadow:0 3px 8px rgba(0,0,0,.4)}
-  .btn:hover{transform:translateY(-2px)}
-  @media(max-width:540px){.btn{width:100%}}
-  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.9rem}
-  th,td{border:1px solid rgba(255,255,255,.25);padding:6px;text-align:center}
-  .sep{text-align:right}
-  #chartBox{height:260px;margin-top:20px}
-  footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
-  </style>
+<style>
+:root{--c1:#8E1F61;--c2:#8FA2B2;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6}
+header{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
+  background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
+header .ring{width:22px;height:22px;border:6px solid var(--c2);border-radius:50%}
+header .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c1)}
+main{max-width:840px;margin:0 auto;padding:var(--g);display:grid;gap:var(--g)}
+.card{background:var(--glass);backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,.2);border-radius:var(--r);padding:16px}
+label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
+input[type=text],input[type=range]{background:#222;border:none;border-radius:var(--r);
+  color:#fff;padding:10px;font:inherit;direction:ltr}
+.btn{cursor:pointer;border:none;border-radius:var(--r);padding:12px 24px;
+  background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-weight:600;
+  box-shadow:0 3px 8px rgba(0,0,0,.4)}
+.btn:hover{transform:translateY(-2px)}
+@media(max-width:540px){.btn{width:100%}}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.9rem}
+th,td{border:1px solid rgba(255,255,255,.25);padding:6px;text-align:center}
+.sep{text-align:right}
+#chartBox{height:260px;margin-top:20px}
+footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
+</style>
 </head>
 <body>
 
@@ -45,13 +44,13 @@
 
 <main>
 
-<!-- فرم -->
+<!-- form -->
 <div class="card">
-  <h3>محاسبهٔ لیزینگ فلزات</h3>
-  <label>وزن قطعه (kg)<input id="w"   class="sep" placeholder="120"/></label>
-  <label>قیمت هر kg (تومان)<input id="pk"  class="sep" placeholder="95,000"/></label>
+  <h3>محاسبۀ لیزینگ فلزات</h3>
+  <label>وزن قطعه (kg)<input id="w" class="sep" placeholder="120"/></label>
+  <label>قیمت هر kg (تومان)<input id="pk" class="sep" placeholder="95,000"/></label>
   <label>تعداد برش<input id="cuts" class="sep" placeholder="3"/></label>
-  <label>قیمت هر برش (تومان)<input id="pc"  class="sep" placeholder="12,000"/></label>
+  <label>قیمت هر برش (تومان)<input id="pc" class="sep" placeholder="12,000"/></label>
   <label>درصد پیش‌پرداخت
     <input type="range" id="dp" min="0" max="100" value="50"/>
     <span id="dpVal">۵۰٪</span>
@@ -61,7 +60,7 @@
   <div id="out"></div>
 </div>
 
-<!-- داشبورد -->
+<!-- dashboard -->
 <div class="card">
   <h3>۵ محاسبۀ اخیر</h3>
   <table id="dash" style="display:none">
@@ -69,38 +68,42 @@
   </table>
 </div>
 
-<!-- نمودار -->
+<!-- chart -->
 <div class="card">
   <h3>نمودار مقایسهٔ گزینه‌ها</h3>
   <div id="chartBox"></div>
 </div>
 
 </main>
-<footer>© 2025 Metalloine – نسخه ۱٫۲</footer>
+<footer>© 2025 Metalloine – نسخه ۱٫۲-fix</footer>
 
 <script>
-/* جداکنندهٔ سه‌رقمی لحظه‌ای */
+/*— تابع تبدیل ارقام فارسی/عربی به لاتین —*/
+const fa2en=s=>s.replace(/[۰-۹]/g,d=>String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+                .replace(/[٠-٩]/g,d=>String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+
+/*— جداکنندۀ زنده —*/
 document.querySelectorAll(".sep").forEach(el=>{
  el.addEventListener("input",()=>{const p=el.selectionStart,l=el.value.length;
-  const neg=el.value.trim().startsWith("-"), c=el.value.replace(/\D/g,"");
+  const neg=el.value.trim().startsWith("-"),c=fa2en(el.value).replace(/\D/g,"");
   el.value=(neg?"-":"")+(c?parseInt(c,10).toLocaleString("en-US"):"");
   el.selectionEnd=p+(el.value.length-l);
  });
 });
 
-/* کمک‌ها */
-const sep=n=>(+n||0).toLocaleString("en-US");
-const raw=s=>parseInt(String(s).replace(/\D/g,"")||"0",10);
-
-/* اسلایدر */
+/*— نمایش درصد اسلایدر —*/
 dp.oninput=_=>dpVal.textContent=dp.value+"٪";
 
-/* فرمول‌ها */
-const r=0.07;
-const grow=(x,m)=>Math.round(x*Math.pow(1+r,m));
-const withDP=(b,p,m)=>Math.round(b*p/100+(b-b*p/100)*Math.pow(1+r,m));
+/*— کمکی‌ها —*/
+const sep=n=>(+n||0).toLocaleString("en-US");
+const raw=s=>parseInt(fa2en(s).replace(/\D/g,"")||"0",10);
 
-/* ذخیره در LocalStorage */
+/*— سود ماهانه و فرمول‌ها —*/
+const r=0.07,
+      grow=(x,m)=>Math.round(x*Math.pow(1+r,m)),
+      withDP=(b,p,m)=>Math.round(b*p/100+(b-b*p/100)*Math.pow(1+r,m));
+
+/*— LocalStorage داشبورد —*/
 const DB="metall_db";const db=JSON.parse(localStorage.getItem(DB)||"[]");
 const save=_=>localStorage.setItem(DB,JSON.stringify(db));
 function refreshDash(){
@@ -111,8 +114,8 @@ function refreshDash(){
 }
 refreshDash();
 
-/* نمودار */
-function drawChart(arr){
+/*— نمودار —*/
+function draw(arr){
  const {BarChart,Bar,XAxis,YAxis,Tooltip,ResponsiveContainer,CartesianGrid}=Recharts;
  ReactDOM.render(
   React.createElement(ResponsiveContainer,{width:"100%",height:"100%"},
@@ -124,62 +127,62 @@ function drawChart(arr){
       React.createElement(Bar,{dataKey:"amt",fill:"#8E1F61",radius:[4,4,0,0]})
   )), chartBox);
 }
-drawChart([]);
+draw([]);
 
-/* دکمه محاسبه */
-document.getElementById("calc").onclick=function(){
-  /* گرفتن مقادیر از فیلدها (رفع ReferenceError) */
+/*— دکمه محاسبه —*/
+document.getElementById("calc").addEventListener("click",()=>{
+
+  /* خواندن ورودی‌ها با پشتیبانی از ارقام فارسی */
   const wv   = raw(document.getElementById("w").value);
   const pkv  = raw(document.getElementById("pk").value);
   const cuts = raw(document.getElementById("cuts").value);
   const pcv  = raw(document.getElementById("pc").value);
   const dpP  = +document.getElementById("dp").value;
-  const dStr = document.getElementById("dKg").value.trim();
-  const dKg  = raw(dStr)*(dStr.startsWith("-")?-1:1);
+  const dkg  = raw(document.getElementById("dKg").value)*(document.getElementById("dKg").value.trim().startsWith("-")?-1:1);
 
-  if(!wv || !pkv){alert("وزن و قیمت هر kg الزامی است");return;}
+  if(!wv||!pkv){alert("وزن و قیمت هر kg الزامی است");return;}
 
-  /* هزینه‌ها */
-  const metal = wv*pkv;
-  const cut   = cuts*pcv;
-  const base  = metal+cut;
+  /* محاسبات */
+  const metal   = wv*pkv,
+        cutCost = cuts*pcv,
+        base    = metal+cutCost,
+        metalΔ  = wv*(pkv+dkg),
+        baseΔ   = metalΔ+cutCost;
 
-  const metalΔ = wv*(pkv+dKg);
-  const baseΔ  = metalΔ+cut;
-
-  /* گزینه‌ها */
-  const data=[
-    ["نقدی", base, baseΔ],
-    ["۱M بی‌پیش", grow(base,1), grow(baseΔ,1)],
-    [`۱M پیش ${dpP}%`, withDP(base,dpP,1), withDP(baseΔ,dpP,1)],
-    ["۲M بی‌پیش", grow(base,2), grow(baseΔ,2)],
-    [`۲M پیش ${dpP}%`, withDP(base,dpP,2), withDP(baseΔ,dpP,2)]
+  const rows=[
+    ["نقدی"           , base          , baseΔ],
+    ["۱M بدون پیش"    , grow(base,1)  , grow(baseΔ,1)],
+    [`۱M با پیش ${dpP}%`, withDP(base,dpP,1), withDP(baseΔ,dpP,1)],
+    ["۲M بدون پیش"    , grow(base,2)  , grow(baseΔ,2)],
+    [`۲M با پیش ${dpP}%`, withDP(base,dpP,2), withDP(baseΔ,dpP,2)]
   ];
 
-  /* جدول ۱: جزئیات پایه */
-  let t1=`<table><thead><tr><th>جزئیات</th><th>مبلغ (تومان)</th></tr></thead><tbody>
+  /* جدول ۱ */
+  let t1=`<table><thead><tr><th>جزئیات</th><th>مبلغ</th></tr></thead><tbody>
   <tr><td>وزن × قیمت kg</td><td>${sep(metal)}</td></tr>
-  <tr><td>برش (${cuts}×)</td><td>${sep(cut)}</td></tr>`;
-  data.forEach(d=>t1+=`<tr><td>${d[0]}</td><td>${sep(d[1])}</td></tr>`); t1+="</tbody></table>";
+  <tr><td>برش (${cuts}×)</td><td>${sep(cutCost)}</td></tr>`;
+  rows.forEach(r=>t1+=`<tr><td>${r[0]}</td><td>${sep(r[1])}</td></tr>`); t1+="</tbody></table>";
 
-  /* جدول ۲: پایه ↔ Δ دلار */
-  const rows2=data.map(d=>`<tr><td>${d[0]}</td><td>${sep(d[1])}</td><td>${sep(d[2])}</td></tr>`).join("");
-  const t2=`<table style="margin-top:18px"><thead><tr><th>پرداخت</th><th>پایه</th><th>با Δ</th></tr></thead><tbody>${rows2}</tbody></table>`;
+  /* جدول ۲ */
+  const t2=`<table style="margin-top:18px"><thead><tr><th>پرداخت</th><th>پایه</th><th>با Δ</th></tr></thead><tbody>${
+    rows.map(r=>`<tr><td>${r[0]}</td><td>${sep(r[1])}</td><td>${sep(r[2])}</td></tr>`).join("")
+  }</tbody></table>`;
 
-  /* جدول ۳: افزایش/kg & افزایش/برش */
-  const rows3=data.map(d=>{
-     const inc=d[2]-d[1], perKg=inc/wv, perCut=cuts? inc/cuts : 0;
-     return `<tr><td>${d[0]}</td><td>${sep(Math.round(perKg))}</td><td>${sep(Math.round(perCut))}</td></tr>`;
-  }).join("");
-  const t3=`<table style="margin-top:18px"><thead><tr><th>پرداخت</th><th>افزایش/kg</th><th>افزایش/برش</th></tr></thead><tbody>${rows3}</tbody></table>`;
+  /* جدول ۳ */
+  const t3=`<table style="margin-top:18px"><thead><tr><th>پرداخت</th><th>افزایش/kg</th><th>افزایش/برش</th></tr></thead><tbody>${
+    rows.map(r=>{
+      const inc=r[2]-r[1], perKg=inc/wv, perCut=cuts?inc/cuts:0;
+      return `<tr><td>${r[0]}</td><td>${sep(Math.round(perKg))}</td><td>${sep(Math.round(perCut))}</td></tr>`
+    }).join("")
+  }</tbody></table>`;
 
   document.getElementById("out").innerHTML=t1+t2+t3+
-    `<p style="margin-top:6px;font-size:.85rem">Δ دلار بر kg: ${sep(dKg)} تومان</p>`;
+    `<p style="margin-top:6px;font-size:.85rem">Δ دلار بر kg: ${sep(dkg)} تومان</p>`;
 
-  /* ذخیره داشبورد و چارت */
-  db.push({metal, cash:base}); if(db.length>50)db.shift(); save(); refreshDash();
-  drawChart(data.map(d=>({name:d[0],amt:d[1]})));
-};
+  /* ذخیره داشبورد + نمودار */
+  db.push({metal,cash:base}); if(db.length>50)db.shift(); save(); refreshDash();
+  draw(rows.map(r=>({name:r[0],amt:r[1]})));
+});
 </script>
 </body>
 </html>
