@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>مبدّل واحدها | Metalloine</title>
+
+  <!-- Vazirmatn font -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+
+  <style>
+    :root {
+      --c-primary:#8E1F61;
+      --c-accent:#8FA2B2;
+      --glass:rgba(255,255,255,0.1);
+      --r:24px;
+      --g:12px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;min-height:100vh;line-height:1.6;}
+    /* Topbar */
+    #topbar{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.25);border-radius:var(--r)}
+    .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
+    .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+    .brand{color:var(--c-primary)}
+
+    main{max-width:520px;margin:0 auto;padding:var(--g)}
+
+    .card{background:var(--glass);backdrop-filter:blur(24px);border-radius:var(--r);border:1px solid rgba(255,255,255,0.2);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:var(--g)}
+    label{display:flex;flex-direction:column;gap:4px;font-size:0.85rem}
+    input,select{border:none;border-radius:var(--r);background:var(--glass);color:#fff;font:inherit;padding:10px}
+    select:focus,input:focus{outline:2px solid var(--c-primary)}
+    select,option{background:#1a1a1a;color:#fff}
+    .row-2{grid-column:span 2}
+    output{display:block;background:#111;text-align:center;padding:12px;border-radius:var(--r);border:1px solid rgba(255,255,255,0.2);font-size:1.2rem;font-weight:700;cursor:pointer;user-select:none}
+    output[aria-live]{min-height:1.4em}
+    .warning{color:#ff8080;text-align:center;grid-column:span 2;min-height:1.2em;font-size:0.8rem}
+    .btn-icon{display:block;width:90%;max-width:520px;margin:2rem auto;text-align:center;padding:14px;text-decoration:none;background:#444;color:#fff;border-radius:var(--r)}
+    @media(max-width:600px){.card{grid-template-columns:1fr!important}}
+  </style>
+</head>
+<body>
+<header id="topbar">
+  <span class="logo"><span class="ring"></span><span class="brand">Metalloine</span></span>
+</header>
+<main>
+  <h2 style="text-align:center">مبدّل واحدها</h2>
+
+  <!-- Converter form -->
+  <form id="unitForm" class="card" autocomplete="off">
+    <label class="row-2">دسته واحد
+      <select id="category">
+        <option value="length">طول</option>
+        <option value="area">مساحت</option>
+        <option value="volume">حجم</option>
+        <option value="mass">جرم</option>
+        <option value="time">زمان</option>
+        <option value="temperature">دما</option>
+        <option value="speed">سرعت</option>
+        <option value="pressure">فشار</option>
+        <option value="energy">انرژی</option>
+        <option value="power">توان</option>
+        <option value="digital">حافظه دیجیتال</option>
+      </select>
+    </label>
+
+    <label>مقدار
+      <input id="valueInput" type="number" placeholder="مثلاً 12.5" step="any">
+    </label>
+    <label>از واحد
+      <select id="fromUnit"></select>
+    </label>
+    <label>به واحد
+      <select id="toUnit"></select>
+    </label>
+    <label>اعشار
+      <select id="decSelect">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </label>
+
+    <output id="unitOutput" class="row-2" aria-live="polite" title="برای کپی کلیک کنید"></output>
+    <div id="warn" class="warning row-2"></div>
+  </form>
+
+  <a href="index.html" class="btn-icon">⬅ بازگشت</a>
+</main>
+
+<script>
+/*******************************************************
+ * Conversion tables (linear categories)
+ *******************************************************/
+const UNITS={
+  length:{base:'m',map:{nm:1e-9,µm:1e-6,mm:1e-3,cm:1e-2,m:1,km:1e3,in:0.0254,ft:0.3048,yd:0.9144,mi:1609.344},labels:{nm:'نانو‌متر (nm)',µm:'میکرو‌متر (µm)',mm:'میلی‌متر (mm)',cm:'سانتی‌متر (cm)',m:'متر (m)',km:'کیلومتر (km)',in:'اینچ (in)',ft:'فوت (ft)',yd:'یارد (yd)',mi:'مایل (mi)'}},
+  area:{base:'m2',map:{mm2:1e-6,cm2:1e-4,m2:1,km2:1e6,in2:0.00064516,ft2:0.092903,acre:4046.8564224,ha:10000},labels:{mm2:'mm²',cm2:'cm²',m2:'m²',km2:'km²',in2:'in²',ft2:'ft²',acre:'جریب (acre)',ha:'هکتار (ha)'}},
+  volume:{base:'m3',map:{ml:1e-6,l:1e-3,m3:1,in3:1.6387064e-5,ft3:0.0283168466,gal:0.003785411784},labels:{ml:'میلی‌لیتر (mL)',l:'لیتر (L)',m3:'m³',in3:'in³',ft3:'ft³',gal:'گالن (gal)'}},
+  mass:{base:'kg',map:{mg:1e-6,g:1e-3,kg:1,t:1000,oz:0.028349523125,lb:0.45359237},labels:{mg:'mg',g:'g',kg:'kg',t:'تن (t)',oz:'oz',lb:'lb'}},
+  time:{base:'s',map:{ms:1e-3,s:1,min:60,h:3600,day:86400,week:604800},labels:{ms:'ms',s:'ثانیه (s)',min:'دقیقه (min)',h:'ساعت (h)',day:'روز',week:'هفته'}},
+  speed:{base:'m/s',map:{'m/s':1,'km/h':0.277777778,'mph':0.44704,'kn':0.514444},labels:{'m/s':'m/s','km/h':'km/h','mph':'mph','kn':'گره (kn)'}},
+  pressure:{base:'Pa',map:{Pa:1,kPa:1000,bar:100000,psi:6894.75729,atm:101325},labels:{Pa:'Pa',kPa:'kPa',bar:'bar',psi:'psi',atm:'atm'}},
+  energy:{base:'J',map:{J:1,kJ:1000,Wh:3600,kWh:3.6e6,cal:4.184,BTU:1055.05585},labels:{J:'J',kJ:'kJ',Wh:'Wh',kWh:'kWh',cal:'cal',BTU:'BTU'}},
+  power:{base:'W',map:{W:1,kW:1000,hp:745.699872},labels:{W:'W',kW:'kW',hp:'hp'}},
+  digital:{base:'B',map:{bit:0.125,B:1,KB:1000,MB:1e6,GB:1e9,TB:1e12},labels:{bit:'بیت',B:'بایت (B)',KB:'KB',MB:'MB',GB:'GB',TB:'TB'}}
+};
+
+const TEMP_UNITS=['C','F','K'];
+
+/*******************************************************
+ * Helpers
+ *******************************************************/
+function populateUnits(cat){
+  const fromSel=document.getElementById('fromUnit');
+  const toSel=document.getElementById('toUnit');
+  fromSel.innerHTML=toSel.innerHTML='';
+
+  if(cat==='temperature'){
+    TEMP_UNITS.forEach(u=>{
+      const opt1=document.createElement('option');
+      const opt2=document.createElement('option');
+      opt1.value=opt2.value=u;
+      opt1.textContent=opt2.textContent=u;
+      fromSel.appendChild(opt1);
+      toSel.appendChild(opt2.cloneNode(true));
+    });
+    toSel.selectedIndex=1;
+    return;
+  }
+
+  const {map,labels}=UNITS[cat];
+  for(const code in map){
+    const opt1=document.createElement('option');
+    const opt2=document.createElement('option');
+    opt1.value=opt2.value=code;
+    opt1.textContent=opt2.textContent=labels[code]||code;
+    fromSel.appendChild(opt1);
+    toSel.appendChild(opt2.cloneNode(true));
+  }
+  toSel.selectedIndex=1;
+}
+
+function convertLinear(val,from,to,cat){
+  const tbl=UNITS[cat].map;
+  return val*tbl[from]/tbl[to];
+}
+function toKelvin(val,u){
+  if(u==='K')return val;
+  if(u==='C')return val+273.15;
+  return (val-32)*5/9+273.15; // F
+}
+function fromKelvin(k,u){
+  if(u==='K')return k;
+  if(u==='C')return k-273.15;
+  return (k-273.15)*9/5+32;
+}
+function convertTemp(val,from,to){
+  return fromKelvin(toKelvin(val,from),to);
+}
+function formatNumber(val,dec){
+  return new Intl.NumberFormat('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}).format(val);
+}
+
+/*******************************************************
+ * DOM vars
+ *******************************************************/
+const $cat=document.getElementById('category');
+const $val=document.getElementById('valueInput');
+const $from=document.getElementById('fromUnit');
+const $to=document.getElementById('toUnit');
+const $dec=document.getElementById('decSelect');
+const $out=document.getElementById('unitOutput');
+const $warn=document.getElementById('warn');
+
+function updateConversion(){
+  $warn.textContent='';
+  const v=parseFloat($val.value);
+  if(isNaN(v)){$out.textContent='';return;}
+  const from=$from.value; const to=$to.value; const cat=$cat.value;
+  if(from===to){$out.textContent='مبدأ و مقصد یکسان';return;}
+  let res;
+  try{
+    res=(cat==='temperature')?convertTemp(v,from,to):convertLinear(v,from,to,cat);
+  }catch(e){$out.textContent='خطا';return;}
+  $out.textContent=`${formatNumber(res,parseInt($dec.value,10))} ${to}`;
+}
+
+['input','change'].forEach(ev=>{
+  $val.addEventListener(ev,updateConversion);
+  $from.addEventListener(ev,updateConversion);
+  $to.addEventListener(ev,updateConversion);
+  $dec.addEventListener(ev,updateConversion);
+});
+$cat.addEventListener('change',()=>{populateUnits($cat.value);updateConversion();});
+
+$out.addEventListener('click',()=>{
+  if(!$out.textContent)return;
+  navigator.clipboard.writeText($out.textContent).then(()=>{
+    $warn.textContent='Copied!';
+    setTimeout(()=>{$warn.textContent='';},1500);
+  });
+});
+
+/*******************************************************
+ * Quick tests
+ *******************************************************/
+console.assert(Math.abs(convertLinear(100,'cm','m','length')-1)<1e-8,'cm→m');
+console.assert(Math.abs(convertTemp(0,'C','F')-32)<1e-8,'C→F');
+console.assert(Math.abs(convertLinear(1,'kW','hp','power')-1.34102)<1e-3,'kW→hp');
+
+// init
+populateUnits('length');
+</script>
+</body>
+</html>
