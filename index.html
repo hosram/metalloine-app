@@ -6,10 +6,7 @@
   <title>Metalloine | صفحه اصلی</title>
 
   <!-- فونت فارسی Vazirmatn -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"
-  />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
 
   <style>
     :root {
@@ -110,6 +107,8 @@
       <a href="weight.html" class="btn-main">محاسبه وزن</a>
       <a href="scrap.html" class="btn-main">محاسبه ضایعات</a>
       <a href="machining-allowances.html" class="btn-main">تلرانس ماشین‌کاری</a>
+      <!-- 🔄 لینک جدید مبدّل واحدها -->
+      <a href="unit-converter.html" class="btn-main" title="مبدّل همه‌کارهٔ واحدها">مبدّل واحدها</a>
     </div>
     <button class="btn-back">بازگشت</button>
   </section>
@@ -121,7 +120,7 @@
     <button class="btn-back">بازگشت</button>
   </section>
 
-  <footer>ورژن ۱.۰.۱</footer>
+  <footer>ورژن ۱.۰.۲</footer>
 
   <script>
     // Helper to switch views
@@ -130,17 +129,17 @@
       document.getElementById(id).classList.remove('hidden');
     }
 
-    // Welcome click = go to menu
-    document.getElementById('welcome').addEventListener('click', ()=>show('menu'));
+    // Welcome click => menu
+    document.getElementById('welcome').addEventListener('click',()=>show('menu'));
 
-    // Menu buttons => target section
+    // Menu buttons => target
     document.querySelectorAll('#menu [data-target]').forEach(btn=>{
-      btn.addEventListener('click', ()=> show(btn.dataset.target));
+      btn.addEventListener('click',()=>show(btn.dataset.target));
     });
 
     // Back buttons
     document.querySelectorAll('.btn-back').forEach(btn=>{
-      btn.addEventListener('click', ()=> show('menu'));
+      btn.addEventListener('click',()=>show('menu'));
     });
   </script>
 </body>
