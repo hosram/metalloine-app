@@ -21,10 +21,8 @@
   <!-- کارت جستجو -->
   <section class="card">
     <label class="row-2">
-      نام فولاد یا استاندارد
-      <input id="steelName" list="steelList"
-             placeholder="مثلاً ASTM A36 یا 1.4401">
-      <datalist id="steelList"></datalist>
+      نام یا شمارهٔ فولاد
+      <input id="steelName" placeholder="مثلاً A36 یا 1.4401">
     </label>
 
     <button id="btn" type="button" class="btn-submit row-2">
@@ -35,7 +33,7 @@
     <div id="result" class="row-2"></div>
   </section>
 
-  <!-- برگشت به منوی اصلی -->
+  <!-- برگشت -->
   <a href="index.html" class="btn-icon">⬅ بازگشت</a>
 </main>
 
@@ -43,65 +41,53 @@
 <script src="assets/header.js"></script>
 
 <script>
-/* ------- بارگذاری دیتابیس فولاد ------- */
-let steelDB = {};
-const list    = document.getElementById('steelList');
-const warn    = document.getElementById('warn');
-const result  = document.getElementById('result');
-const input   = document.getElementById('steelName');
+/* ---------- بارگذاری دیتابیس ---------- */
+let steelDB  = {};
+let steelMap = {};            // synonym → master key
 
-fetch('assets/steel_db_full.json')
-  .then(r => r.json())
-  .then(data => {
+fetch('assets/steel_db_full_syn.json')
+ .then(r => r.json())
+ .then(data => {
     steelDB = data;
-    // تکمیل خودکار در <datalist>
-    Object.keys(data).forEach(k => {
-      const opt = document.createElement('option');
-      opt.value = k;
-      list.appendChild(opt);
+    Object.entries(data).forEach(([k,v])=>{
+        steelMap[k.toLowerCase()] = k;                 // خود کلید
+        (v.syn || []).forEach(s => steelMap[s.toLowerCase()] = k); // معادل‌ها
     });
-  })
-  .catch(err => console.error("DB load error:", err));
+ })
+ .catch(err => console.error("DB load error:", err));
 
-/* ------- منطق جستجو ------- */
-function show() {
+/* ---------- منطق جستجو ---------- */
+const warn   = document.getElementById('warn');
+const result = document.getElementById('result');
+const input  = document.getElementById('steelName');
+
+function show(){
   warn.textContent   = "";
   result.textContent = "";
 
-  const q = input.value.trim();
-  if (!q) {
-    warn.textContent = "نام فولاد را وارد کنید.";
+  const q = input.value.trim().toLowerCase();
+  if(!q){
+    warn.textContent = "نام یا شمارهٔ فولاد را وارد کنید.";
     return;
   }
 
-  // جستجوی دقیق یا شامل
-  const key = Object.keys(steelDB).find(
-                k => k.toLowerCase() === q.toLowerCase()
-              ) ||
-              Object.keys(steelDB).find(
-                k => k.toLowerCase().includes(q.toLowerCase())
-              );
-
-  if (!key) {
-    warn.textContent = `«${q}» در دیتابیس نیست.`;
+  const master = steelMap[q];
+  if(!master){
+    warn.textContent = `«${input.value}» در دیتابیس نیست.`;
     return;
   }
 
-  const { d, e } = steelDB[key];
-  let html = `<h3>${key}</h3>
-              <p style="margin-top:6px">${d || "-"}</p>
+  const info = steelDB[master];
+  let html = `<h3>${master}</h3>
+              <p style="margin-top:6px">${info.d || "-"}</p>
               <div style="margin-top:10px"><strong>الکترودهای پیشنهادی:</strong></div>`;
-
-  (e || []).forEach(x => {
-    html += `<div class="elec-item">${x}</div>`;
-  });
-
+  (info.e || []).forEach(x => html += `<div class="elec-item">${x}</div>`);
   result.innerHTML = html;
 }
 
-/* رویدادها */
+/* ---------- رویدادها ---------- */
 document.getElementById('btn').addEventListener('click', show);
-input.addEventListener('keydown', e => { if (e.key === "Enter") show(); });
+input.addEventListener('keydown', e => { if(e.key === "Enter") show(); });
 </script>
 </body>
 </html>
