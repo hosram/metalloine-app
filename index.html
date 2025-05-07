@@ -13,7 +13,7 @@
       --c-primary: #8E1F61;
       --c-accent:  #8FA2B2;
       --glass: rgba(255,255,255,0.1);
-      --r: 24px; 
+      --r: 24px;
       --g: 12px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,10 +33,8 @@
       text-decoration: none; display: inline-block; text-align:center;
     }
     .btn-main.disabled,
-    .btn-main:disabled {
-      opacity:.4; pointer-events:none;
-      background: var(--glass);
-    }
+    .btn-main:disabled { opacity:.4; pointer-events:none; background: var(--glass); }
+
     .btn-back {
       margin-top:2rem; background:none; border:1px solid var(--c-accent);
       color:var(--c-accent); padding:.75rem 2rem; border-radius:var(--r);
@@ -46,19 +44,13 @@
     /* ===== Layout Sections ===== */
     .view { flex:1; display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center; padding:2rem; }
 
-    #topbar {
-      display: flex; justify-content: center; align-items: center;
-      height: 64px; margin: var(--g);
-      background: var(--glass); backdrop-filter: blur(24px);
-      border: 1px solid rgba(255,255,255,0.25); border-radius: var(--r);
-    }
+    #topbar { display:flex; justify-content:center; align-items:center; height:64px; margin:var(--g); background:var(--glass); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.25); border-radius:var(--r); }
     .logo { display:flex; align-items:center; gap:8px; font-size:1.4rem; font-weight:700; }
     .ring { width:22px; height:22px; border:6px solid var(--c-accent); border-radius:50%; }
     .brand { color:var(--c-primary); }
 
     /* Grid menu buttons */
-    .grid { display:grid; gap:var(--g); width:100%; max-width:840px;
-            grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); }
+    .grid { display:grid; gap:var(--g); width:100%; max-width:840px; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); }
 
     footer { margin:1rem auto .5rem; text-align:center; font-size:.8rem; opacity:.7; }
   </style>
@@ -96,7 +88,10 @@
   <!-- ===== Engineering Assistant ===== -->
   <section id="engineering" class="view hidden">
     <h2 style="font-size:1.8rem; margin-bottom:2rem;">دستیار مهندسی</h2>
-    <a href="hardness.html" class="btn-main">تبدیل سختی</a>
+    <div class="grid" style="max-width:600px;">
+      <a href="hardness.html" class="btn-main">تبدیل سختی</a>
+      <a href="electrode-assistant.html" class="btn-main" title="دستیار انتخاب الکترود">انتخاب الکترود</a>
+    </div>
     <button class="btn-back">بازگشت</button>
   </section>
 
@@ -107,7 +102,6 @@
       <a href="weight.html" class="btn-main">محاسبه وزن</a>
       <a href="scrap.html" class="btn-main">محاسبه ضایعات</a>
       <a href="machining-allowances.html" class="btn-main">تلرانس ماشین‌کاری</a>
-      <!-- 🔄 لینک جدید مبدّل واحدها -->
       <a href="unit-converter.html" class="btn-main" title="مبدّل همه‌کارهٔ واحدها">مبدّل واحدها</a>
     </div>
     <button class="btn-back">بازگشت</button>
@@ -120,27 +114,21 @@
     <button class="btn-back">بازگشت</button>
   </section>
 
-  <footer>ورژن ۱.۰.۲</footer>
+  <footer>ورژن ۱.۰.۳</footer>
 
   <script>
-    // Helper to switch views
     function show(id){
       document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
     }
-
-    // Welcome click => menu
     document.getElementById('welcome').addEventListener('click',()=>show('menu'));
-
-    // Menu buttons => target
     document.querySelectorAll('#menu [data-target]').forEach(btn=>{
       btn.addEventListener('click',()=>show(btn.dataset.target));
     });
-
-    // Back buttons
     document.querySelectorAll('.btn-back').forEach(btn=>{
       btn.addEventListener('click',()=>show('menu'));
     });
   </script>
 </body>
 </html>
+
