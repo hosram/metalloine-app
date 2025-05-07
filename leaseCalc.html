@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>Metalloine | لیزینگ (نسخۀ آزمایشی)</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
 
-<!-- React + Recharts UMD -->
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
@@ -15,23 +15,17 @@
 <style>
 :root{--c-primary:#8E1F61;--c-accent:#8FA2B2;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6}
-
+body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif}
 header{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
   background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
 .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
 .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c-primary)}
-
 main{max-width:900px;margin:0 auto;padding:var(--g);display:grid;gap:var(--g)}
-.card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.2);
-  border-radius:var(--r);padding:16px}
+.card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.2);border-radius:var(--r);padding:16px}
 label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
-input[type=number],input[type=text],input[type=range]{background:#222;border:none;border-radius:var(--r);
-  color:#fff;padding:10px;font:inherit;direction:ltr}
-.btn{cursor:pointer;border:none;border-radius:var(--r);padding:12px 24px;
-  background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
-  color:#fff;font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.4)}
-.btn:hover{transform:translateY(-2px)}
+input[type=text],input[type=range]{background:#222;border:none;border-radius:var(--r);color:#fff;padding:10px;font:inherit;direction:ltr}
+.btn{cursor:pointer;border:none;border-radius:var(--r);padding:12px 24px;background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+     color:#fff;font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.4)}
 table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
 th,td{border:1px solid rgba(255,255,255,.2);padding:6px;text-align:center}
 #chartBox{height:260px}
@@ -46,160 +40,126 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:.7rem 0}
 
 <main>
 
-<!-- داشبورد ساده -->
+<!-- داشبورد -->
 <div class="card" id="dash">
-  <h3 style="margin-bottom:6px">داشبورد خلاصه</h3>
+  <h3>داشبورد خلاصه</h3>
   <p id="dashTotal">هیچ فاکتوری ثبت نشده است.</p>
   <table id="dashTable" style="display:none">
-    <thead><tr><th>#</th><th>مبلغ فاکتور</th><th>نسیه ۱ ماه (بدون پیش)</th></tr></thead>
+    <thead><tr><th>#</th><th>مبلغ فاکتور</th><th>۱ ماه بدون پیش</th></tr></thead>
     <tbody></tbody>
   </table>
 </div>
 
-<!-- فرم محاسبه -->
+<!-- فرم -->
 <div class="card">
-  <h3>فرم محاسبهٔ لیزینگ</h3>
-
+  <h3>فرم محاسبهٔ جدید</h3>
   <label>مبلغ کلی فاکتور (تومان)
     <input id="invoice" class="sep" placeholder="5,000,000"/>
   </label>
-
   <label>درصد پیش‌پرداخت
     <input type="range" id="dpSlider" min="0" max="100" value="50"/>
     <span id="dpVal">۵۰٪</span>
   </label>
-
-  <label>برآورد تغییر قیمت دلار (تومان) <small>(+ یا -)</small>
+  <label>برآورد تغییر قیمت دلار (تومان)
     <input id="predict" class="sep" placeholder="+5,000 یا -3,000"/>
   </label>
-
-  <button class="btn" id="calcBtn">محاسبۀ لیزینگ و ثبت در داشبورد</button>
+  <button class="btn" id="calcBtn">محاسبۀ لیزینگ و ثبت</button>
   <button class="btn" style="margin-top:8px;background:#444" onclick="location='index.html'">⬅ بازگشت</button>
-
   <div id="resultBox" style="margin-top:1rem;white-space:pre-line"></div>
 </div>
 
-<!-- نمودار مقایسه -->
+<!-- نمودار -->
 <div class="card">
-  <h3 style="margin-bottom:6px">نمودار مقایسهٔ گزینه‌ها</h3>
+  <h3>نمودار مقایسهٔ گزینه‌ها</h3>
   <div id="chartBox"></div>
 </div>
 
 </main>
-
-<footer>Metalloine — نسخهٔ آزمایشی ۱٫۰۱</footer>
+<footer>Metalloine — نسخهٔ ۱٫۰۲</footer>
 
 <script>
-/* ابزارهای عددی */
-const sep=(n)=>(+n||0).toLocaleString("en-US");
-const raw=(s)=>parseInt(String(s).replace(/\D/g,"")||"0",10);
+/* جداکنندهٔ آنی سه‌رقمی */
+function formatField(el){
+  const pos=el.selectionStart,len=el.value.length;
+  const neg=el.value.trim().startsWith("-"); 
+  const raw=el.value.replace(/\D/g,"");
+  el.value=(neg?"-":"")+ (raw?parseInt(raw,10).toLocaleString("en-US"):"");
+  el.selectionEnd=pos+(el.value.length-len);
+}
+document.querySelectorAll(".sep").forEach(i=>i.addEventListener("input",()=>formatField(i)));
 
-/* اسلایدر پیش‌پرداخت */
+const sep=n=>(+n||0).toLocaleString("en-US");
+const raw=s=>parseInt(String(s).replace(/\D/g,"")||"0",10);
+
+/* پیش‌پرداخت */
 const slider=document.getElementById("dpSlider");
-const dpLabel=document.getElementById("dpVal");
-slider.addEventListener("input",()=>dpLabel.textContent=slider.value+"٪");
+slider.addEventListener("input",()=>dpVal.textContent=slider.value+"٪");
 
 /* پایگاه محلی */
-const DB_KEY="metalloine_db";
-const db=JSON.parse(localStorage.getItem(DB_KEY)||"[]");
-function saveDB(){localStorage.setItem(DB_KEY,JSON.stringify(db));}
+const DB="metalloine_db";const db=JSON.parse(localStorage.getItem(DB)||"[]");
+function save(){localStorage.setItem(DB,JSON.stringify(db));}
 
-/* نرخ سود ماهانه */
-const r=0.07;
-function oneMonth(amount){return Math.round(amount*(1+r));}
-function twoMonth(amount){return Math.round(amount*Math.pow(1+r,2));}
-function withDP(base,dpPerc,months){
-  const dp=base*dpPerc/100;
-  const remain=base-dp;
-  const factor=Math.pow(1+r,months);
-  return Math.round(dp+remain*factor);
-}
+/* نرخ سود */
+const r=0.07, oneM=a=>Math.round(a*(1+r)), twoM=a=>Math.round(a*Math.pow(1+r,2));
+const withDP=(b,p,m)=>Math.round(b*p/100 + (b-b*p/100)*Math.pow(1+r,m));
 
-/* محاسبه و ثبت */
-document.getElementById("calcBtn").addEventListener("click",()=>{
-  const invoice=raw(document.getElementById("invoice").value);
-  const dpP=+slider.value;
-  const delta=raw(document.getElementById("predict").value)* (document.getElementById("predict").value.trim().startsWith("-")?-1:1);
+/* محاسبه */
+calcBtn.onclick=_=>{
+  const invoice=raw(invoiceInput.value);
+  if(!invoice) return alert("مبلغ فاکتور؟");
+  const dp=+slider.value,delta=raw(predict.value)*(predict.value.trim().startsWith("-")?-1:1);
+  const cash=invoice, n1=oneM(invoice), n1dp=withDP(invoice,dp,1),
+        n2=twoM(invoice), n2dp=withDP(invoice,dp,2), k=delta? (invoice+delta)/invoice :1;
+  const out=`مبلغ فاکتور: ${sep(invoice)} تومان
+➖ نقدی: ${sep(cash)}
+➖ ۱ ماه بدون پیش: ${sep(n1)}
+➖ ۱ ماه با پیش ${dp}٪: ${sep(n1dp)}
+➖ ۲ ماه بدون پیش: ${sep(n2)}
+➖ ۲ ماه با پیش ${dp}٪: ${sep(n2dp)}
+───── تغییر دلار فرضی: ${sep(delta)}
+▸ ۱ ماه بدون پیش: ${sep(Math.round(n1*k))}
+▸ ۱ ماه با پیش: ${sep(Math.round(n1dp*k))}
+▸ ۲ ماه بدون پیش: ${sep(Math.round(n2*k))}
+▸ ۲ ماه با پیش: ${sep(Math.round(n2dp*k))}`;
+  resultBox.textContent=out;
 
-  if(invoice<=0){alert("مبلغ فاکتور را وارد کنید");return;}
-
-  // محاسبات
-  const cash=invoice;
-  const n1=noPre=oneMonth(invoice);
-  const n1dp=withDP(invoice,dpP,1);
-  const n2=twoMonth(invoice);
-  const n2dp=withDP(invoice,dpP,2);
-
-  // نسبت تغییر دلار
-  const ratio=delta? (invoice+delta)/invoice : 1;
-  const n1x = Math.round(n1*ratio);
-  const n1dpx=Math.round(n1dp*ratio);
-  const n2x = Math.round(n2*ratio);
-  const n2dpx=Math.round(n2dp*ratio);
-
-  // خروجی متنی
-  const out=`📄 مبلغ فاکتور: ${sep(invoice)} تومان
-➖ نقدی: ${sep(cash)} تومان
-➖ ۱ ماه بدون پیش‌پرداخت: ${sep(n1)} تومان
-➖ ۱ ماه با پیش‌پرداخت ${dpP}٪ : ${sep(n1dp)} تومان
-➖ ۲ ماه بدون پیش‌پرداخت: ${sep(n2)} تومان
-➖ ۲ ماه با پیش‌پرداخت ${dpP}٪ : ${sep(n2dp)} تومان
-────────────────────
-تغییر دلاری فرضی: ${sep(delta)} ⇒ نسبت ×${ratio.toFixed(3)}
-🟢 ۱ ماه بدون پیش:  ${sep(n1x)} تومان
-🟢 ۱ ماه با پیش‌پرداخت:  ${sep(n1dpx)} تومان
-🟢 ۲ ماه بدون پیش:  ${sep(n2x)} تومان
-🟢 ۲ ماه با پیش‌پرداخت:  ${sep(n2dpx)} تومان`;
-  document.getElementById("resultBox").textContent=out;
-
-  // ذخیرهٔ خلاصه در داشبورد
-  db.push({invoice,n1,ts:Date.now()});
-  if(db.length>50) db.shift();
-  saveDB();
-  refreshDash();
-
-  // چارت
+  db.push({inv:invoice,n1}); if(db.length>50)db.shift(); save(); refreshDash();
   drawChart([
     {name:"نقدی",amt:cash},
     {name:"۱M بدون‌پیش",amt:n1},
-    {name:`۱M با ${dpP}%`,amt:n1dp},
+    {name:`۱M با ${dp}%`,amt:n1dp},
     {name:"۲M بدون‌پیش",amt:n2},
-    {name:`۲M با ${dpP}%`,amt:n2dp}
+    {name:`۲M با ${dp}%`,amt:n2dp}
   ]);
-});
+}
 
 /* داشبورد */
 function refreshDash(){
-  const total=db.reduce((s,x)=>s+x.invoice,0);
-  const dashTot=document.getElementById("dashTotal");
-  dashTot.textContent="مجموع فاکتورهای ثبت شده: "+sep(total)+" تومان";
-
-  const tbody=document.querySelector("#dashTable tbody");
-  tbody.innerHTML="";
-  db.slice(-5).reverse().forEach((it,i)=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${db.length-i}</td><td>${sep(it.invoice)}</td><td>${sep(it.n1)}</td>`;
-    tbody.appendChild(tr);
+  dashTotal.textContent=db.length?
+    "مجموع مبالغ فاکتور: "+sep(db.reduce((s,x)=>s+x.inv,0))+" تومان" :
+    "هیچ فاکتوری ثبت نشده است.";
+  const tb=document.querySelector("#dashTable tbody");tb.innerHTML="";
+  db.slice(-5).reverse().forEach((x,i)=>{
+    tb.insertAdjacentHTML("beforeend",
+      `<tr><td>${db.length-i}</td><td>${sep(x.inv)}</td><td>${sep(x.n1)}</td></tr>`);
   });
-  document.getElementById("dashTable").style.display=db.length?"" :"none";
+  dashTable.style.display=db.length?"":"none";
 }
 refreshDash();
 
-/* چارت با Recharts */
-function drawChart(arr){
+/* چارت */
+function drawChart(data){
   const {BarChart,Bar,XAxis,YAxis,Tooltip,ResponsiveContainer,CartesianGrid}=Recharts;
   ReactDOM.render(
     React.createElement(ResponsiveContainer,{width:"100%",height:"100%"},
-      React.createElement(BarChart,{data:arr},
+      React.createElement(BarChart,{data},
         React.createElement(CartesianGrid,{strokeDasharray:"3 3",stroke:"#555"}),
         React.createElement(XAxis,{dataKey:"name",stroke:"#fff",fontSize:12}),
         React.createElement(YAxis,{stroke:"#fff",fontSize:12,tickFormatter:sep}),
         React.createElement(Tooltip,{formatter:sep}),
-        React.createElement(Bar,{dataKey:"amt",fill:"#8E1F61",radius:[4,4,0,0]})
-      )
-    ),document.getElementById("chartBox"));
+        React.createElement(Bar,{dataKey:"amt",fill:"#8E1F61",radius:[4,4,0,0]}))),
+    chartBox);
 }
-/* چارت خالی اولیه */
 drawChart([]);
 </script>
 </body>
