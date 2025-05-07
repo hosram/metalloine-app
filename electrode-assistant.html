@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>دستیار انتخاب الکترود | Metalloine</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    :root{--c-primary:#8E1F61;--c-accent:#8FA2B2;--glass:rgba(255,255,255,.1);--r:24px;--g:12px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;min-height:100vh;line-height:1.6}
+    #topbar{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
+    .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
+    .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+    .brand{color:var(--c-primary)}
+    main{max-width:520px;margin:0 auto;padding:var(--g)}
+    .card{background:var(--glass);backdrop-filter:blur(24px);border-radius:var(--r);border:1px solid rgba(255,255,255,.2);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:var(--g)}
+    label{display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+    input,select,button{border:none;border-radius:var(--r);background:var(--glass);color:#fff;font:inherit;padding:10px}
+    select:focus,input:focus{outline:2px solid var(--c-primary)}
+    select,option{background:#1a1a1a;color:#fff}
+    .row-2{grid-column:span 2}
+    .btn-submit{background:linear-gradient(135deg,var(--c-primary),var(--c-accent));color:#fff;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.4);font-weight:600;border:none;border-radius:var(--r)}
+    .warning{color:#ff8080;text-align:center;grid-column:span 2;min-height:1.2em;font-size:.8rem}
+    #resultBox{opacity:0;margin-top:1rem;background:#222;padding:12px;border-radius:var(--r);border:1px solid rgba(255,255,255,.3);font-size:.9rem;line-height:1.4;min-height:1.6em;transition:opacity .4s ease}
+    #resultBox.visible{opacity:1}
+    #disclaimer{margin-top:.75rem;font-size:.65rem;color:#aaa;text-align:justify}
+    @media(max-width:600px){.card{grid-template-columns:1fr !important}}
+  </style>
+</head>
+<body>
+<header id="topbar"><span class="logo"><span class="ring"></span><span class="brand">Metalloine</span></span></header>
+<main>
+  <h2 style="text-align:center">دستیار انتخاب الکترود</h2>
+  <form id="electrodeForm" class="card" autocomplete="off">
+    <label>نوع فلز پایه
+      <select id="metalSelect">
+        <option value="carbon_steel">فولاد کربنی</option>
+        <option value="low_alloy">فولاد کم‌آلیاژ</option>
+        <option value="stainless">فولاد زنگ‌نزن</option>
+        <option value="cast_iron">چدن</option>
+        <option value="galvanized">فولاد گالوانیزه</option>
+        <option value="aluminum">آلومینیوم</option>
+        <option value="copper">مس</option>
+        <option value="brass">برنج</option>
+        <option value="titanium">تیتانیوم</option>
+      </select>
+    </label>
+    <label>موقعیت جوش
+      <select id="posSelect">
+        <option value="1G">1G – تخت</option><option value="2G">2G – افقی</option><option value="3G_up">3G ↑ عمودی</option><option value="3G_down">3G ↓ عمودی</option><option value="4G">4G – سقفی</option><option value="1F">1F – تخت گوشه</option><option value="2F">2F – افقی گوشه</option><option value="3F_up">3F ↑ گوشه عمودی</option><option value="4F">4F – سقفی گوشه</option><option value="5G_up">5G ↑ لوله افقی</option><option value="5G_down">5G ↓ لوله افقی</option><option value="6G">6G – لوله ۴۵°</option>
+      </select>
+    </label>
+    <label>ضخامت (mm)
+      <input id="thickInput" type="number" step="0.1" placeholder="6" />
+    </label>
+    <label>معادل کربن (CEQ)
+      <input id="ceqInput" type="number" step="0.01" placeholder="0.35" />
+    </label>
+    <label>تنش تسلیم (MPa)
+      <input id="ysInput" type="number" list="ysList" />
+      <datalist id="ysList"><option>235</option><option>355</option><option>460</option><option>550</option></datalist>
+    </label>
+    <label>دمای پیش‌گرمایش (°C)
+      <input id="preheatInput" type="number" list="phList" />
+      <datalist id="phList"><option>0</option><option>75</option><option>125</option><option>175</option></datalist>
+    </label>
+    <label class="row-2"><input id="lowHInput" type="checkbox" /> کم‌هیدروژن (Low-H)</label>
+    <button id="calcBtn" type="button" class="btn-submit row-2">محاسبه</button>
+    <div id="warnBox" class="warning row-2"></div>
+  </form>
+  <section id="resultBox"></section>
+  <p id="disclaimer">این نتیجه جایگزین WPS تأیید‌شده نیست؛ قبل از جوشکاری نهایی با مهندس جوش مشورت کنید.</p>
+</main>
+<script type="module">
+window.addEventListener('DOMContentLoaded',()=>{
+  const $={m:metalSelect,p:posSelect,t:thickInput,c:ceqInput,y:ysInput,h:preheatInput,l:lowHInput,btn:calcBtn,w:warnBox,r:resultBox};
+  const ERR_THICK='ضخامت معتبر نیست (۰–۲۰۰mm)';
+  const ERR_CEQ='مقدار CEQ باید بین ۰ تا ۱٫۲ باشد.';
+  const ysDefault={carbon_steel:235,low_alloy:355,stainless:275,cast_iron:200,galvanized:235,aluminum:150,copper:70,brass:100,titanium:275};
+  const suggestYS=m=>ysDefault[m]||235;
+  const suggestPH=({m,t,ceq})=>{if(!['carbon_steel','low_alloy'].includes(m))return 0;let ph=0;if(ceq>0.6||t>50)ph=175;else if(ceq>0.45||t>25)ph=125;else if(ceq>0.3||t>12)ph=75;return ph;};
+  $.m.addEventListener('change',()=>{if(!$.y.value)$.y.value=suggestYS($.m.value);});
+  const fillPH=()=>{$.h.value=suggestPH({m:$.m.value,t:+($.t.value)||0,ceq:+($.c.value)||0});};
+  $.t.addEventListener('blur',fillPH);$.c.addEventListener('blur',fillPH);
+
+  const selectElectrode=d=>{const reason=[];let e='AWS A5.1 E7018';switch(d.m){case 'stainless':e='AWS A5.4 E308L-16';reason.push('فولاد زنگ‌نزن');break;case 'cast_iron':e='AWS A5.11 ENiFe-CI';reason.push('چدن');break;case 'low_alloy':e=d.ceq>0.45?'AWS A5.5 E8018-B2':'AWS A5.5 E7018-A1';reason.push('فولاد کم‌آلیاژ');break;case 'galvanized':e='AWS A5.1 E6011';reason.push('گالوانیزه');break;case 'aluminum':e='AWS A5.10 ER4043';reason.push('آلومینیوم');break;case 'copper':e='AWS A5.7 ERCu';reason.push('مس');break;case 'brass':e='AWS A5.7 ERCuZn-A';reason.push('برنج');break;case 'titanium':e='AWS A5.16 ERTi-2';reason.push('تیتانیوم');break;default:if(/^[3-6]/.test(d.p)){e='AWS A5.1 E7018';reason.push('موقعیت غیرتخت');}else if(d.t<6&&d.ceq<0.3){e='AWS A5.1 E6013';reason.push('ضخامت کم');}}
+    if(d.lh&&!/7018|8018/.test(e)){e='AWS A5.1 E7018';reason.push('Low-H');}
+    if(d.ys>460&&!/8/.test(e)){e=e.replace(/7018/g,'8018');reason.push('استحکام بالا');}
+    if(d.ph>0)reason.push(`پیش‌گرمایش ${d.ph}°C`);
+    return {e,r:reason.join('<br>')};};
+
+  $.btn.addEventListener('click',()=>{
+    $.w.textContent='';$.r.classList.remove('visible');
+    const t=+$.t.value;if(t<=0||t>200){$.w.textContent=ERR_THICK;return;}
+    const ceq=+$.c.value;if(isNaN(ceq)||ceq<0||ceq>1.2){$.w.textContent=ERR_CEQ;return;}
+    const data={m:$.m.value,p:$.p.value,t,ceq,ys:+$.y.value||0,ph:+$.h.value||0,lh:$.l.checked};
+    const out=selectElectrode(data);
+    $.r.innerHTML=`<strong>${out.e}</strong><br>${out.r}`;$.r.classList.add('visible');
+  });
+
+  const q=new URLSearchParams(location.search);if(q.size){$.m.value=q.get('m')||$.m.value;$.p.value=q.get('p')||$.p.value;$.t.value=q.get('t')||'';$.c.value=q.get('ceq')||'';$.y.value=q.get('ys')||'';$.h.value=q.get('ph')||'';$.l.checked=q.get('lh')==='1';fillPH();}
+});
+</script>
+</body>
+</html>
