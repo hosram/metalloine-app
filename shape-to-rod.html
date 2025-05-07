@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>محاسبه قطر میلگرد | Metalloine</title>
+
+  <!-- فونت Vazirmatn -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+
+  <style>
+    :root{
+      --c-primary:#8E1F61;
+      --c-accent:#8FA2B2;
+      --glass:rgba(255,255,255,0.1);
+      --r:24px;
+      --g:12px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;background:#000;color:#fff;
+      font-family:"Vazirmatn",sans-serif;line-height:1.6
+    }
+    /* هدر */
+    #topbar{
+      display:flex;justify-content:center;align-items:center;
+      height:64px;margin:var(--g);
+      background:var(--glass);backdrop-filter:blur(24px);
+      border:1px solid rgba(255,255,255,.25);border-radius:var(--r)
+    }
+    .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
+    .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+    .brand{color:var(--c-primary)}
+    main{max-width:420px;margin:0 auto;padding:var(--g)}
+    /* کارت فرم */
+    .card{
+      background:var(--glass);backdrop-filter:blur(24px);
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:var(--r);padding:16px;
+      display:grid;grid-template-columns:1fr 1fr;gap:12px;
+      margin-top:var(--g)
+    }
+    label{display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+    input,select,button{
+      border:none;border-radius:var(--r);
+      background:var(--glass);color:#fff;font:inherit;padding:10px
+    }
+    select:focus,input:focus{outline:2px solid var(--c-primary)}
+    select,option{background:#1a1a1a;color:#fff}
+    .row-2{grid-column:span 2}
+    .btn-submit{
+      background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
+      color:#fff;cursor:pointer;font-weight:600;
+      box-shadow:0 4px 10px rgba(0,0,0,.4);border:none;border-radius:var(--r)
+    }
+    .hidden{display:none!important}
+    .warning{color:#ff8080;text-align:center;grid-column:span 2;min-height:1.2em;font-size:.8rem}
+    /* نتایج */
+    #results{margin-top:1rem}
+    .resBox{
+      background:#222;margin-top:8px;border-radius:var(--r);padding:12px;
+      border:1px solid rgba(255,255,255,.3);font-size:.9rem;line-height:1.4
+    }
+    @media(max-width:600px){
+      .card{grid-template-columns:1fr!important}
+    }
+  </style>
+</head>
+<body>
+<header id="topbar">
+  <span class="logo">
+    <span class="ring"></span>
+    <span class="brand">Metalloine</span>
+  </span>
+</header>
+
+<main>
+  <h2 style="text-align:center">تبدیل مقطع به قطر میلگرد</h2>
+
+  <form id="shapeForm" class="card">
+    <!-- انتخاب نوع مقطع -->
+    <label class="row-2">نوع مقطع
+      <select id="shapeType">
+        <option value="square">چهارگوش</option>
+        <option value="rectangle">تسمه (مستطیل)</option>
+        <option value="hexagon">شش‌گوش</option>
+      </select>
+    </label>
+
+    <!-- فیلدهای ورودی ابعاد -->
+    <label id="f-dim1">ضلع / عرض (mm)
+      <input id="dim1" type="number" placeholder="مثلاً 40">
+    </label>
+    <label id="f-dim2" class="hidden">ضخامت (mm)
+      <input id="dim2" type="number" placeholder="مثلاً 20">
+    </label>
+
+    <!-- تلرانس -->
+    <label>تلرانس (%)  
+      <input id="tol" type="number" value="5">
+    </label>
+
+    <button id="btnCalc" type="button" class="btn-submit row-2">محاسبه</button>
+    <div id="warn" class="warning row-2"></div>
+  </form>
+
+  <!-- خروجی‌ها -->
+  <section id="results">
+    <div id="outTheo" class="resBox"></div>
+    <div id="outRecom" class="resBox"></div>
+    <div id="outNote" class="resBox"></div>
+  </section>
+
+  <!-- بازگشت -->
+  <a href="index.html" class="btn-submit row-2" style="display:block;text-align:center;margin:2rem auto;max-width:420px">⬅ بازگشت</a>
+</main>
+
+<script>
+/* ------------------ نمایش پویاى فیلدها ------------------ */
+const shapeSel = document.getElementById('shapeType');
+const fDim2   = document.getElementById('f-dim2');
+const dim2Inp = document.getElementById('dim2');
+
+function updateFields(){
+  if(shapeSel.value==='rectangle'){
+    fDim2.classList.remove('hidden');
+    dim2Inp.required=true;
+  }else{
+    fDim2.classList.add('hidden');
+    dim2Inp.required=false;
+    dim2Inp.value='';
+  }
+}
+shapeSel.addEventListener('change',updateFields);
+updateFields();
+
+/* ------------------ محاسبات هندسى ------------------ */
+function diaSquare(a){return a*Math.SQRT2;}                               // چهارگوش
+function diaRectangle(b,t){return Math.sqrt(b*b + t*t);}                  // تسمه
+function diaHex(A){return A/Math.cos(30*Math.PI/180);}                    // شش‌گوش
+
+function calc(shape,a,b=0){
+  switch(shape){
+    case 'square':    return diaSquare(a);
+    case 'rectangle': return diaRectangle(a,b);
+    case 'hexagon':   return diaHex(a);
+    default:          return 0;
+  }
+}
+
+/* ------------------ رویداد محاسبه ------------------ */
+const warn = document.getElementById('warn');
+const outTheo  = document.getElementById('outTheo');
+const outRecom = document.getElementById('outRecom');
+const outNote  = document.getElementById('outNote');
+
+document.getElementById('btnCalc').addEventListener('click',()=>{
+  warn.textContent='';
+  outTheo.textContent='';
+  outRecom.textContent='';
+  outNote.textContent='';
+
+  const shape = shapeSel.value;
+  const d1 = parseFloat(document.getElementById('dim1').value||'0');
+  const d2 = parseFloat(document.getElementById('dim2').value||'0');
+  const tol = parseFloat(document.getElementById('tol').value||'0');
+
+  if(d1<=0 || (shape==='rectangle' && d2<=0)){ 
+    warn.textContent='ابعاد را کامل و صحیح وارد کنید.'; 
+    return;
+  }
+  if(tol<0){warn.textContent='تلرانس نمی‌تواند منفی باشد.'; return;}
+
+  // قطرها
+  const dTheo = calc(shape,d1,d2);
+  if(!dTheo){warn.textContent='محاسبه امکان‌پذیر نیست.';return;}
+  const dRecom = dTheo*(1+tol/100);
+
+  // نمایش
+  outTheo.innerHTML  = `قطر تئوری: <strong>${dTheo.toFixed(2)} میلی‌متر</strong>`;
+  outRecom.innerHTML = `قطر پیشنهادى با ${tol}% تلرانس: <strong>${dRecom.toFixed(2)} میلی‌متر</strong>`;
+  outNote.innerHTML  = `در عمل باید نزدیک‌ترین سایز استاندارد <strong>بزرگ‌تر</strong> از مقدار پیشنهادى انتخاب شود.`;
+});
+</script>
+</body>
+</html>
