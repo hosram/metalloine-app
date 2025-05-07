@@ -2,29 +2,24 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Metalloine | صفحهٔ اصلی</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>محاسبه لیزینگ فلزات | Metalloine</title>
 
-  <!-- فونت Vazirmatn -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"
-  />
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
 
   <style>
   :root{
     --c-primary:#8E1F61;
     --c-accent:#8FA2B2;
     --glass:rgba(255,255,255,.1);
-    --r:24px;
-    --g:12px;
+    --r:24px;--g:12px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
     background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;
     min-height:100vh;line-height:1.6
   }
-  /*––– هدر –––*/
   #topbar{
     display:flex;justify-content:center;align-items:center;
     height:64px;margin:var(--g);
@@ -35,34 +30,31 @@
   .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
   .brand{color:var(--c-primary)}
 
-  /*––– محتوای اصلی –––*/
-  #landing{
-    min-height:calc(100vh - 64px - 2*var(--g) - 60px);
-    display:grid;place-items:center;text-align:center
+  main{max-width:420px;margin:0 auto;padding:var(--g)}
+  .card{
+    background:var(--glass);backdrop-filter:blur(24px);
+    border-radius:var(--r);border:1px solid rgba(255,255,255,.2);
+    padding:16px;margin-top:var(--g);display:flex;flex-direction:column;gap:1rem
   }
-  .btn-main{
-    padding:14px 32px;border:none;border-radius:var(--r);
-    cursor:pointer;font-weight:700;font-size:1rem;
+  h2{text-align:center}
+  label{display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+  input,select,button{
+    border:none;border-radius:var(--r);background:var(--glass);
+    color:#fff;padding:10px;font:inherit
+  }
+  input:focus,select:focus{outline:2px solid var(--c-primary)}
+  .btn-submit{
     background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
-    color:#fff;box-shadow:0 4px 10px rgba(0,0,0,.4);text-decoration:none;
-    display:inline-block;transition:all .2s
+    color:#fff;font-weight:600;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.4)
   }
-  .btn-main:hover{
-    transform:translateY(-3px);
-    box-shadow:0 6px 14px rgba(0,0,0,.5)
+  .result{
+    background:#111;padding:12px;border-radius:var(--r);
+    border:1px solid rgba(255,255,255,.2);white-space:pre-line;min-height:4em
   }
-  footer{
-    text-align:center;font-size:.8rem;opacity:.7;
-    padding:.5rem 0
-  }
-  @media(max-width:540px){
-    .btn-main{width:100%}
-  }
+  .sepNumber{text-align:right}
   </style>
 </head>
 <body>
-
-<!--–––– Header ––––-->
 <header id="topbar">
   <span class="logo">
     <span class="ring"></span>
@@ -70,18 +62,97 @@
   </span>
 </header>
 
-<!--–––– Landing links ––––-->
-<section id="landing">
-  <div style="display:flex;flex-direction:column;gap:1rem;">
-    <a href="weight.html"               class="btn-main">محاسبه وزن</a>
-    <a href="scrap.html"                class="btn-main">محاسبه ضایعات</a>
-    <a href="hardness.html"             class="btn-main">تبدیل سختی</a>
-    <a href="machining-allowances.html" class="btn-main">تلرانس ماشین‌کاری</a>
-    <a href="leaseCalc.html"            class="btn-main">محاسبه لیزینگ</a>
-    <a href="bank_balance.html"         class="btn-main">نمایش موجودی بانک</a>
-  </div>
-</section>
+<main>
+  <h2>محاسبه لیزینگ فلزات</h2>
+  <div class="card">
+    <label>نام متریال
+      <select id="mat">
+        <option>فولاد ساده</option>
+        <option>فولاد زنگ‌نزن</option>
+        <option>مس</option>
+        <option>آلومینیوم</option>
+        <option>برنج</option>
+        <option>فسفر برنز</option>
+        <option>تیتانیوم</option>
+      </select>
+    </label>
 
-<footer>ورژن ۱٫۰۰</footer>
+    <label>مبلغ کلی فاکتور (تومان)
+      <input id="invoice" class="sepNumber" placeholder="مثلاً 5,000,000"/>
+    </label>
+
+    <label>برآورد تغییر قیمت دلار (تومان)
+      <input id="predict" class="sepNumber" placeholder="+5,000 یا -3,000"/>
+    </label>
+
+    <button id="btnCalc" class="btn-submit">محاسبه</button>
+
+    <div class="result" id="box1"></div>
+    <div class="result" id="box2"></div>
+    <div class="result" id="box3"></div>
+
+    <a href="index.html" class="btn-submit" style="text-decoration:none;">⬅ بازگشت</a>
+  </div>
+</main>
+
+<script>
+/* جداکننده سه‌رقمی هنگام تایپ */
+function formatNum(s){
+  if(!s) return "";
+  const neg=s.trim().startsWith("-"); 
+  const raw=s.replace(/\D/g,"");
+  return (neg?"-":"") + (raw?parseInt(raw,10).toLocaleString("en-US"):"");
+}
+document.querySelectorAll(".sepNumber").forEach(el=>{
+  el.addEventListener("input",e=>{
+    const pos=el.selectionStart,len=el.value.length;
+    el.value=formatNum(el.value);
+    el.selectionEnd=pos+(el.value.length-len);
+  });
+});
+function toNumber(str){
+  if(!str) return 0;
+  const neg=str.trim().startsWith("-")?-1:1;
+  return neg*parseInt(str.replace(/\D/g,"")||"0",10);
+}
+
+/* نرخ سود ماهانه ۷٪ */
+const r=0.07;
+function noPrepay(b){return Math.round(b*(1+r));}
+function withPrepay(b){const dp=b*0.5;return Math.round(dp+(b-dp)*(1+r));}
+
+document.getElementById("btnCalc").addEventListener("click",()=>{
+  const mat=document.getElementById("mat").value;
+  const invoice=toNumber(document.getElementById("invoice").value);
+  const delta=toNumber(document.getElementById("predict").value);
+
+  if(invoice<=0){
+    alert("مبلغ فاکتور را وارد کنید");return;
+  }
+  /* کادر اول */
+  box1.textContent=
+    `متریال: ${mat}
+مبلغ کلی فاکتور: ${invoice.toLocaleString("en-US")} تومان`;
+
+  const n0=noPrepay(invoice);
+  const n1=withPrepay(invoice);
+
+  /* کادر دوم */
+  box2.textContent=
+    `نسیه بدون پیش‌پرداخت (۱ ماهه): ${n0.toLocaleString("en-US")} تومان
+نسیه با پیش‌پرداخت ۵۰٪ (۱ ماهه): ${n1.toLocaleString("en-US")} تومان`;
+
+  /* تغییر دلاری */
+  const ratio=delta? (invoice+delta)/invoice : 1;
+  const n0x=Math.round(n0*ratio);
+  const n1x=Math.round(n1*ratio);
+
+  /* کادر سوم */
+  box3.textContent=
+    `تغییر دلاری فرضی: ${delta.toLocaleString("en-US")} تومان
+نسیه بدون پیش‌پرداخت (با تغییر): ${n0x.toLocaleString("en-US")} تومان
+نسیه با پیش‌پرداخت ۵۰٪ (با تغییر): ${n1x.toLocaleString("en-US")} تومان`;
+});
+</script>
 </body>
 </html>
