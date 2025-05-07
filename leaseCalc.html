@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Metalloine | لیزینگ فلزات ۱٫۵</title>
+  <title>Metalloine | لیزینگ فلزات</title>
+
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
   <style>
@@ -12,9 +13,9 @@
   body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6}
   header{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
     background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
-  .ring{width:22px;height:22px;border:6px solid var(--c2);border-radius:50%}
-  .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c1)}
-  main{max-width:840px;margin:0 auto;padding:var(--g)}
+  header .ring{width:22px;height:22px;border:6px solid var(--c2);border-radius:50%}
+  header .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c1)}
+  main{max-width:820px;margin:0 auto;padding:var(--g)}
   .card{background:var(--glass);backdrop-filter:blur(24px);
     border:1px solid rgba(255,255,255,.2);border-radius:var(--r);padding:16px;margin-bottom:var(--g)}
   label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
@@ -27,6 +28,7 @@
   .btn-back{background:#444}
   table{width:100%;border-collapse:collapse;margin-top:16px;font-size:.9rem}
   th,td{border:1px solid rgba(255,255,255,.25);padding:6px;text-align:center}
+  th{white-space:nowrap}
   .sep{text-align:right}
   footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
   </style>
@@ -37,15 +39,18 @@
 
 <main>
 <div class="card">
-  <h3>محاسبۀ لیزینگ فلزات</h3>
+  <h3>فرم محاسبۀ لیزینگ فلزات</h3>
 
   <label>وزن قطعه (کیلوگرم)<input id="w" class="sep" placeholder="120"/></label>
   <label>قیمت هر کیلو (تومان)<input id="pk" class="sep" placeholder="95,000"/></label>
   <label>تعداد برش<input id="cuts" class="sep" placeholder="3"/></label>
   <label>قیمت هر برش (تومان)<input id="pc" class="sep" placeholder="12,000"/></label>
-  <label>درصد پیش‌پرداخت
-    <input type="range" id="dp" min="0" max="100" value="50"/>
-    <span id="dpVal">۵۰٪</span></label>
+  <label>درصد پیش‌پرداخت برای ۱ ماه
+    <input type="range" id="dp1" min="0" max="100" value="50"/>
+    <span id="dpVal1">۵۰٪</span></label>
+  <label>درصد پیش‌پرداخت برای ۲ ماه
+    <input type="range" id="dp2" min="0" max="100" value="50"/>
+    <span id="dpVal2">۵۰٪</span></label>
   <label>افزایش دلار بر هر کیلو (تومان)<input id="dKg" class="sep" placeholder="+1,000 یا -500"/></label>
 
   <button class="btn" id="calcBtn">محاسبه</button>
@@ -55,7 +60,7 @@
 </div>
 </main>
 
-<footer>Metalloine — نسخه ۱٫۵</footer>
+<footer>© 2025 Metalloine</footer>
 
 <script>
 const fa2en=s=>s.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
@@ -69,52 +74,57 @@ document.querySelectorAll(".sep").forEach(el=>{
     el.selectionEnd=p+(el.value.length-l);
   });
 });
-dp.oninput=_=>dpVal.textContent=dp.value+"٪";
+dp1.oninput=_=>dpVal1.textContent=dp1.value+"٪";
+dp2.oninput=_=>dpVal2.textContent=dp2.value+"٪";
 
 const r=0.07;
 const grow=(x,m)=>Math.round(x*Math.pow(1+r,m));
 const withDP=(b,p,m)=>Math.round(b*p/100+(b-b*p/100)*Math.pow(1+r,m));
 
 calcBtn.onclick=_=>{
-  const w   = raw(w.value),
-        pk  = raw(pk.value),
-        cuts= raw(cuts.value),
-        pc  = raw(pc.value),
-        dpP = +dp.value,
-        dkg = raw(dKg.value)*(dKg.value.trim().startsWith("-")?-1:1);
+  const w    = raw(w.value),
+        pk   = raw(pk.value),
+        cuts = raw(cuts.value),
+        pc   = raw(pc.value),
+        dp1P = +dp1.value,
+        dp2P = +dp2.value,
+        dkg  = raw(dKg.value)*(dKg.value.trim().startsWith("-")?-1:1);
 
   if(!w || !pk) return alert("وزن و قیمت هر کیلو الزامی است");
 
-  const priceBase = w * pk;
-  const priceDelta = w * (pk + dkg);
-  const cutTotal = cuts * pc;
-  const finalBase = priceBase + cutTotal;
-  const finalDelta = priceDelta + cutTotal;
+  const metalΔ  = w * (pk + dkg);
+  const cut     = pc;
+  const total   = metalΔ + (cuts * cut);
 
   const rows = [
-    ["قیمت اولیه", priceBase + cutTotal],
-    ["قیمت نهایی نقدی", finalDelta],
-    ["نسیه ۱ ماه بدون پیش‌پرداخت", grow(finalDelta, 1)],
-    [`نسیه ۱ ماه با پیش‌پرداخت ${dpP}%`, withDP(finalDelta, dpP, 1)],
-    ["نسیه ۲ ماه بدون پیش‌پرداخت", grow(finalDelta, 2)],
-    [`نسیه ۲ ماه با پیش‌پرداخت ${dpP}%`, withDP(finalDelta, dpP, 2)]
+    ["قیمت اولیه", w*pk + (cuts * pc)],
+    ["قیمت نهایی نقدی", total],
+    ["نسیه ۱ ماه بدون پیش‌پرداخت", grow(total,1)],
+    [`نسیه ۱ ماه با پیش‌پرداخت ${dp1P}%`, withDP(total,dp1P,1)],
+    ["نسیه ۲ ماه بدون پیش‌پرداخت", grow(total,2)],
+    [`نسیه ۲ ماه با پیش‌پرداخت ${dp2P}%`, withDP(total,dp2P,2)]
   ];
 
-  const body = rows.map(row=>{
-    const total = row[1];
-    const perKg = total / w;
-    const perCut = cuts ? total / cuts : 0;
-    return `<tr><td>${row[0]}</td><td>${sep(Math.round(perKg))}</td><td>${sep(Math.round(perCut))}</td></tr>`;
-  }).join("");
+  const table1 = `<table>
+  <thead><tr>
+    <th>نوع پرداخت</th><th>قیمت هر کیلو</th><th>قیمت هر برش</th>
+  </tr></thead>
+  <tbody>${
+    rows.map(r=>{
+      const perKg = r[1]/w;
+      const perCut = cuts ? r[1]/cuts : 0;
+      return `<tr><td>${r[0]}</td><td>${sep(Math.round(perKg))}</td><td>${sep(Math.round(perCut))}</td></tr>`;
+    }).join("")
+  }</tbody></table>`;
+
+  const table2 = `<table style="margin-top:16px">
+  <thead><tr><th>نوع پرداخت</th><th>مبلغ کل (تومان)</th></tr></thead>
+  <tbody>${
+    rows.map(r=>`<tr><td>${r[0]}</td><td>${sep(r[1])}</td></tr>`).join("")
+  }</tbody></table>`;
 
   document.getElementById("out").innerHTML =
-    `<table>
-      <thead>
-        <tr><th>نوع پرداخت</th><th>قیمت هر کیلو (تومان)</th><th>قیمت هر برش (تومان)</th></tr>
-      </thead>
-      <tbody>${body}</tbody>
-    </table>
-    <p style="margin-top:6px;font-size:.85rem">افزایش دلار بر هر کیلو: ${sep(dkg)} تومان</p>`;
+    table1 + table2 + `<p style="margin-top:6px;font-size:.85rem">افزایش دلار: ${sep(dkg)} تومان</p>`;
 };
 </script>
 </body>
