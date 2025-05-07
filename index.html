@@ -6,22 +6,9 @@
   <title>Metalloine | صفحه اصلی</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
   <style>
-    :root {
-      --c-bg: #000;
-      --c-fg: #fff;
-      --c-primary: #8E1F61;
-      --glass: rgba(255, 255, 255, 0.08);
-      --r: 24px;
-      --g: 12px;
-    }
+    :root{--c-bg:#000;--c-fg:#fff;--c-primary:#8E1F61;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
     *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:"Vazirmatn",sans-serif;
-      background:var(--c-bg);color:var(--c-fg);
-      min-height:100vh;display:flex;flex-direction:column;
-      overflow-x:hidden
-    }
-    /* پیش‌لودر */
+    body{font-family:"Vazirmatn",sans-serif;background:var(--c-bg);color:var(--c-fg);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
     #preloader{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:var(--c-bg);z-index:9999;transition:opacity .2s}
     #preloader.hidden{opacity:0;pointer-events:none}
     .spinner{width:38px;height:38px;border:4px solid var(--c-primary);border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
@@ -43,18 +30,13 @@
   <div id="preloader"><span class="spinner"></span></div>
 
   <header id="topbar">
-    <span class="logo">
-      <span class="ring"></span>
-      <span class="brand">Metalloine</span>
-    </span>
+    <span class="logo"><span class="ring"></span><span class="brand">Metalloine</span></span>
   </header>
 
   <!-- Welcome -->
   <section id="welcome" class="view">
     <h1 style="font-size:2.3rem;margin-bottom:.75rem">به متال‌لاین خوش آمدید</h1>
-    <p id="tagline" style="font-size:1.2rem;opacity:.85;margin-bottom:2.5rem">
-      ابزارهای هوشمند برای <span id="roles" style="color:var(--c-primary)"></span>
-    </p>
+    <p id="tagline" style="font-size:1.2rem;opacity:.85;margin-bottom:2.5rem">ابزارهای هوشمند برای <span id="roles" style="color:var(--c-primary)"></span></p>
     <button id="startBtn" class="btn-main">شروع کنید</button>
   </section>
 
@@ -72,17 +54,18 @@
     </div>
   </section>
 
-  <!-- Assistants -->
+  <!-- Engineering -->
   <section id="engineering" class="view hidden">
     <h2 style="font-size:1.8rem;margin-bottom:2rem">دستیار مهندسی</h2>
     <div class="grid" style="max-width:600px">
       <a href="hardness.html" class="btn-main">تبدیل سختی</a>
-      <!-- دکمه جدید ↓↓↓ -->
-      <a href="electrode-finder.html" class="btn-main">پیشنهاد الکترود</a>
+      <a href="electrode-assistant.html" class="btn-main">انتخاب الکترود فولاد</a>
+      <a href="electrode-finder.html" class="btn-main">انتخاب الکترود جوشکاری</a>
     </div>
     <button class="btn-back">بازگشت</button>
   </section>
 
+  <!-- Technical -->
   <section id="technical" class="view hidden">
     <h2 style="font-size:1.8rem;margin-bottom:2rem">دستیار فنی</h2>
     <div class="grid" style="max-width:600px">
@@ -94,6 +77,7 @@
     <button class="btn-back">بازگشت</button>
   </section>
 
+  <!-- Financial -->
   <section id="financial" class="view hidden">
     <h2 style="font-size:1.8rem;margin-bottom:2rem">دستیار مالی</h2>
     <a href="leaseCalc.html" class="btn-main">محاسبه لیزینگ</a>
@@ -101,28 +85,9 @@
   </section>
 
   <script>
-    /* پیش‌لودر */
-    const pre = document.getElementById('preloader');
-    function hide(){pre.classList.add('hidden')}
-    window.addEventListener('load',hide);setTimeout(hide,1500);
-
-    /* جابه‌جایی نماها */
-    function show(id){
-      document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
-    }
-
-    /* افکت تایپ */
-    const roles=['مهندسین','مدیران فنی','مدیران مالی','کارشناسان تولید'];
-    const span=document.getElementById('roles');let r=0,c=0,del=false;
-    (function type(){
-      const t=roles[r];span.textContent=t.substring(0,c);
-      if(!del && c++===t.length){del=true;setTimeout(type,1000)}
-      else if(del && c--===0){del=false;r=(r+1)%roles.length;setTimeout(type,350)}
-      else setTimeout(type,del?45:85);
-    })();
-
-    /* ناوبری */
+    const pre=document.getElementById('preloader');function hide(){pre.classList.add('hidden')}window.addEventListener('load',hide);setTimeout(hide,1500);
+    function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+    const roles=['مهندسین','مدیران فنی','مدیران مالی','کارشناسان تولید'];const span=document.getElementById('roles');let r=0,c=0,del=false;(function type(){const t=roles[r];span.textContent=t.substring(0,c);if(!del&&c++===t.length){del=true;setTimeout(type,1000)}else if(del&&c--===0){del=false;r=(r+1)%roles.length;setTimeout(type,350)}else setTimeout(type,del?45:85)})();
     document.getElementById('startBtn').addEventListener('click',()=>show('menu'));
     document.querySelectorAll('#menu [data-target]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.target)));
     document.querySelectorAll('.btn-back').forEach(b=>b.addEventListener('click',()=>show('menu')));
