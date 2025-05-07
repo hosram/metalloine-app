@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>پیشنهاد الکترود | Metalloine</title>
+
+  <!-- فونت فارسی -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css">
+
+  <!-- تم مشترک -->
+  <link rel="stylesheet" href="assets/theme.css">
+</head>
+<body>
+
+<main>
+  <h2 style="text-align:center">پیشنهاد الکترود</h2>
+
+  <!-- کارت جستجو -->
+  <section class="card">
+    <label class="row-2">
+      نام فولاد یا استاندارد
+      <input id="steelName" list="steelList"
+             placeholder="مثلاً ASTM A36 یا 1.4401">
+      <datalist id="steelList"></datalist>
+    </label>
+
+    <button id="btn" type="button" class="btn-submit row-2">
+      نمایش الکترود
+    </button>
+
+    <div id="warn"   class="row-2 warning"></div>
+    <div id="result" class="row-2"></div>
+  </section>
+
+  <!-- برگشت به منوی اصلی -->
+  <a href="index.html" class="btn-icon">⬅ بازگشت</a>
+</main>
+
+<!-- هدر مشترک -->
+<script src="assets/header.js"></script>
+
+<script>
+/* ------- بارگذاری دیتابیس فولاد ------- */
+let steelDB = {};
+const list    = document.getElementById('steelList');
+const warn    = document.getElementById('warn');
+const result  = document.getElementById('result');
+const input   = document.getElementById('steelName');
+
+fetch('assets/steel_db_full.json')
+  .then(r => r.json())
+  .then(data => {
+    steelDB = data;
+    // تکمیل خودکار در <datalist>
+    Object.keys(data).forEach(k => {
+      const opt = document.createElement('option');
+      opt.value = k;
+      list.appendChild(opt);
+    });
+  })
+  .catch(err => console.error("DB load error:", err));
+
+/* ------- منطق جستجو ------- */
+function show() {
+  warn.textContent   = "";
+  result.textContent = "";
+
+  const q = input.value.trim();
+  if (!q) {
+    warn.textContent = "نام فولاد را وارد کنید.";
+    return;
+  }
+
+  // جستجوی دقیق یا شامل
+  const key = Object.keys(steelDB).find(
+                k => k.toLowerCase() === q.toLowerCase()
+              ) ||
+              Object.keys(steelDB).find(
+                k => k.toLowerCase().includes(q.toLowerCase())
+              );
+
+  if (!key) {
+    warn.textContent = `«${q}» در دیتابیس نیست.`;
+    return;
+  }
+
+  const { d, e } = steelDB[key];
+  let html = `<h3>${key}</h3>
+              <p style="margin-top:6px">${d || "-"}</p>
+              <div style="margin-top:10px"><strong>الکترودهای پیشنهادی:</strong></div>`;
+
+  (e || []).forEach(x => {
+    html += `<div class="elec-item">${x}</div>`;
+  });
+
+  result.innerHTML = html;
+}
+
+/* رویدادها */
+document.getElementById('btn').addEventListener('click', show);
+input.addEventListener('keydown', e => { if (e.key === "Enter") show(); });
+</script>
+</body>
+</html>
