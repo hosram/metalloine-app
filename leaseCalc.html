@@ -6,8 +6,10 @@
   <title>Metalloine | صفحهٔ اصلی</title>
 
   <!-- فونت Vazirmatn -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"
+  />
 
   <style>
   :root{
@@ -35,7 +37,7 @@
 
   /*––– محتوای اصلی –––*/
   #landing{
-    min-height:calc(100vh - 64px - 2*var(--g) - 140px);
+    min-height:calc(100vh - 64px - 2*var(--g) - 60px);
     display:grid;place-items:center;text-align:center
   }
   .btn-main{
@@ -45,20 +47,10 @@
     color:#fff;box-shadow:0 4px 10px rgba(0,0,0,.4);text-decoration:none;
     display:inline-block;transition:all .2s
   }
-  .btn-main:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(0,0,0,.5)}
-
-  /*––– باکس قیمت تتر –––*/
-  #tetherBox{
-    margin:2rem auto 3rem;max-width:420px;padding:16px;
-    background:var(--glass);backdrop-filter:blur(24px);
-    border-radius:var(--r);border:1px solid rgba(255,255,255,.25);
-    display:flex;flex-direction:column;gap:12px;align-items:center
+  .btn-main:hover{
+    transform:translateY(-3px);
+    box-shadow:0 6px 14px rgba(0,0,0,.5)
   }
-  #tetherPrice{
-    width:220px;text-align:center;border:none;border-radius:var(--r);
-    background:#222;color:#fff;padding:12px;font-size:1rem
-  }
-
   footer{
     text-align:center;font-size:.8rem;opacity:.7;
     padding:.5rem 0
@@ -90,35 +82,6 @@
   </div>
 </section>
 
-<!--–––– Tether price box ––––-->
-<section id="tetherBox">
-  <h3 style="margin-bottom:.5rem">دریافت قیمت تتر</h3>
-  <button id="btnLoadTether" class="btn-main" style="width:200px;">به‌روزرسانی قیمت</button>
-  <input  id="tetherPrice"  type="text" class="sepNumber" readonly placeholder="—"/>
-</section>
-
 <footer>ورژن ۱٫۰۰</footer>
-
-<script>
-/* جداکننده سه‌رقمی */
-function formatNumber(n){return (+n||0).toLocaleString("en-US")}
-
-/* فراخوانی سرورلس /api/tetherland */
-async function loadTetherPrice(){
-  try{
-    const res=await fetch("/api/tetherland");
-    if(!res.ok) throw new Error("HTTP "+res.status);
-    const data=await res.json();
-    if(!data.success) throw new Error(data.message||"API Error");
-    document.getElementById("tetherPrice").value = formatNumber(data.tetherPrice);
-  }catch(e){
-    alert("خطا در دریافت قیمت تتر: "+e.message);
-  }
-}
-document.getElementById("btnLoadTether").addEventListener("click",loadTetherPrice);
-
-/* در بدو ورود یک‌بار تلاش می‌کنیم قیمت تتر را بگیریم */
-loadTetherPrice();
-</script>
 </body>
 </html>
