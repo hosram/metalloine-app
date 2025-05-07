@@ -1,207 +1,171 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Metalloine | محاسبۀ لیزینگ فلزات ۱٫۱۱</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Metalloine | لیزینگ فلزات ۱٫۲</title>
 
-  <!-- فونت Vazirmatn -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
 
-  <style>
-  :root{
-    --c-primary:#8E1F61;
-    --c-accent :#8FA2B2;
-    --glass   :rgba(255,255,255,.08);
-    --r:24px;--g:12px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6
-  }
-  header{
-    display:flex;justify-content:center;align-items:center;
-    height:64px;margin:var(--g);
-    background:var(--glass);backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,.25);border-radius:var(--r)
-  }
-  .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
-  .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c-primary)}
+<!-- React + Recharts (UMD) -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
 
-  main{max-width:750px;margin:0 auto;padding:var(--g)}
-  .card{
-    background:var(--glass);backdrop-filter:blur(24px);
-    border:1px solid rgba(255,255,255,.2);border-radius:var(--r);padding:16px
-  }
-  label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
-  input[type=text],input[type=range]{
-    background:#222;border:none;border-radius:var(--r);color:#fff;padding:10px;
-    font:inherit;direction:ltr
-  }
-  .btn{
-    cursor:pointer;border:none;border-radius:var(--r);padding:12px 24px;
-    background:linear-gradient(135deg,var(--c-primary),var(--c-accent));
-    color:#fff;font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.4)
-  }
-  .btn:hover{transform:translateY(-2px)}
-  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.9rem}
-  th,td{border:1px solid rgba(255,255,255,.25);padding:6px;text-align:center}
-  .sep{text-align:right}
-  footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
-  @media(max-width:540px){.btn{width:100%}}
-  </style>
+<style>
+:root{--c1:#8E1F61;--c2:#8FA2B2;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6}
+header{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
+  background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
+header .ring{width:22px;height:22px;border:6px solid var(--c2);border-radius:50%}
+header .brand{margin-inline-start:8px;font-size:1.4rem;font-weight:700;color:var(--c1)}
+
+main{max-width:820px;margin:0 auto;padding:var(--g);display:grid;gap:var(--g)}
+.card{background:var(--glass);backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,.2);border-radius:var(--r);padding:16px}
+label{display:flex;flex-direction:column;gap:4px;margin-block:8px;font-size:.85rem}
+input[type=text],input[type=range]{background:#222;border:none;border-radius:var(--r);
+  color:#fff;padding:10px;font:inherit;direction:ltr}
+.btn{cursor:pointer;border:none;border-radius:var(--r);padding:12px 24px;
+  background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-weight:600;
+  box-shadow:0 3px 8px rgba(0,0,0,.4)}
+.btn:hover{transform:translateY(-2px)}
+@media(max-width:540px){.btn{width:100%}}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.9rem}
+th,td{border:1px solid rgba(255,255,255,.25);padding:6px;text-align:center}
+.sep{text-align:right}
+#chartBox{height:260px;margin-top:20px}
+footer{text-align:center;font-size:.8rem;opacity:.7;padding:.6rem 0}
+</style>
 </head>
 <body>
 
-<header>
-  <span class="ring"></span>
-  <span class="brand">Metalloine</span>
-</header>
+<header><span class="ring"></span><span class="brand">Metalloine</span></header>
 
 <main>
-  <div class="card">
-    <h3>فرم محاسبهٔ لیزینگ فلزات</h3>
 
-    <label>وزن قطعه (کیلوگرم)
-      <input id="weightInput" class="sep" placeholder="120"/>
-    </label>
+<!-- فرم اصلی -->
+<div class="card">
+  <h3>محاسبۀ لیزینگ فلزات</h3>
+  <label>وزن قطعه (kg)<input id="w" class="sep" placeholder="120"/></label>
+  <label>قیمت هر kg (تومان)<input id="pk" class="sep" placeholder="95,000"/></label>
+  <label>تعداد برش<input id="cuts" class="sep" placeholder="3"/></label>
+  <label>قیمت هر برش (تومان)<input id="pc" class="sep" placeholder="12,000"/></label>
+  <label>درصد پیش‌پرداخت
+    <input type="range" id="dp" min="0" max="100" value="50"/>
+    <span id="dpVal">۵۰٪</span>
+  </label>
+  <label>تغییر دلار بر kg (تومان)<input id="dKg" class="sep" placeholder="+4,000 یا -2,000"/></label>
+  <button class="btn" id="calc">محاسبه و ذخیره</button>
+  <div id="out"></div>
+</div>
 
-    <label>قیمت هر کیلو (تومان)
-      <input id="priceKgInput" class="sep" placeholder="95,000"/>
-    </label>
+<!-- داشبورد آخرین محاسبات -->
+<div class="card" id="dash">
+  <h3>۵ محاسبۀ آخر</h3>
+  <table id="dashTable" style="display:none">
+    <thead><tr><th>#</th><th>kg×قیمت</th><th>جمع نقدی</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
 
-    <label>تعداد برش
-      <input id="cutCountInput" class="sep" placeholder="3"/>
-    </label>
+<!-- چارت مقایسه -->
+<div class="card">
+  <h3>نمودار مقایسهٔ گزینه‌ها</h3>
+  <div id="chartBox"></div>
+</div>
 
-    <label>قیمت هر برش (تومان)
-      <input id="priceCutInput" class="sep" placeholder="12,000"/>
-    </label>
-
-    <label>درصد پیش‌پرداخت
-      <input type="range" id="dpSlider" min="0" max="100" value="50"/>
-      <span id="dpVal">۵۰٪</span>
-    </label>
-
-    <label>برآورد تغییر دلار بر هر کیلو (تومان) <small>(+ یا −)</small>
-      <input id="deltaKgInput" class="sep" placeholder="+4,000 یا -2,000"/>
-    </label>
-
-    <button class="btn" id="calcBtn">محاسبه</button>
-    <button class="btn" style="margin-top:8px;background:#444" onclick="location='index.html'">⬅ بازگشت</button>
-
-    <div id="resultBox" style="margin-top:1rem;"></div>
-  </div>
 </main>
-
-<footer>Metalloine — نسخه ۱٫۱۱</footer>
+<footer>© 2025 Metalloine | نسخه ۱٫۲</footer>
 
 <script>
-/* — توابع عددی — */
-const sep=n=>(+n||0).toLocaleString("en-US");
-const raw=s=>parseInt(String(s).replace(/\D/g,"")||"0",10);
+/* جداکنندهٔ آنی */
+document.querySelectorAll(".sep").forEach(el=>{
+ el.addEventListener("input",()=>{const p=el.selectionStart,l=el.value.length;
+  const neg=el.value.trim().startsWith("-"),c=el.value.replace(/\D/g,"");
+  el.value=(neg?"-":"")+(c?parseInt(c,10).toLocaleString("en-US"):"");
+  el.selectionEnd=p+(el.value.length-l);
+ })});
+/* نمایش اسلایدر */
+dp.oninput=_=>dpVal.textContent=dp.value+"٪";
 
-/* — جداکنندهٔ سه‌رقمی بلادرنگ — */
-function fmt(el){
-  const p=el.selectionStart,len=el.value.length;
-  const neg=el.value.trim().startsWith("-");
-  const clean=el.value.replace(/\D/g,"");
-  el.value=(neg?"-":"")+(clean?parseInt(clean,10).toLocaleString("en-US"):"");
-  el.selectionEnd=p+(el.value.length-len);
+/* اعداد کمکی */
+const sep=n=>(+n||0).toLocaleString("en-US"), raw=s=>parseInt(String(s).replace(/\D/g,"")||"0",10);
+/* سود */
+const r=0.07, grow=(a,m)=>Math.round(a*Math.pow(1+r,m)),
+      withDP=(b,p,m)=>Math.round(b*p/100+(b-b*p/100)*Math.pow(1+r,m));
+
+/* LocalStorage */
+const DB="metalloine_db"; const db=JSON.parse(localStorage.getItem(DB)||"[]");
+const save=()=>localStorage.setItem(DB,JSON.stringify(db));
+
+/* چارت */
+function chart(data){
+  const {BarChart,Bar,XAxis,YAxis,Tooltip,ResponsiveContainer,CartesianGrid}=Recharts;
+  ReactDOM.render(
+    React.createElement(ResponsiveContainer,{width:"100%",height:"100%"},
+      React.createElement(BarChart,{data},
+        React.createElement(CartesianGrid,{strokeDasharray:"3 3",stroke:"#555"}),
+        React.createElement(XAxis,{dataKey:"name",stroke:"#fff",fontSize:12}),
+        React.createElement(YAxis,{stroke:"#fff",fontSize:12,tickFormatter:sep}),
+        React.createElement(Tooltip,{formatter:sep}),
+        React.createElement(Bar,{dataKey:"amt",fill:"#8E1F61",radius:[4,4,0,0]}))),
+    chartBox);
 }
-document.querySelectorAll(".sep").forEach(i=>i.addEventListener("input",()=>fmt(i)));
+chart([]);  /* empty */
 
-/* — نمایش درصد اسلایدر — */
-const dpSlider=document.getElementById("dpSlider");
-const dpVal   =document.getElementById("dpVal");
-dpSlider.oninput=()=>dpVal.textContent=dpSlider.value+"٪";
+/* داشبورد */
+function refreshDash(){
+ const tb=document.querySelector("#dashTable tbody");tb.innerHTML="";
+ db.slice(-5).reverse().forEach((x,i)=>{
+   tb.insertAdjacentHTML("beforeend",
+     `<tr><td>${db.length-i}</td><td>${sep(x.metal)}</td><td>${sep(x.cash)}</td></tr>`);
+ });
+ document.getElementById("dashTable").style.display=db.length?"":"none";
+}
+refreshDash();
 
-/* — نرخ سود — */
-const r=0.07;
-const grow=(amt,mon)=>Math.round(amt*Math.pow(1+r,mon));
-const withDP=(base,dp,mon)=>{
-  const down=base*dp/100;
-  return Math.round(down + (base-down)*Math.pow(1+r,mon));
+/* محاسبه */
+calc.onclick=_=>{
+ const wv=raw(w.value), pkv=raw(pk.value), cn=raw(cuts.value), pcv=raw(pc.value);
+ const dpP=+dp.value, dkgStr=dKg.value.trim(), dkg=raw(dkgStr)*(dkgStr.startsWith("-")?-1:1);
+ if(!wv||!pkv){alert("وزن و قیمت هر کیلو الزامی است");return;}
+ const metal=wv*pkv, cut=cn*pcv, base=metal+cut;
+ const metalD=wv*(pkv+dkg), baseD=metalD+cut;
+
+ const opts=[
+   ["نقدی"           , base , baseD ],
+   ["۱M بدون‌پیش"    , grow(base,1) , grow(baseD,1) ],
+   [`۱M با پیش ${dpP}%`, withDP(base,dpP,1), withDP(baseD,dpP,1) ],
+   ["۲M بدون‌پیش"    , grow(base,2) , grow(baseD,2) ],
+   [`۲M با پیش ${dpP}%`, withDP(base,dpP,2), withDP(baseD,dpP,2) ]
+ ];
+
+ /* جدول ۱ */
+ let t1=`<table><thead><tr><th>آیتم</th><th>مبلغ (تومان)</th></tr></thead><tbody>
+ <tr><td>وزن × قیمت kg</td><td>${sep(metal)}</td></tr>
+ <tr><td>برش (${cn}×)</td><td>${sep(cut)}</td></tr>`;
+ opts.forEach(o=>t1+=`<tr><td>${o[0]}</td><td>${sep(o[1])}</td></tr>`); t1+="</tbody></table>";
+
+ /* جدول ۲ */
+ const rowsC=opts.map(o=>`<tr><td>${o[0]}</td><td>${sep(o[1])}</td><td>${sep(o[2])}</td></tr>`).join("");
+ const t2=`<table style="margin-top:18px"><thead><tr><th>پرداخت</th><th>پایه</th><th>با Δ</th></tr></thead><tbody>${rowsC}</tbody></table>`;
+
+ /* جدول ۳ */
+ const rowsInc=opts.map(o=>{
+   const inc=o[2]-o[1], incKg=inc/wv, incCut=cn?inc/cn:0;
+   return `<tr><td>${o[0]}</td><td>${sep(Math.round(incKg))}</td><td>${sep(Math.round(incCut))}</td></tr>`;
+ }).join("");
+ const t3=`<table style="margin-top:18px"><thead><tr><th>پرداخت</th><th>افزایش/kg</th><th>افزایش/برش</th></tr></thead><tbody>${rowsInc}</tbody></table>`;
+
+ out.innerHTML=t1+t2+t3+`<p style="margin-top:6px;font-size:.85rem">Δ دلار بر kg: ${sep(dkg)}</p>`;
+
+ /* ذخیره داشبورد + چارت */
+ db.push({metal, cash:base}); if(db.length>50)db.shift(); save(); refreshDash();
+ chart(opts.map(o=>({name:o[0],amt:o[1]})));
 };
-
-/* — عناصر ورودی — */
-const weightInput  =document.getElementById("weightInput");
-const priceKgInput =document.getElementById("priceKgInput");
-const cutCountInput=document.getElementById("cutCountInput");
-const priceCutInput=document.getElementById("priceCutInput");
-const deltaKgInput =document.getElementById("deltaKgInput");
-const calcBtn      =document.getElementById("calcBtn");
-const resultBox    =document.getElementById("resultBox");
-
-/* — محاسبه — */
-calcBtn.addEventListener("click",()=>{
-  const weight   = raw(weightInput.value);
-  const priceKg  = raw(priceKgInput.value);
-  const cutCount = raw(cutCountInput.value);
-  const priceCut = raw(priceCutInput.value);
-  const dp       = +dpSlider.value;
-  const deltaStr = deltaKgInput.value.trim();
-  const deltaKg  = raw(deltaStr)*(deltaStr.startsWith("-")?-1:1);
-
-  if(!weight||!priceKg){
-    alert("لطفاً «وزن قطعه» و «قیمت هر کیلو» را پر کنید");return;
-  }
-
-  /* هزینه‌های پایه */
-  const metalCost = weight*priceKg;
-  const cutCost   = cutCount*priceCut;
-  const baseTotal = metalCost+cutCost;
-
-  /* هزینه با تغییر دلار فقط روی فلز */
-  const metalCostΔ = weight*(priceKg+deltaKg);
-  const totalΔ     = metalCostΔ + cutCost;
-
-  /* گزینه‌ها: پایه */
-  const cash  = baseTotal;
-  const m1np  = grow(baseTotal,1);
-  const m1dp  = withDP(baseTotal,dp,1);
-  const m2np  = grow(baseTotal,2);
-  const m2dp  = withDP(baseTotal,dp,2);
-
-  /* گزینه‌ها: با Δ دلار */
-  const cashΔ = totalΔ;
-  const m1npΔ = grow(totalΔ,1);
-  const m1dpΔ = withDP(totalΔ,dp,1);
-  const m2npΔ = grow(totalΔ,2);
-  const m2dpΔ = withDP(totalΔ,dp,2);
-
-  /* جدول جزئیات */
-  const tblDetail=
-`<table>
-<thead><tr><th>آیتم</th><th>مبلغ (تومان)</th></tr></thead>
-<tbody>
-<tr><td>وزن × قیمت kg</td><td>${sep(metalCost)}</td></tr>
-<tr><td>برش (${cutCount}×)</td><td>${sep(cutCost)}</td></tr>
-<tr><td><b>جمع نقدی</b></td><td><b>${sep(cash)}</b></td></tr>
-<tr><td>۱ ماه بدون پیش</td><td>${sep(m1np)}</td></tr>
-<tr><td>۱ ماه با پیش ${dp}%</td><td>${sep(m1dp)}</td></tr>
-<tr><td>۲ ماه بدون پیش</td><td>${sep(m2np)}</td></tr>
-<tr><td>۲ ماه با پیش ${dp}%</td><td>${sep(m2dp)}</td></tr>
-</tbody></table>`;
-
-  /* جدول مقایسه پایه / Δ دلار */
-  const tblComp=
-`<table style="margin-top:18px">
-<thead><tr><th>پرداخت</th><th>مبلغ پایه</th><th>با Δ دلار</th></tr></thead>
-<tbody>
-<tr><td>نقدی</td><td>${sep(cash)}</td><td>${sep(cashΔ)}</td></tr>
-<tr><td>۱ ماه بدون پیش</td><td>${sep(m1np)}</td><td>${sep(m1npΔ)}</td></tr>
-<tr><td>۱ ماه با پیش ${dp}%</td><td>${sep(m1dp)}</td><td>${sep(m1dpΔ)}</td></tr>
-<tr><td>۲ ماه بدون پیش</td><td>${sep(m2np)}</td><td>${sep(m2npΔ)}</td></tr>
-<tr><td>۲ ماه با پیش ${dp}%</td><td>${sep(m2dp)}</td><td>${sep(m2dpΔ)}</td></tr>
-</tbody></table>
-<p style="margin-top:6px;font-size:.85rem">
-Δ دلار بر هر کیلو: ${sep(deltaKg)} تومان
-</p>`;
-
-  resultBox.innerHTML = tblDetail + tblComp;
-});
 </script>
 </body>
 </html>
