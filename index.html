@@ -6,48 +6,167 @@
   <title>Metalloine | صفحه اصلی</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
   <style>
-    :root{--c-bg:#000;--c-fg:#fff;--c-primary:#8E1F61;--glass:rgba(255,255,255,.08);--r:24px;--g:12px}
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:"Vazirmatn",sans-serif;background:var(--c-bg);color:var(--c-fg);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
-    #preloader{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:var(--c-bg);z-index:9999;transition:opacity .2s}
-    #preloader.hidden{opacity:0;pointer-events:none}
-    .spinner{width:38px;height:38px;border:4px solid var(--c-primary);border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .hidden{display:none!important}
-    .btn-main{padding:14px 32px;border:none;border-radius:var(--r);cursor:pointer;font-weight:700;font-size:1.05rem;background:var(--c-primary);color:#fff;text-decoration:none;display:inline-block;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:transform .15s}
-    .btn-main:hover{transform:scale(1.05)}
-    .btn-main.disabled,.btn-main:disabled{opacity:.4;pointer-events:none;background:var(--glass)}
-    .btn-back{margin-top:2rem;background:none;border:1px solid var(--c-primary);color:var(--c-primary);padding:.75rem 2rem;border-radius:var(--r);cursor:pointer;font-weight:700;transition:background .2s}
-    .btn-back:hover{background:var(--glass)}
-    .view{flex:1;display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center;padding:2rem}
-    #topbar{display:flex;align-items:center;justify-content:center;height:64px;margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r);padding-inline:1rem}
-    .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
-    .ring{width:22px;height:22px;border:6px solid var(--c-primary);border-radius:50%}
-    .grid{display:grid;gap:var(--g);width:100%;max-width:840px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+    :root {
+      --c-bg: #000;
+      --c-fg: #fff;
+      --c-primary: #8E1F61;
+      --glass: rgba(255,255,255,.08);
+      --r: 24px;
+      --g: 12px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: "Vazirmatn", sans-serif;
+      background: var(--c-bg);
+      color: var(--c-fg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    #preloader {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--c-bg);
+      z-index: 9999;
+      transition: opacity .2s;
+    }
+    #preloader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .spinner {
+      width: 38px;
+      height: 38px;
+      border: 4px solid var(--c-primary);
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .hidden {
+      display: none!important;
+    }
+    .btn-main {
+      padding: 14px 32px;
+      border: none;
+      border-radius: var(--r);
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.05rem;
+      background: var(--c-primary);
+      color: #fff;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,.4);
+      transition: transform .15s;
+    }
+    .btn-main:hover {
+      transform: scale(1.05);
+    }
+    .btn-main.disabled,
+    .btn-main:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+      background: var(--glass);
+    }
+    .btn-back {
+      margin-top: 2rem;
+      background: none;
+      border: 1px solid var(--c-primary);
+      color: var(--c-primary);
+      padding: 0.75rem 2rem;
+      border-radius: var(--r);
+      cursor: pointer;
+      font-weight: 700;
+      transition: background .2s;
+    }
+    .btn-back:hover {
+      background: var(--glass);
+    }
+    .view {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
+    }
+    #topbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 64px;
+      margin: var(--g);
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: var(--r);
+      padding-inline: 1rem;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .ring {
+      width: 22px;
+      height: 22px;
+      border: 6px solid var(--c-primary);
+      border-radius: 50%;
+    }
+    .grid {
+      display: grid;
+      gap: var(--g);
+      width: 100%;
+      max-width: 840px;
+      grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+    }
   </style>
 </head>
 <body>
   <div id="preloader"><span class="spinner"></span></div>
 
   <header id="topbar">
-    <span class="logo"><span class="ring"></span><span class="brand">Metalloine</span></span>
+    <span class="logo">
+      <span class="ring"></span>
+      <span class="brand">Metalloine</span>
+    </span>
   </header>
 
   <!-- Welcome -->
   <section id="welcome" class="view">
-    <h1 style="font-size:2.3rem;margin-bottom:.75rem">به متال‌لاین خوش آمدید</h1>
-    <p id="tagline" style="font-size:1.2rem;opacity:.85;margin-bottom:2.5rem">ابزارهای هوشمند برای <span id="roles" style="color:var(--c-primary)"></span></p>
+    <h1 style="font-size:2.3rem; margin-bottom:.75rem">به متال‌لاین خوش آمدید</h1>
+    <p id="tagline" style="font-size:1.2rem; opacity:.85; margin-bottom:2.5rem">
+      ابزارهای هوشمند برای
+      <span id="roles" style="color: var(--c-primary)"></span>
+    </p>
     <button id="startBtn" class="btn-main">شروع کنید</button>
   </section>
 
   <!-- Menu -->
   <section id="menu" class="view hidden">
-    <h2 style="font-size:1.8rem;margin-bottom:2rem">انتخاب دستیار</h2>
+    <h2 style="font-size:1.8rem; margin-bottom:2rem">انتخاب دستیار</h2>
     <div class="grid">
       <button class="btn-main" data-target="engineering">دستیار مهندسی</button>
       <button class="btn-main" data-target="technical">دستیار فنی</button>
       <button class="btn-main" data-target="financial">دستیار مالی</button>
-      <button class="btn-main disabled" disabled>دستیار فروش</button>
+      <!-- دستیار فروش را فعال کردیم (حذف disabled) -->
+      <button class="btn-main" data-target="sales">دستیار فروش</button>
+      <!-- بقیه دستیارها همچنان غیرفعال -->
       <button class="btn-main disabled" disabled>دستیار انبار</button>
       <button class="btn-main disabled" disabled>دستیار خرید و تامین</button>
       <button class="btn-main disabled" disabled>دستیار منابع انسانی</button>
@@ -56,7 +175,7 @@
 
   <!-- Engineering -->
   <section id="engineering" class="view hidden">
-    <h2 style="font-size:1.8rem;margin-bottom:2rem">دستیار مهندسی</h2>
+    <h2 style="font-size:1.8rem; margin-bottom:2rem">دستیار مهندسی</h2>
     <div class="grid" style="max-width:600px">
       <a href="hardness.html" class="btn-main">تبدیل سختی</a>
       <a href="electrode-assistant.html" class="btn-main">انتخاب الکترود فولاد</a>
@@ -67,7 +186,7 @@
 
   <!-- Technical -->
   <section id="technical" class="view hidden">
-    <h2 style="font-size:1.8rem;margin-bottom:2rem">دستیار فنی</h2>
+    <h2 style="font-size:1.8rem; margin-bottom:2rem">دستیار فنی</h2>
     <div class="grid" style="max-width:600px">
       <a href="weight.html" class="btn-main">محاسبه وزن</a>
       <a href="scrap.html" class="btn-main">محاسبه ضایعات</a>
@@ -79,18 +198,65 @@
 
   <!-- Financial -->
   <section id="financial" class="view hidden">
-    <h2 style="font-size:1.8rem;margin-bottom:2rem">دستیار مالی</h2>
+    <h2 style="font-size:1.8rem; margin-bottom:2rem">دستیار مالی</h2>
     <a href="leaseCalc.html" class="btn-main">محاسبه لیزینگ</a>
     <button class="btn-back">بازگشت</button>
   </section>
 
+  <!-- Sales (دستیار فروش) -->
+  <section id="sales" class="view hidden">
+    <h2 style="font-size:1.8rem; margin-bottom:2rem">دستیار فروش</h2>
+    <div class="grid" style="max-width:600px">
+      <!-- سفارشات آفلاین -->
+      <a href="orderForm.html" class="btn-main">سفارشات آفلاین</a>
+    </div>
+    <button class="btn-back">بازگشت</button>
+  </section>
+
   <script>
-    const pre=document.getElementById('preloader');function hide(){pre.classList.add('hidden')}window.addEventListener('load',hide);setTimeout(hide,1500);
-    function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
-    const roles=['مهندسین','مدیران فنی','مدیران مالی','کارشناسان تولید'];const span=document.getElementById('roles');let r=0,c=0,del=false;(function type(){const t=roles[r];span.textContent=t.substring(0,c);if(!del&&c++===t.length){del=true;setTimeout(type,1000)}else if(del&&c--===0){del=false;r=(r+1)%roles.length;setTimeout(type,350)}else setTimeout(type,del?45:85)})();
-    document.getElementById('startBtn').addEventListener('click',()=>show('menu'));
-    document.querySelectorAll('#menu [data-target]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.target)));
-    document.querySelectorAll('.btn-back').forEach(b=>b.addEventListener('click',()=>show('menu')));
+    // پیش‌بارگذار
+    const pre = document.getElementById('preloader');
+    function hide() { pre.classList.add('hidden'); }
+    window.addEventListener('load', hide);
+    setTimeout(hide, 1500);
+
+    // نمایش/مخفی‌کردن صفحات
+    function show(id) {
+      document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    // تایپ متنی برای roles
+    const roles = ['مهندسین','مدیران فنی','مدیران مالی','کارشناسان تولید'];
+    const span = document.getElementById('roles');
+    let r = 0, c = 0, del = false;
+    (function type(){
+      const t = roles[r];
+      span.textContent = t.substring(0, c);
+      if(!del && c++ === t.length){
+        del = true;
+        setTimeout(type, 1000);
+      } else if(del && c-- === 0){
+        del = false;
+        r = (r+1) % roles.length;
+        setTimeout(type, 350);
+      } else {
+        setTimeout(type, del ? 45 : 85);
+      }
+    })();
+
+    // دکمه شروع
+    document.getElementById('startBtn').addEventListener('click', () => show('menu'));
+
+    // منو اصلی → دستیارهای مختلف
+    document.querySelectorAll('#menu [data-target]').forEach(b => {
+      b.addEventListener('click', () => show(b.dataset.target));
+    });
+
+    // دکمه‌های بازگشت در هر دستیار
+    document.querySelectorAll('.btn-back').forEach(b => {
+      b.addEventListener('click', () => show('menu'));
+    });
   </script>
 </body>
 </html>
