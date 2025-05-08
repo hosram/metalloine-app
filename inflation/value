@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>محاسبه ارزش پول</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+<style>
+body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;text-align:center;padding:2rem}
+input,select{padding:10px;border-radius:24px;margin:8px;width:200px}
+button{padding:10px 20px;border:none;background:#8E1F61;color:#fff;border-radius:24px;cursor:pointer}
+#result{margin-top:1.5rem;font-weight:bold}
+a.btn{display:inline-block;margin-top:1.5rem;background:#444;color:#fff;padding:.75rem 2rem;border-radius:24px;text-decoration:none}
+</style>
+</head>
+<body>
+<h2>💰 محاسبه ارزش معادل پول</h2>
+<input type="number" id="amount" placeholder="مبلغ (تومان)"/>
+<br/>
+<select id="fromYear"></select>
+<select id="toYear"></select>
+<br/>
+<button onclick="calc()">محاسبه</button>
+<div id="result"></div>
+<a href="index.html" class="btn">بازگشت</a>
+<script>
+const toFa=n=>n.toString().replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const g2j=y=>new Intl.DateTimeFormat("fa-IR-u-ca-persian",{year:"numeric"}).format(new Date(Date.UTC(y,0,1)));
+let cpi={};
+fetch("data/cpi.json").then(r=>r.json()).then(json=>{
+  cpi=json;
+  const years=Object.keys(cpi).map(Number).sort((a,b)=>a-b);
+  const fy=document.getElementById("fromYear"), ty=document.getElementById("toYear");
+  years.forEach(y=>{
+    const opt = `<option value='${y}'>${toFa(g2j(y))}</option>`;
+    fy.insertAdjacentHTML('beforeend', opt);
+    ty.insertAdjacentHTML('beforeend', opt);
+  });
+  fy.value=years[0]; ty.value=years.at(-1);
+});
+
+function calc(){
+  const amt=+document.getElementById("amount").value||0;
+  const from=+document.getElementById("fromYear").value;
+  const to=+document.getElementById("toYear").value;
+  if(!cpi[from]||!cpi[to]) return;
+  const val = amt * (cpi[to]/cpi[from]);
+  document.getElementById("result").textContent = "ارزش معادل: "+ toFa(val.toFixed(0)) + " تومان";
+}
+</script>
+</body>
+</html>
