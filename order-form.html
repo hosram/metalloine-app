@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Metalloine | ثبت سفارش</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+  <style>
+    :root {
+      --c-primary: #8e1f61;
+      --c-accent: #8fa2b2;
+      --glass: rgba(255,255,255,.08);
+      --r: 22px;
+      --g: 12px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      font-family: "Vazirmatn", sans-serif;
+    }
+    body {
+      background: #000;
+      color: #fff;
+      line-height: 1.6;
+    }
+    /* header */
+    #topbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 64px;
+      margin: var(--g);
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,.25);
+    }
+    .logo {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .ring {
+      width: 22px;
+      height: 22px;
+      border: 6px solid var(--c-accent);
+      border-radius: 50%;
+    }
+    .brand {
+      color: var(--c-primary);
+    }
+    /* main/form styles */
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: var(--g);
+    }
+    .card {
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: var(--r);
+      backdrop-filter: blur(24px);
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: .85rem;
+    }
+    .row-2 {
+      grid-column: span 2;
+    }
+    .hgroup {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--g);
+    }
+    /* سه‌ستونی برای سال/ماه/روز */
+    .triple {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--g);
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: var(--r);
+      background: var(--glass);
+      color: #fff;
+      font: inherit;
+    }
+    select, option {
+      background: #1a1a1a;
+      color: #fff;
+    }
+    input:focus, select:focus {
+      outline: 2px solid var(--c-primary);
+    }
+    .btn {
+      padding: 12px;
+      border: none;
+      border-radius: var(--r);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,.4);
+    }
+    .warning {
+      grid-column: span 2;
+      color: #ff6b6b;
+      text-align: center;
+      min-height: 1.2em;
+      font-size: .8rem;
+    }
+    .hidden {
+      display: none!important;
+    }
+    /* خلاصه سفارش (صفحه دوم) */
+    #summaryPage {
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: var(--r);
+      backdrop-filter: blur(24px);
+      padding: 18px;
+      margin-top: var(--g);
+    }
+    .summaryField {
+      margin-bottom: 8px;
+    }
+    .btns {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media(max-width:600px){
+      .card,
+      .hgroup {
+        grid-template-columns: 1fr!important;
+      }
+      .triple {
+        grid-template-columns: 1fr 1fr 1fr!important;
+      }
+      .btns {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<header id="topbar">
+  <span class="logo">
+    <span class="ring"></span>
+    <span class="brand">Metalloine</span>
+  </span>
+</header>
+
+<main>
+  <h2 style="text-align:center">فرم ثبت سفارش</h2>
+
+  <!-- فرم اصلی (صفحه اول) -->
+  <form id="form" class="card" onsubmit="return false">
+    <!-- مشتری -->
+    <label class="row-2">
+      نام مشتری
+      <input id="cust" required>
+    </label>
+
+    <!-- تاریخ و شماره سفارش -->
+    <label class="row-2">شماره سفارش
+      <input id="ordNo" readonly>
+    </label>
+
+    <label class="row-2">تاریخ سفارش</label>
+    <div class="row-2 triple" id="dateSection">
+      <label>سال
+        <select id="year"></select>
+      </label>
+      <label>ماه
+        <select id="month"></select>
+      </label>
+      <label>روز
+        <select id="day"></select>
+      </label>
+    </div>
+
+    <!-- منبع متریال و گرید/استاندارد -->
+    <div class="hgroup row-2">
+      <label>منبع متریال
+        <select id="src">
+          <option value="stock">متریال انبار</option>
+          <option value="direct">ارسال مستقیم</option>
+        </select>
+      </label>
+      <label id="gradeBox">
+        <span id="gradeLbl">گرید</span>
+        <select id="grade">
+          <option>ST37</option>
+          <option>CK45</option>
+          <option>MO40</option>
+        </select>
+        <input id="std" class="hidden" placeholder="استاندارد دلخواه">
+      </label>
+    </div>
+
+    <!-- مقطع و ابعاد -->
+    <label>نوع مقطع
+      <select id="sec">
+        <option value="round">میله‌گرد</option>
+        <option value="pipe">لوله</option>
+        <option value="hex">شش‌گوش</option>
+        <option value="square">چهارگوش</option>
+        <option value="sheet">ورق</option>
+        <option value="flat">تسمه</option>
+        <option value="angle">نبشی</option>
+        <option value="channel">ناودونی</option>
+        <option value="ibeam">تیراهن</option>
+        <option value="box">قوطی</option>
+      </select>
+    </label>
+    <label id="f1" class="row-2">
+      <span class="lbl">قطر (mm)</span>
+      <input id="d1" type="number">
+    </label>
+    <label id="f2" class="row-2 hidden">
+      <span class="lbl">مشخصه ۲</span>
+      <input id="d2" type="number" disabled>
+    </label>
+
+    <!-- طول و تعداد -->
+    <div class="hgroup row-2">
+      <label>طول (cm)
+        <input id="len" type="number">
+      </label>
+      <label>تعداد
+        <input id="qty" type="number" value="1" min="1">
+      </label>
+    </div>
+
+    <!-- نحوه پرداخت -->
+    <label class="row-2">
+      نحوه پرداخت
+      <select id="payment">
+        <option value="cash">نقدی</option>
+        <option value="creditDoc">نسیه باسند</option>
+        <option value="creditNoDoc">نسیه بدون سند</option>
+      </select>
+    </label>
+    <!-- فقط درصد پرداخت (برای نسیه) -->
+    <label class="row-2 hidden" id="percentGroup">
+      درصد پرداخت
+      <input id="percentPay" type="number" placeholder="مثلاً 30">
+    </label>
+
+    <!-- محل تحویل بار -->
+    <label class="row-2">
+      محل تحویل بار
+      <select id="delivery"></select>
+    </label>
+
+    <button class="btn btn-primary row-2" id="submitBtn">ثبت</button>
+    <div id="warn" class="warning"></div>
+  </form>
+
+  <!-- صفحهٔ خلاصه سفارش (صفحه دوم) -->
+  <div id="summaryPage" class="hidden">
+    <h2>خروجی سفارش</h2>
+    <div class="summaryField">
+      <strong>نام مشتری:</strong>
+      <span id="sumCust"></span>
+    </div>
+    <div class="summaryField">
+      <strong>شماره سفارش:</strong>
+      <span id="sumOrdNo"></span>
+    </div>
+    <div class="summaryField">
+      <strong>تاریخ سفارش:</strong>
+      <span id="sumDate"></span>
+    </div>
+    <div class="summaryField">
+      <strong>منبع متریال:</strong>
+      <span id="sumSrc"></span>
+    </div>
+    <div class="summaryField">
+      <strong>گرید/استاندارد:</strong>
+      <span id="sumGrade"></span>
+    </div>
+    <div class="summaryField">
+      <strong>نوع مقطع:</strong>
+      <span id="sumSec"></span>
+    </div>
+    <div class="summaryField">
+      <strong>ابعاد:</strong>
+      <span id="sumDims"></span>
+    </div>
+    <div class="summaryField">
+      <strong>طول:</strong>
+      <span id="sumLen"></span> cm
+    </div>
+    <div class="summaryField">
+      <strong>تعداد برش:</strong>
+      <span id="sumQty"></span>
+    </div>
+    <div class="summaryField">
+      <strong>نحوه پرداخت:</strong>
+      <span id="sumPayment"></span>
+    </div>
+    <div class="summaryField">
+      <strong>محل تحویل بار:</strong>
+      <span id="sumDelivery"></span>
+    </div>
+    <hr>
+    <!-- بخش وزن کل و تعداد برش کل -->
+    <div class="summaryField">
+      <strong>وزن کل:</strong>
+      <span id="sumWeight"></span> کیلوگرم
+    </div>
+    <div class="summaryField">
+      <strong>تعداد کل برش:</strong>
+      <span id="sumCuts"></span>
+    </div>
+
+    <div class="btns">
+      <button type="button" class="btn" id="editBtn">ویرایش</button>
+      <button type="button" class="btn btn-primary" id="finalSubmitBtn">ثبت نهایی (Google Sheet)</button>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ===== ابزار کمکی تبدیل اعداد ===== */
+const toFa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const toEn = s => s.replace(/[۰-۹]/g, d => '0123456789'["۰۱۲۳۴۵۶۷۸۹".indexOf(d)]);
+
+/* سه منوی کشویی: سال، ماه، روز */
+const yearSel  = document.getElementById('year');
+const monthSel = document.getElementById('month');
+const daySel   = document.getElementById('day');
+
+/* سال‌ها را (۱۴۰۰ تا ۱۴۱۰) پر می‌کنیم */
+for(let y=1400; y<=1410; y++){
+  const opt = document.createElement('option');
+  opt.value = y;
+  opt.textContent = toFa(String(y));
+  yearSel.appendChild(opt);
+}
+/* ماه‌ها را (۱ تا ۱۲) پر می‌کنیم */
+for(let m=1; m<=12; m++){
+  const opt = document.createElement('option');
+  opt.value = m;
+  opt.textContent = toFa(String(m).padStart(2,'0'));
+  monthSel.appendChild(opt);
+}
+/* روزها را (۱ تا ۳۱) پر می‌کنیم (ساده‌ترین حالت) */
+function fillDays(){
+  daySel.innerHTML = '';
+  for(let d=1; d<=31; d++){
+    const opt = document.createElement('option');
+    opt.value = d;
+    opt.textContent = toFa(String(d).padStart(2,'0'));
+    daySel.appendChild(opt);
+  }
+}
+fillDays();
+
+/* تابع کلید تاریخ: مثلاً "14020930" */
+function getSelectedDateKey(){
+  const y = parseInt(yearSel.value, 10) || 1400;
+  const m = parseInt(monthSel.value,10) || 1;
+  const d = parseInt(daySel.value, 10) || 1;
+  return String(y) + String(m).padStart(2,'0') + String(d).padStart(2,'0');
+}
+/* بروزرسانی شماره سفارش */
+function updateOrderNo(){
+  const key = getSelectedDateKey();
+  let seq = parseInt(localStorage.getItem('seq' + key) || '0', 10) + 1;
+  localStorage.setItem('seq' + key, seq);
+  document.getElementById('ordNo').value = toFa(key + String(seq).padStart(2,'0'));
+}
+/* هر تغییری در سال/ماه/روز ⇒ شماره سفارش */
+[yearSel, monthSel, daySel].forEach(el => {
+  el.addEventListener('change', () => {
+    updateOrderNo();
+    document.getElementById('warn').textContent = '';
+  });
+});
+
+/* منبع متریال + محل تحویل بار */
+function toggleSource(){
+  const stock = document.getElementById('src').value === 'stock';
+  // گرید یا استاندارد
+  document.getElementById('grade').classList.toggle('hidden', !stock);
+  document.getElementById('grade').disabled = !stock;
+  document.getElementById('std').classList.toggle('hidden', stock);
+  document.getElementById('std').disabled = stock;
+  document.getElementById('gradeLbl').textContent = stock ? 'گرید' : 'استاندارد';
+
+  // محل تحویل بار
+  const deliverySel = document.getElementById('delivery');
+  deliverySel.innerHTML = '';
+  if(stock){
+    // فقط اهواز
+    const opt = document.createElement('option');
+    opt.value = 'ahvaz';
+    opt.textContent = 'اهواز';
+    deliverySel.appendChild(opt);
+    deliverySel.disabled = true;
+  } else {
+    // تهران یا اهواز
+    const opt1 = document.createElement('option');
+    opt1.value = 'tehran';
+    opt1.textContent = 'تهران';
+    const opt2 = document.createElement('option');
+    opt2.value = 'ahvaz';
+    opt2.textContent = 'اهواز';
+    deliverySel.appendChild(opt1);
+    deliverySel.appendChild(opt2);
+    deliverySel.disabled = false;
+  }
+}
+document.getElementById('src').addEventListener('change', toggleSource);
+toggleSource(); // فراخوانی اولیه
+
+/* ابعاد پویا بر اساس مقطع */
+const spec = {
+  round  : {l1:'قطر (mm)',         p1:'40',  s2:false},
+  pipe   : {l1:'قطر بیرونی (mm)',  p1:'60',  l2:'قطر داخلی (mm)',   p2:'40',  s2:true},
+  hex    : {l1:'بعد (mm)',         p1:'30',  s2:false},
+  square : {l1:'ضلع (mm)',         p1:'40',  s2:false},
+  sheet  : {l1:'ضخامت (mm)',       p1:'5',   l2:'عرض (mm)',         p2:'1500',s2:true},
+  flat   : {l1:'ضخامت (mm)',       p1:'10',  l2:'عرض (mm)',         p2:'100', s2:true},
+  angle  : {l1:'بال (mm)',         p1:'50',  l2:'ضخامت (mm)',       p2:'5',   s2:true},
+  channel: {l1:'ارتفاع (mm)',      p1:'80',  l2:'ضخامت جان (mm)',   p2:'6',   s2:true},
+  ibeam  : {l1:'ارتفاع (mm)',      p1:'140', l2:'عرض بال (mm)',      p2:'80',  s2:true},
+  box    : {l1:'عرض (mm)',         p1:'60',  l2:'ارتفاع (mm)',       p2:'40',  s2:true}
+};
+function updateSpec(){
+  const val = document.getElementById('sec').value;
+  const m = spec[val];
+  document.querySelector('#f1 .lbl').textContent = m.l1;
+  document.getElementById('d1').placeholder = m.p1;
+  if(m.s2){
+    document.getElementById('f2').classList.remove('hidden');
+    document.getElementById('d2').disabled = false;
+    document.getElementById('d2').placeholder = m.p2;
+    document.querySelector('#f2 .lbl').textContent = m.l2;
+  } else {
+    document.getElementById('f2').classList.add('hidden');
+    document.getElementById('d2').disabled = true;
+    document.getElementById('d2').value = '';
+  }
+}
+document.getElementById('sec').addEventListener('change', updateSpec);
+updateSpec(); // مقداردهی اولیه
+
+/* نحوه پرداخت (نقدی یا نسیه) */
+function togglePayment(){
+  const payment = document.getElementById('payment').value;
+  const percentGroup = document.getElementById('percentGroup');
+  if(payment === 'cash'){
+    percentGroup.classList.add('hidden');
+  } else {
+    percentGroup.classList.remove('hidden');
+  }
+}
+document.getElementById('payment').addEventListener('change', togglePayment);
+togglePayment();
+
+/* 
+   فرمول محاسبه وزن (کیلوگرم) برای هر مقطع:
+   - چگالی فولاد ~ 7.85 g/cm³
+   - ابعاد ورودی d1, d2 (mm)، طول (cm)
+   - در نهایت وزن کل (kg) = وزن هر قطعه * تعداد
+*/
+function computeWeight(section, d1, d2, length, qty){
+  const density = 7.85; // g/cm³
+  let areaMM2 = 0;
+  d1 = +d1; // تبدیل به number
+  d2 = +d2;
+  length = +length;
+  qty = +qty;
+
+  switch(section){
+    case 'round':
+      areaMM2 = Math.PI*(d1*d1)/4;
+      break;
+    case 'pipe':
+      areaMM2 = Math.PI*((d1*d1)-(d2*d2))/4;
+      break;
+    case 'hex':
+      areaMM2 = (3*Math.sqrt(3)/2)*(d1*d1);
+      break;
+    case 'square':
+      areaMM2 = d1*d1;
+      break;
+    case 'sheet': 
+    case 'flat':
+      areaMM2 = d1*d2;
+      break;
+    case 'angle':
+      areaMM2 = 2*(d1*d2) - (d2*d2);
+      break;
+    case 'channel':
+      areaMM2 = d1 * d2 * 2; 
+      break;
+    case 'ibeam':
+      areaMM2 = d1*d2 * 2.2; 
+      break;
+    case 'box':
+      areaMM2 = d1*d2;
+      break;
+    default:
+      areaMM2 = 0;
+  }
+  // حجم (cm³) = (area mm² / 100) * length(cm)
+  const volumeCM3 = (areaMM2 / 100.0) * length;
+  // جرم (g) = حجم (cm³) * 7.85
+  const massG = volumeCM3 * density;
+  // جرم کل (kg) = جرم(g)/1000 * تعداد
+  return Math.round((massG/1000.0)*qty*100)/100;
+}
+
+/* آبجکت ذخیره‌ی موقت داده‌ها */
+let formData = {};
+
+/* دکمه‌ی «ثبت» (صفحه اول) → نمایش خلاصه */
+document.getElementById('submitBtn').addEventListener('click', () => {
+  // ۱) گرفتن داده‌ها از فرم
+  const cust       = document.getElementById('cust').value.trim();
+  const ordNo      = document.getElementById('ordNo').value;
+  const yFa        = toFa(yearSel.value);
+  const mFa        = toFa(monthSel.value.padStart(2,'0'));
+  const dFa        = toFa(daySel.value.padStart(2,'0'));
+  const srcVal     = (document.getElementById('src').value === 'stock') ? 'انبار' : 'ارسال مستقیم';
+  const gradeSel   = (document.getElementById('src').value === 'stock') 
+                     ? document.getElementById('grade').value 
+                     : document.getElementById('std').value;
+  const secVal     = document.getElementById('sec').value;
+  const d1         = document.getElementById('d1').value;
+  const d2         = document.getElementById('d2').value;
+  const length     = document.getElementById('len').value;
+  const qty        = document.getElementById('qty').value;
+  const paymentVal = document.getElementById('payment').value;
+  const percent    = document.getElementById('percentPay').value;
+  const delivery   = document.getElementById('delivery').value;
+
+  // ۲) چند مقدار برای نمایش
+  const qtyFa    = toFa(qty);
+  const lengthFa = toFa(length);
+  const d1Fa     = toFa(d1);
+  const d2Fa     = toFa(d2);
+
+  let paymentTxt = '';
+  switch(paymentVal){
+    case 'cash':        paymentTxt = 'نقدی'; break;
+    case 'creditDoc':   paymentTxt = 'نسیه باسند'; break;
+    case 'creditNoDoc': paymentTxt = 'نسیه بدون سند'; break;
+  }
+  // اصلاح استفاده از Template Literal
+  let percentTxt = (paymentVal !== 'cash' && percent) ? ` (${toFa(percent)}٪)` : '';
+
+  // ۳) محاسبه وزن کل
+  const totalWeight = computeWeight(secVal, d1, d2, length, qty);
+  // تعداد کل برش را همان qty فرض کرده‌ایم
+  const totalCuts = qty;
+
+  // ۴) ذخیرهٔ این داده‌ها در formData
+  formData = {
+    cust, ordNo,
+    y: yearSel.value,
+    m: monthSel.value,
+    d: daySel.value,
+    src: document.getElementById('src').value,
+    gradeSel,
+    secVal,
+    d1, d2,
+    length, qty,
+    paymentVal, percent,
+    delivery
+  };
+
+  // ۵) نمایش خلاصه در صفحه دوم
+  document.getElementById('sumCust').textContent     = cust;
+  document.getElementById('sumOrdNo').textContent    = ordNo;
+  document.getElementById('sumDate').textContent     = `${yFa}/${mFa}/${dFa}`;
+  document.getElementById('sumSrc').textContent      = srcVal;
+  document.getElementById('sumGrade').textContent    = gradeSel;
+  document.getElementById('sumSec').textContent      = secVal;
+  // اصلاح استفاده از Template Literal
+  document.getElementById('sumDims').textContent     = d2 ? `${d1Fa} × ${d2Fa} mm` : (d1Fa + ' mm');
+  document.getElementById('sumLen').textContent      = lengthFa;
+  document.getElementById('sumQty').textContent      = qtyFa;
+  document.getElementById('sumPayment').textContent  = paymentTxt + percentTxt;
+  document.getElementById('sumDelivery').textContent = (delivery === 'tehran') ? 'تهران' : 'اهواز';
+  document.getElementById('sumWeight').textContent   = toFa(String(totalWeight));
+  document.getElementById('sumCuts').textContent     = toFa(String(totalCuts));
+
+  // ۶) فرم را پنهان و خلاصه را نشان بده
+  document.querySelector('.card').style.display = 'none';
+  document.getElementById('summaryPage').classList.remove('hidden');
+});
+
+/* دکمهٔ «ویرایش» در صفحه دوم → بازگشت به فرم با همان داده‌ها */
+document.getElementById('editBtn').addEventListener('click', () => {
+  // ۱) مقداردهی دوباره فرم با داده‌های formData
+  document.getElementById('cust').value        = formData.cust;
+  document.getElementById('ordNo').value       = formData.ordNo;
+  yearSel.value                                = formData.y;
+  monthSel.value                               = formData.m;
+  daySel.value                                 = formData.d;
+  document.getElementById('src').value         = formData.src;
+  toggleSource();
+  if(formData.src === 'stock'){
+    document.getElementById('grade').value     = formData.gradeSel;
+  } else {
+    document.getElementById('std').value       = formData.gradeSel;
+  }
+  document.getElementById('sec').value         = formData.secVal;
+  updateSpec();
+  document.getElementById('d1').value          = formData.d1;
+  document.getElementById('d2').value          = formData.d2;
+  document.getElementById('len').value         = formData.length;
+  document.getElementById('qty').value         = formData.qty;
+  document.getElementById('payment').value     = formData.paymentVal;
+  togglePayment();
+  document.getElementById('percentPay').value  = formData.percent;
+  document.getElementById('delivery').value    = formData.delivery;
+
+  // ۲) حالا فرم را نشان بده و خلاصه را پنهان کن
+  document.querySelector('.card').style.display = 'grid';
+  document.getElementById('summaryPage').classList.add('hidden');
+});
+
+/* دکمهٔ «ثبت نهایی» → ارسال اطلاعات به Google Sheet (وب‌اپ Apps Script) */
+document.getElementById('finalSubmitBtn').addEventListener('click', () => {
+  // ۱) ساختن آبجکتی که قرار است پُست شود
+  const dataToSend = {
+    customer      : formData.cust,
+    orderNumber   : formData.ordNo,
+    dateY         : formData.y,
+    dateM         : formData.m,
+    dateD         : formData.d,
+    source        : formData.src,
+    gradeOrStd    : formData.gradeSel,
+    section       : formData.secVal,
+    dim1          : formData.d1,
+    dim2          : formData.d2,
+    length        : formData.length,
+    quantity      : formData.qty,
+    paymentMethod : formData.paymentVal,
+    percentPay    : formData.percent,
+    delivery      : formData.delivery
+  };
+
+  // ۲) آدرس وب‌اپ واقعی شما (Google Apps Script)
+  //    پس از Deploy کردن و انتخاب دسترسی، به شما می‌دهد:
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzBVrE-OtFpWRLjczF6IfFfX6kD-ZcC3zi_HCZK-igJU1JNmZCY-Q3Bzj_FfkW-8f3q/exec';
+
+  // ۳) درخواست POST با Fetch
+  fetch(scriptURL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataToSend)
+  })
+  .then(res => res.json())
+  .then(response => {
+    console.log('Success:', response);
+    alert('اطلاعات با موفقیت در گوگل شیت ثبت شد!');
+    // در صورت نیاز می‌توانید فرم را ریست کنید یا کاری دیگر انجام دهید
+  })
+  .catch(err => {
+    console.error('Error:', err);
+    alert('خطا در ارسال اطلاعات به گوگل شیت');
+  });
+});
+</script>
+
+<!-- 
+==============================================================================================
+  کد زیر را «نباید» داخل همین فایل HTML قرار دهید تا کار کند، 
+  بلکه باید در Google Apps Script (متصل به همان شیت) قرار بگیرد.
+  اینجا صرفاً برای مرجع به‌صورت کامنت آورده شده است:
+
+  توجه: اگر در شیت ساختید، از SpreadsheetApp.getActiveSpreadsheet() استفاده کنید:
+  اگر شیت دیگری می‌خواهید، از openById("ID_SHEET") استفاده کنید.
+
+Google Apps Script (سمت سرور) مثالی:
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+
+    // شیت فعال را بگیر
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName("Sheet1");  // اگر نام دیگری دارید، تغییر دهید
+
+    // اطلاعات را در یک سطر جدید ثبت کن
+    sheet.appendRow([
+      data.customer,
+      data.orderNumber,
+      data.dateY,
+      data.dateM,
+      data.dateD,
+      data.source,
+      data.gradeOrStd,
+      data.section,
+      data.dim1,
+      data.dim2,
+      data.length,
+      data.quantity,
+      data.paymentMethod,
+      data.percentPay,
+      data.delivery
+    ]);
+
+    // پاسخ موفقیت
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: "OK", message: "Data inserted" })
+    ).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: "ERROR", message: err.toString() })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+==============================================================================================
+-->
+</body>
+</html>
