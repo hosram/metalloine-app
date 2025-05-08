@@ -22,7 +22,6 @@ a.btn{display:inline-block;margin-top:1.5rem;background:#444;color:#fff;padding:
 <canvas id="chart" width="600" height="360"></canvas>
 <a href="index.html" class="btn">بازگشت</a>
 <script>
-const g2j=gy=>new Intl.DateTimeFormat("fa-IR-u-ca-persian",{year:"numeric"}).format(new Date(Date.UTC(gy,0,1)));
 const toFa=n=>n.toString().replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 fetch("data/cpi.json").then(r=>r.json()).then(json=>{
   const years=Object.keys(json).map(Number).sort((a,b)=>a-b);
@@ -30,7 +29,7 @@ fetch("data/cpi.json").then(r=>r.json()).then(json=>{
   const startSel=document.getElementById("start");
   const endSel=document.getElementById("end");
   years.forEach(y=>{
-    const opt = `<option value='${y}'>${toFa(g2j(y))}</option>`;
+    const opt = `<option value='${y}'>${toFa(y)}</option>`;
     startSel.insertAdjacentHTML('beforeend', opt);
     endSel.insertAdjacentHTML('beforeend', opt);
   });
@@ -42,7 +41,7 @@ fetch("data/cpi.json").then(r=>r.json()).then(json=>{
   function draw(){
     const s=+startSel.value, e=+endSel.value;
     const filtered=data.filter(d=>d.year>=s && d.year<=e);
-    const labels=filtered.map(d=>toFa(g2j(d.year)));
+    const labels=filtered.map(d=>toFa(d.year));
     const values=filtered.map(d=>d.val);
     if(chart) chart.destroy();
     chart=new Chart(ctx,{type:'line',
