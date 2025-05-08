@@ -26,14 +26,13 @@ a.btn{display:inline-block;margin-top:1.5rem;background:#444;color:#fff;padding:
 <a href="index.html" class="btn">بازگشت</a>
 <script>
 const toFa=n=>n.toString().replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
-const g2j=y=>new Intl.DateTimeFormat("fa-IR-u-ca-persian",{year:"numeric"}).format(new Date(Date.UTC(y,0,1)));
 let cpi={};
 fetch("data/cpi.json").then(r=>r.json()).then(json=>{
   cpi=json;
   const years=Object.keys(cpi).map(Number).sort((a,b)=>a-b);
   const fy=document.getElementById("fromYear"), ty=document.getElementById("toYear");
   years.forEach(y=>{
-    const opt = `<option value='${y}'>${toFa(g2j(y))}</option>`;
+    const opt = `<option value='${y}'>${toFa(y)}</option>`;
     fy.insertAdjacentHTML('beforeend', opt);
     ty.insertAdjacentHTML('beforeend', opt);
   });
