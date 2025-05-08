@@ -200,15 +200,25 @@
 <section id="financial" class="view hidden">
   <h2 style="font-size:1.8rem; margin-bottom:2rem">دستیار مالی</h2>
 
-  <!-- دکمه‌ها -->
+  <!-- دکمه کلی تورم -->
   <div class="grid" style="max-width:600px">
+    <button class="btn-main" onclick="showInflation()">تورم</button>
     <a href="leaseCalc.html" class="btn-main">محاسبه لیزینگ</a>
-    <a href="inflation/inflation.html" class="btn-main">نمودار نرخ تورم</a>
-    <a href="inflation/value.html" class="btn-main">محاسبه ارزش پول</a>
   </div>
 
   <button class="btn-back">بازگشت</button>
 </section>
+
+<!-- زیرمنوی تورم -->
+<section id="inflationMenu" class="view hidden">
+  <h2 style="font-size:1.8rem; margin-bottom:2rem">ابزارهای تورم</h2>
+  <div class="grid" style="max-width:600px">
+    <a href="inflation/inflation.html" class="btn-main">نمودار نرخ تورم</a>
+    <a href="inflation/value.html" class="btn-main">محاسبه ارزش پول</a>
+  </div>
+  <button class="btn-back" onclick="hideInflation()">بازگشت</button>
+</section>
+
 
 
   <!-- Sales (دستیار فروش) -->
@@ -265,6 +275,15 @@
     document.querySelectorAll('.btn-back').forEach(b => {
       b.addEventListener('click', () => show('menu'));
     });
+function showInflation() {
+  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+  document.getElementById('inflationMenu').classList.remove('hidden');
+}
+function hideInflation() {
+  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+  document.getElementById('financial').classList.remove('hidden');
+}
+
   </script>
 </body>
 </html>
