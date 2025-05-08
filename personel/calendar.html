@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>تقویم مشاوران پخش برخط فولاد</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
@@ -11,69 +9,41 @@
 <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
 <style>
 :root{--c-brand:#8E1F61;--c-accent:#8fa2b2;--c-event:#fcb108;--glass:#1a1520;--r:22px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"Vazirmatn",sans-serif;background:#000;color:#fff;min-height:100vh}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Vazirmatn",sans-serif;background:#000;color:#fff;min-height:100vh}
 #topbar{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--r);background:var(--glass);border-radius:var(--r)}
-.logo{display:flex;gap:8px;font-size:1.3rem;font-weight:700}
-.ring{width:20px;height:20px;border:6px solid var(--c-accent);border-radius:50%}
-.brand{color:var(--c-brand)}
-main{max-width:960px;margin:0 auto;padding:var(--r)}
-.controls{display:flex;gap:10px;justify-content:center;margin-bottom:var(--r)}
-select{padding:10px;border:none;border-radius:var(--r);background:var(--glass);color:#fff}
+.logo{display:flex;gap:8px;font-size:1.3rem;font-weight:700}.ring{width:20px;height:20px;border:6px solid var(--c-accent);border-radius:50%}
+.brand{color:var(--c-brand)}main{max-width:960px;margin:0 auto;padding:var(--r)}
+.controls{display:flex;gap:10px;justify-content:center;margin-bottom:var(--r)}select{padding:10px;border:none;border-radius:var(--r);background:var(--glass);color:#fff}
 .submonths{text-align:center;font-size:.8rem;margin-bottom:4px;opacity:.85}
-.weekbar{display:grid;grid-template-columns:repeat(7,1fr);background:var(--c-brand);border-radius:12px}
-.weekbar span{padding:8px 0;text-align:center;font-weight:700}
+.weekbar{display:grid;grid-template-columns:repeat(7,1fr);background:var(--c-brand);border-radius:12px}.weekbar span{padding:8px 0;text-align:center;font-weight:700}
 .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-.cell{background:var(--glass);border-radius:10px;position:relative;min-height:88px;cursor:pointer}
-.cell.empty{visibility:hidden}
+.cell{background:var(--glass);border-radius:10px;position:relative;min-height:88px;cursor:pointer}.cell.empty{visibility:hidden}
 .num-fa{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.25rem;font-weight:700}
 .num-ar{position:absolute;top:4px;left:6px;font-size:.65rem}
 .num-en{position:absolute;bottom:4px;left:6px;font-size:.65rem}
-.is-holiday .num-fa{color:var(--c-brand)}
-.is-today{outline:2px solid var(--c-accent);outline-offset:-2px;border-radius:10px}
+.is-holiday .num-fa{color:var(--c-brand)}.is-today{outline:2px solid var(--c-accent);outline-offset:-2px;border-radius:10px}
 .dot{position:absolute;top:4px;right:4px;width:6px;height:6px;background:var(--c-event);border-radius:50%}
 #dayView{display:none;flex-direction:column;align-items:center;gap:18px;margin-top:var(--r)}
 .badge{width:110px;height:110px;border-radius:50%;background:#fff;color:#000;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:700;line-height:1.2}
 .badge small{font-size:.65rem;opacity:.7}
 .day-details{background:var(--glass);border-radius:var(--r);padding:20px;max-width:480px;width:100%}
-.day-details ul{list-style:none}
-.day-details li{padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.2)}
-.day-details li:last-child{border-bottom:none}
-.btn-group{display:flex;gap:10px;margin-top:8px}
-.btn{background:#444;color:#fff;border:none;border-radius:var(--r);padding:10px 18px;cursor:pointer}
-</style>
-</head>
-<body>
+.day-details ul{list-style:none}.day-details li{padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.2)}.day-details li:last-child{border-bottom:none}
+.btn-group{display:flex;gap:10px;margin-top:8px}.btn{background:#444;color:#fff;border:none;border-radius:var(--r);padding:10px 18px;cursor:pointer}
+</style></head><body>
 <header id="topbar"><span class="logo"><span class="ring"></span><span class="brand">مشاوران پخش برخط فولاد</span></span></header>
-
 <main>
 <section id="monthView">
-  <div class="controls">
-    <select id="yearSel"></select>
-    <select id="monthSel"></select>
-  </div>
-  <div class="submonths" id="subMonths"></div>
-  <div class="weekbar" id="weekBar"></div>
-  <div class="calendar" id="calGrid"></div>
+<div class="controls"><select id="yearSel"></select><select id="monthSel"></select></div>
+<div class="submonths" id="subMonths"></div><div class="weekbar" id="weekBar"></div><div class="calendar" id="calGrid"></div>
 </section>
-
 <section id="dayView">
-  <div style="display:flex;gap:14px">
-    <div class="badge" id="gBadge"></div>
-    <div class="badge" id="pBadge"></div>
-    <div class="badge" id="hBadge"></div>
-  </div>
-
-  <!-- ✅ جعبهٔ نمایش مناسبت‌ها -->
-  <div class="day-details" id="detailBox"></div>
-
-  <div class="btn-group">
-    <button class="btn" id="btnBack">ماه</button>
-    <a class="btn" href="../index.html">برگشت</a>
-  </div>
+<div style="display:flex;gap:14px"><div class="badge" id="gBadge"></div><div class="badge" id="pBadge"></div><div class="badge" id="hBadge"></div></div>
+<div class="btn-group">
+  <button class="btn" id="btnBack">ماه</button>
+  <a class="btn" href="../index.html">برگشت</a>
+</div>
 </section>
 </main>
-
 <script>
 moment.loadPersian({usePersianDigits:false});
 const FA="۰۱۲۳۴۵۶۷۸۹".split(""),AR="٠١٢٣٤٥٦٧٨٩".split("");
@@ -81,68 +51,21 @@ const PERSIAN_M=["فروردین","اردیبهشت","خرداد","تیر","مر
 const GREG_M=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const HIJRI_M=["محرم","صفر","ربیع‌الاول","ربیع‌الثانی","جمادی‌الاول","جمادی‌الثانی","رجب","شعبان","رمضان","شوال","ذوالقعده","ذوالحجه"];
 const WEEK=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"];
-const ySel=document.getElementById('yearSel'),
-      mSel=document.getElementById('monthSel'),
-      weekBar=document.getElementById('weekBar'),
-      cal=document.getElementById('calGrid'),
-      sub=document.getElementById('subMonths');
-WEEK.forEach(w=>weekBar.innerHTML+=`<span>${w}</span>`);
-for(let y=1390;y<=1440;y++)ySel.innerHTML+=`<option value='${y}'>${y}</option>`;
-PERSIAN_M.forEach((m,i)=>mSel.innerHTML+=`<option value='${i}'>${m}</option>`);
+const ySel=document.getElementById('yearSel'),mSel=document.getElementById('monthSel'),weekBar=document.getElementById('weekBar'),cal=document.getElementById('calGrid'),sub=document.getElementById('subMonths');
+WEEK.forEach(w=>weekBar.innerHTML+=`<span>${w}</span>`);for(let y=1390;y<=1440;y++)ySel.innerHTML+=`<option value='${y}'>${y}</option>`;PERSIAN_M.forEach((m,i)=>mSel.innerHTML+=`<option value='${i}'>${m}</option>`);
 const today=moment();
-let cY=+today.format('jYYYY'),cM=+today.format('jM')-1;
-ySel.value=cY;mSel.value=cM;
+let cY=+today.format('jYYYY'),cM=+today.format('jM')-1;ySel.value=cY;mSel.value=cM;
 function toDig(n,s){return n.toString().replace(/[0-9]/g,x=>s[x]);}
-
 /* load events */
 let EVENTS={};
 fetch('events.json').then(r=>r.json()).then(d=>{EVENTS=d;render();}).catch(()=>render());
-function getEvents(k,t){return (EVENTS[t]&&EVENTS[t][k])||[];}
+function getEvents(key,type){return (EVENTS[type]&&EVENTS[type][key])||[];}
 function daysIn(y,m){return moment().jYear(y).jMonth(m).jDate(1).add(1,'jMonth').subtract(1,'day').jDate();}
-
-function render(){
-  cal.innerHTML='';updateSub();
-  const first=moment().jYear(cY).jMonth(cM).jDate(1);
-  cal.innerHTML+="<div class='cell empty'></div>".repeat((first.day()+1)%7);
-  for(let d=1;d<=daysIn(cY,cM);d++){
-    const g=moment().jYear(cY).jMonth(cM).jDate(d);
-    const solarKey=`${cM+1}`.padStart(2,'0')+"-"+String(d).padStart(2,'0'),
-          gregKey=`${g.month()+1}`.padStart(2,'0')+"-"+String(g.date()).padStart(2,'0'),
-          islamKey=`${g.iMonth()+1}`.padStart(2,'0')+"-"+String(g.iDate()).padStart(2,'0');
-    const ev=[...getEvents(solarKey,'solar'),...getEvents(gregKey,'gregorian'),
-              ...getEvents(islamKey,'islamic'),...getEvents(solarKey,'zoroastrian'),
-              ...getEvents(gregKey,'jewish')];
-    const hol=g.day()==5||ev.length,
-          todayFlag=cY==+today.format('jYYYY')&&cM==+today.format('jM')-1&&d==+today.format('jD');
-    cal.insertAdjacentHTML('beforeend',`
-      <div class='cell${hol?' is-holiday':''}${todayFlag?' is-today':''}' data-d='${d}'>
-        <span class='num-fa'>${toDig(d,FA)}</span>
-        <span class='num-ar'>${toDig(g.iDate(),AR)}</span>
-        <span class='num-en'>${g.date()}</span>
-        ${ev.length?'<span class="dot"></span>':""}
-      </div>`);}
-  while(cal.children.length%7)cal.innerHTML+="<div class='cell empty'></div>";
-}
-
-function updateSub(){
-  const s=moment().jYear(cY).jMonth(cM).jDate(1),
-        e=s.clone().jDate(daysIn(cY,cM));
-  const gm=[GREG_M[s.month()],GREG_M[e.month()]].filter((v,i,a)=>a.indexOf(v)==i).join(' / '),
-        hm=[HIJRI_M[s.iMonth()],HIJRI_M[e.iMonth()]].filter((v,i,a)=>a.indexOf(v)==i).join(' / ');
-  sub.textContent=gm+" · "+hm;
-}
-
-cal.addEventListener('click',e=>{
-  const c=e.target.closest('.cell[data-d]');
-  if(c) open(+c.dataset.d);
-});
-
-const dayView=document.getElementById('dayView'),
-      monthView=document.getElementById('monthView'),
-      gB=document.getElementById('gBadge'),
-      pB=document.getElementById('pBadge'),
-      hB=document.getElementById('hBadge'),
-      detail=document.getElementById('detailBox');
-
-function open(d){
-  const g=moment().jYear(c
+function render(){cal.innerHTML='';updateSub();const f=moment().jYear(cY).jMonth(cM).jDate(1);cal.innerHTML+="<div class='cell empty'></div>".repeat((f.day()+1)%7);for(let d=1;d<=daysIn(cY,cM);d++){const g=moment().jYear(cY).jMonth(cM).jDate(d);const solarKey=(cM+1).toString().padStart(2,'0')+"-"+String(d).padStart(2,'0');const gregKey=(g.month()+1).toString().padStart(2,'0')+"-"+String(g.date()).padStart(2,'0');const islamKey=(g.iMonth()+1).toString().padStart(2,'0')+"-"+String(g.iDate()).padStart(2,'0');const ev=[...getEvents(solarKey,'solar'),...getEvents(gregKey,'gregorian'),...getEvents(islamKey,'islamic'),...getEvents(solarKey,'zoroastrian'),...getEvents(gregKey,'jewish')];const hol=g.day()==5||ev.length;const tFlag=cY==+today.format('jYYYY')&&cM==+today.format('jM')-1&&d==+today.format('jD');cal.insertAdjacentHTML('beforeend',`<div class='cell${hol?' is-holiday':''}${tFlag?' is-today':''}' data-d='${d}'><span class='num-fa'>${toDig(d,FA)}</span><span class='num-ar'>${toDig(g.iDate(),AR)}</span><span class='num-en'>${g.date()}</span>${ev.length?'<span class="dot"></span>':""}</div>`);}while(cal.children.length%7)cal.innerHTML+="<div class='cell empty'></div>";}
+function updateSub(){const s=moment().jYear(cY).jMonth(cM).jDate(1),e=s.clone().jDate(daysIn(cY,cM));const gm=[GREG_M[s.month()],GREG_M[e.month()]].filter((v,i,a)=>a.indexOf(v)==i).join(' / ');const hm=[HIJRI_M[s.iMonth()],HIJRI_M[e.iMonth()]].filter((v,i,a)=>a.indexOf(v)==i).join(' / ');sub.textContent=gm+" · "+hm;}
+cal.addEventListener('click',e=>{const c=e.target.closest('.cell[data-d]');if(c)open(+c.dataset.d);});
+const dayView=document.getElementById('dayView'),monthView=document.getElementById('monthView'),gB=document.getElementById('gBadge'),pB=document.getElementById('pBadge'),hB=document.getElementById('hBadge'),detail=document.getElementById('detailBox');
+function open(d){const g=moment().jYear(cY).jMonth(cM).jDate(d);gB.innerHTML=`<small>${GREG_M[g.month()]}</small>${g.date()}`;pB.innerHTML=`<small>${PERSIAN_M[cM]}</small>${toDig(d,FA)}`;hB.innerHTML=`<small>${HIJRI_M[g.iMonth()]}</small>${toDig(g.iDate(),AR)}`;const solarKey=(cM+1).toString().padStart(2,'0')+"-"+String(d).padStart(2,'0'),gregKey=(g.month()+1).toString().padStart(2,'0')+"-"+String(g.date()).padStart(2,'0'),islamKey=(g.iMonth()+1).toString().padStart(2,'0')+"-"+String(g.iDate()).padStart(2,'0');const ev=[...getEvents(solarKey,'solar'),...getEvents(gregKey,'gregorian'),...getEvents(islamKey,'islamic'),...getEvents(solarKey,'zoroastrian'),...getEvents(gregKey,'jewish')];detail.innerHTML="<ul>"+(ev.length?ev.map(t=>`<li>${t}</li>`).join(""):"<li>رویدادی ثبت نشده</li>")+"</ul>";monthView.style.display='none';dayView.style.display='flex';}
+document.getElementById('btnBack').onclick=()=>{dayView.style.display='none';monthView.style.display='block';};
+ySel.onchange=()=>{cY=+ySel.value;render();};mSel.onchange=()=>{cM=+mSel.value;render();};
+</script></body></html>
