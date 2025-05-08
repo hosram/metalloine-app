@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>قیمت لحظه‌ای فلزات | API Ninjas</title>
+
+  <!-- فونت Vazirmatn -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+
+  <style>
+    :root{
+      --bg:#101010;--card:#1e1e1e;--accent:#8E1F61;--r:18px;--g:12px
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--bg);color:#fff;font-family:"Vazirmatn",sans-serif;
+      line-height:1.7;min-height:100vh;display:flex;flex-direction:column;
+      align-items:center
+    }
+    h1{margin:2rem 0;font-size:1.55rem;color:var(--accent)}
+    #board{
+      width:100%;max-width:460px;padding:var(--g);background:var(--card);
+      border-radius:var(--r);border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 6px 18px rgba(0,0,0,.45)
+    }
+    table{width:100%;border-collapse:collapse;font-size:.92rem}
+    th,td{padding:.6rem .3rem;text-align:center}
+    th{color:#d0d0d0;border-bottom:1px solid rgba(255,255,255,.2)}
+    tbody tr:not(:last-child) td{border-bottom:1px dashed rgba(255,255,255,.08)}
+    .loading{animation:pulse 1s infinite alternate}
+    @keyframes pulse{from{opacity:.35}to{opacity:1}}
+    .time{margin-top:1rem;text-align:center;font-size:.8rem;color:#bbb}
+    .err{color:#ff7c7c;text-align:center;padding:.8rem;font-size:.9rem}
+  </style>
+</head>
+<body>
+
+<h1>قیمت لحظه‌ای فلزات (USD)</h1>
+
+<section id="board">
+  <table>
+    <thead><tr><th>فلز</th><th>قیمت</th><th>بازار</th></tr></thead>
+    <tbody id="rows">
+      <tr><td colspan="3" class="loading">در حال دریافت داده…</td></tr>
+    </tbody>
+  </table>
+  <div id="stamp" class="time"></div>
+</section>
+
+<script type="module">
+/* ——— تنظیمات ——— */
+const KEY   = "BvqKSJiIKPOw3BtbDTyaAg==TiAtI0qwi2Sij2W3";            // کلید رایگان
+const LIST  = [
+  {en:"gold",fa:"طلا"},{en:"silver",fa:"نقره"},{en:"platinum",fa:"پلاتین"},
+  {en:"palladium",fa:"پالادیوم"},{en:"copper",fa:"مس"},
+  {en:"aluminum",fa:"آلومینیوم"},{en:"nickel",fa:"نیکل"},{en:"zinc",fa:"روی"}
+];
+const GAP   = 300_000;     // ۵ دقیقه
+
+/* ———‌ کمک‌ها ——— */
+const fmt = n=>Intl.NumberFormat("fa-IR",{maximumFractionDigits:2}).format(n);
+const ts  = s=>new Date(s*1000)
+  .toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+
+/* ——— DOM ——— */
+const tbody=document.getElementById("rows");
+const stamp=document.getElementById("stamp");
+
+/* ——— واکشی یک فلز ——— */
+async function one(m){
+  const url=`https://api.api-ninjas.com/v1/commodityprice?name=${m.en}`;
+  const r=await fetch(url,{headers:{'X-Api-Key':KEY}});
+  if(!r.ok)throw new Error(`${m.en}:${r.status}`);
+  const d=await r.json();
+  return {fa:m.fa,price:d.price,ex:d.exchange,time:d.updated};
+}
+
+/* ——— دانلود همه (۱req/sec) ——— */
+async function fetchAll(){
+  const out=[];let latest=0;
+  for(const m of LIST){
+    if(out.length)await new Promise(r=>setTimeout(r,1100));
+    try{
+      const row=await one(m);out.push(row);
+      latest=Math.max(latest,row.time||0);
+    }catch{out.push({fa:m.fa,price:"خطا",ex:"—"});}
+    render(out);
+  }
+  if(latest)stamp.textContent=`به‌روز شده: ${ts(latest)}`;
+}
+
+/* ——— رندر ——— */
+function render(arr){
+  tbody.innerHTML=arr.map(x=>`
+    <tr><td>${x.fa}</td>
+        <td>${typeof x.price==="number"?fmt(x.price):x.price}</td>
+        <td>${x.ex||"—"}</td></tr>`).join("");
+}
+
+/* ——— حلقهٔ خودکار ——— */
+(function loop(){fetchAll().finally(()=>setTimeout(loop,GAP));})();
+</script>
+</body>
+</html>
