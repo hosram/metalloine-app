@@ -1,109 +1,58 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>نرخ تورم پس از انقلاب</title>
-
-  <!-- فونت وزیرمتن -->
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
-
-  <style>
-    :root{--c1:#8e1f61;--glass:rgba(255,255,255,.1);--r:24px;--g:12px}
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;line-height:1.6}
-    main{max-width:640px;margin:0 auto;padding:var(--g)}
-    .card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid #ffffff33;
-          border-radius:var(--r);padding:16px;display:grid;grid-template-columns:1fr 1fr;
-          gap:12px;margin-top:var(--g)}
-    select{background:#1a1a1a;color:#fff;border:none;border-radius:var(--r);padding:10px}
-    canvas{background:#111;border-radius:var(--r);margin-top:var(--g);border:1px solid #ffffff22}
-    @media(max-width:600px){.card{grid-template-columns:1fr}}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>نمودار نرخ تورم</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<style>
+:root{--r:24px;--g:12px}
+body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;text-align:center;padding:2rem}
+select,input{padding:10px;border-radius:var(--r);margin:8px}
+canvas{margin-top:1rem;background:#111;border-radius:var(--r)}
+a.btn{display:inline-block;margin-top:1.5rem;background:#444;color:#fff;padding:.75rem 2rem;border-radius:var(--r);text-decoration:none}
+</style>
 </head>
 <body>
-  <main>
-    <h2 style="text-align:center">نرخ تورم سالانه پس از انقلاب</h2>
-
-    <!-- فیلتر سال -->
-    <form id="filter" class="card">
-      <label>از سال
-        <select id="yearStart"></select>
-      </label>
-      <label>تا سال
-        <select id="yearEnd"></select>
-      </label>
-      <div style="grid-column:span 2;text-align:center;font-size:.8rem">
-        با انتخاب یک سال واحد، نمودار ۱۲ ماههٔ همان سال نشان داده می‌شود
-      </div>
-    </form>
-
-    <!-- نمودار -->
-    <canvas id="chart" height="380"></canvas>
-  
-    <a href="../index.html" class="btn-main" style="display:block;margin:24px auto 0;max-width:200px">بازگشت</a>
-  </main>
-
+<h2>📊 نمودار نرخ تورم سالانه</h2>
+<select id="start"></select>
+<select id="end"></select>
+<canvas id="chart" width="600" height="360"></canvas>
+<a href="index.html" class="btn">بازگشت</a>
 <script>
-const toFaDigits = n => n.toString().replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
-const g2jYear   = g => new Intl.DateTimeFormat("fa-IR-u-ca-persian",
-                    {year:"numeric"}).format(new Date(Date.UTC(g,0,1)));
-
-let rows=[];
-fetch("./data/inflation_ir.json")
-  .then(r=>r.json()).then(j=>{
-     rows=j.map(d=>({year:+d.fiscal_year.split('-')[0],
-                     inflation:+d.inflation_pct}));
-     init();
-  }).catch(()=>{alert("فایل داده لود نشد");});
-
-function init(){
-  const years=[...new Set(rows.map(r=>r.year))];
-  const map = Object.fromEntries(years.map(y=>[y,g2jYear(y)]));
-  const selS=document.getElementById("yearStart");
-  const selE=document.getElementById("yearEnd");
+const g2j=gy=>new Intl.DateTimeFormat("fa-IR-u-ca-persian",{year:"numeric"}).format(new Date(Date.UTC(gy,0,1)));
+const toFa=n=>n.toString().replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+fetch("data/cpi.json").then(r=>r.json()).then(json=>{
+  const years=Object.keys(json).map(Number).sort((a,b)=>a-b);
+  const data=Object.entries(json).map(([y,v])=>({year:+y,val:v}));
+  const startSel=document.getElementById("start");
+  const endSel=document.getElementById("end");
   years.forEach(y=>{
-    const lbl=toFaDigits(map[y]);
-    selS.insertAdjacentHTML('beforeend',`<option value="${y}">${lbl}</option>`);
-    selE.insertAdjacentHTML('beforeend',`<option value="${y}">${lbl}</option>`);
+    const opt = `<option value='${y}'>${toFa(g2j(y))}</option>`;
+    startSel.insertAdjacentHTML('beforeend', opt);
+    endSel.insertAdjacentHTML('beforeend', opt);
   });
-  selS.value=years[0]; selE.value=years.at(-1);
+  startSel.value=years[0]; endSel.value=years.at(-1);
 
   const ctx=document.getElementById("chart").getContext("2d");
   let chart;
-  const render=()=>{
-    const s=+selS.value, e=+selE.value;
+
+  function draw(){
+    const s=+startSel.value, e=+endSel.value;
+    const filtered=data.filter(d=>d.year>=s && d.year<=e);
+    const labels=filtered.map(d=>toFa(g2j(d.year)));
+    const values=filtered.map(d=>d.val);
     if(chart) chart.destroy();
-
-    if(s===e){
-      const rec=rows.find(r=>r.year===s) || {inflation:0};
-      chart=new Chart(ctx,{type:"bar",
-        data:{labels:["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور",
-                      "مهر","آبان","آذر","دی","بهمن","اسفند"],
-              datasets:[{data:Array(12).fill(rec.inflation),
-                         label:"درصد تورم ماهانه (نرخ ثابت)",borderWidth:1}]},
-        options:{plugins:{legend:{display:false}},scales:{y:{ticks:{
-          callback:v=>v+'%'}}}}
-      });
-      return;
-    }
-
-    const subset=rows.filter(r=>r.year>=s && r.year<=e);
-    chart=new Chart(ctx,{type:"line",
-      data:{labels:subset.map(r=>toFaDigits(map[r.year])),
-            datasets:[{data:subset.map(r=>r.inflation),borderWidth:3,
-                       tension:.3,label:"درصد تورم سالانه"}]},
-      options:{plugins:{legend:{display:false}},scales:{y:{ticks:{
-        callback:v=>v+'%'}}}}
+    chart=new Chart(ctx,{type:'line',
+      data:{labels,datasets:[{label:'شاخص CPI',data:values,borderWidth:2}]},
+      options:{scales:{y:{ticks:{callback:v=>v+"x"}}}}
     });
-  };
-  selS.onchange=selE.onchange=render;
-  render();
-}
+  }
+  startSel.onchange=endSel.onchange=draw;
+  draw();
+});
 </script>
 </body>
 </html>
