@@ -23,9 +23,10 @@ a.btn{display:inline-block;margin-top:1.5rem;background:#444;color:#fff;padding:
 <br/>
 <button onclick="calc()">محاسبه</button>
 <div id="result"></div>
-<a href="index.html" class="btn">بازگشت</a>
+<a href="tools.html" class="btn">بازگشت</a>
 <script>
 const toFa=n=>n.toString().replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const toFaSep=n=>toFa(n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,"٬"));
 let cpi={};
 fetch("data/cpi.json").then(r=>r.json()).then(json=>{
   cpi=json;
@@ -45,7 +46,7 @@ function calc(){
   const to=+document.getElementById("toYear").value;
   if(!cpi[from]||!cpi[to]) return;
   const val = amt * (cpi[to]/cpi[from]);
-  document.getElementById("result").textContent = "ارزش معادل: "+ toFa(val.toFixed(0)) + " تومان";
+  document.getElementById("result").textContent = "ارزش معادل: "+ toFaSep(val.toFixed(0)) + " تومان";
 }
 </script>
 </body>
