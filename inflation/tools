@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ابزارهای CPI | متال‌لاین</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css"/>
+  <style>
+    body { background: #000; color: #fff; font-family: "Vazirmatn", sans-serif; text-align: center; padding: 2rem; }
+    h1 { margin-bottom: 2rem; }
+    .btn { display: block; background: #8E1F61; color: #fff; text-decoration: none; margin: 1rem auto; padding: 1rem 2rem; border-radius: 24px; font-weight: bold; max-width: 280px; }
+    .btn:hover { background: #A33270; }
+  </style>
+</head>
+<body>
+  <h1>ابزارهای مربوط به نرخ تورم و ارزش پول</h1>
+  <a href="inflation.html" class="btn">📈 نمودار نرخ تورم</a>
+  <a href="value.html" class="btn">💰 محاسبه ارزش پول</a>
+</body>
+</html>
