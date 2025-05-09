@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>حضور و غیاب | Metalloine</title>
+
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+
+<style>
+:root{--c-primary:#8E1F61;--c-accent:#8FA2B2;
+      --glass:rgba(255,255,255,.1);--r:24px;--g:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;min-height:100vh}
+#topbar{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);
+        background:var(--glass);backdrop-filter:blur(24px);
+        border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
+.logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
+.ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+.brand{color:var(--c-primary)}
+main{max-width:420px;margin:0 auto;padding:var(--g)}
+.card{background:var(--glass);backdrop-filter:blur(24px);
+      border-radius:var(--r);border:1px solid rgba(255,255,255,.2);
+      padding:16px;display:grid;gap:12px}
+button{border:none;border-radius:var(--r);cursor:pointer;font:inherit;padding:14px;
+       background:linear-gradient(135deg,var(--c-primary),var(--c-accent));color:#fff;
+       font-weight:600;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+#tbl{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:16px}
+th,td{padding:8px 6px;text-align:center}
+th{background:#111}tr:nth-child(odd){background:#1a1a1a}tr:nth-child(even){background:#222}
+.msg{min-height:1.2em;text-align:center;font-size:.8rem;color:#ff8}
+</style>
+</head>
+
+<body>
+<header id="topbar">
+  <span class="logo"><span class="ring"></span><span class="brand">Metalloine</span></span>
+</header>
+
+<main>
+  <h2 style="text-align:center">ثبت حضور و غیاب</h2>
+
+  <!-- کارت دکمه‌ها -->
+  <section class="card">
+    <input id="full" type="text" placeholder="نام کامل" style="grid-column:span 2;border:none;
+      border-radius:var(--r);background:var(--glass);color:#fff;padding:10px">
+    <button id="btn-in">ورود</button>
+    <button id="btn-out">خروج</button>
+    <div id="msg" class="msg" style="grid-column:span 2"></div>
+  </section>
+
+  <!-- جدول لاگ -->
+  <section class="card" style="margin-top:var(--g)">
+    <table id="tbl">
+      <thead><tr><th>نام</th><th>عملیات</th><th>زمان</th></tr></thead>
+      <tbody id="tbody"><tr><td colspan="3">بارگذاری…</td></tr></tbody>
+    </table>
+  </section>
+
+  <a href="index.html" class="btn-icon" style="display:block;text-align:center;margin-top:1.5rem;
+     background:#444;color:#fff;border-radius:var(--r);padding:14px;text-decoration:none">
+     ⬅ بازگشت</a>
+</main>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbyVxv0oDgsdDP4Z1ttd6yR0RVXMq5jVu5quBNVOZFeNngqbg3V8kzWwbt-rVzmJsAWZBA/exec";          // <-- اینجا URL وب‌اپ
+const msg = s => document.getElementById('msg').textContent = s;
+
+async function punch(action){
+  const full = document.getElementById('full').value.trim();
+  if(!full){ msg("نام را وارد کنید"); return; }
+  try{
+    const r = await fetch(API, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ user_id: full, fullname: full, action })
+    });
+    const j = await r.json();
+    if(j.ok){ msg("ثبت شد ✅"); load(); }
+    else    { msg("خطا!"); }
+  }catch(e){ msg("ارتباط برقرار نشد"); }
+}
+
+document.getElementById('btn-in').onclick = () => punch('in');
+document.getElementById('btn-out').onclick = () => punch('out');
+
+/* ---- بارگذاری جدول ---- */
+async function load(){
+  try{
+    const res = await fetch(API + "?limit=50");
+    const rows = await res.json();          // آرایهٔ ساده
+    const html = rows.reverse().map(r=>`
+      <tr><td>${r[1]}</td><td>${r[2]}</td><td>${r[3].replace('T',' ').slice(0,19)}</td></tr>
+    `).join('');
+    document.getElementById('tbody').innerHTML = html || '<tr><td colspan="3">داده‌ای نیست</td></tr>';
+  }catch(e){
+    document.getElementById('tbody').innerHTML = '<tr><td colspan="3">خطا در دریافت</td></tr>';
+  }
+}
+load();
+</script>
+</body></html>
