@@ -222,13 +222,15 @@
 
 
 
-  <!-- Sales (دستیار فروش) -->
+ <!-- Sales (دستیار فروش) -->
 <section id="sales" class="view hidden">
   <h2 style="font-size:1.8rem; margin-bottom:2rem">دستیار فروش</h2>
   <div class="grid" style="max-width:600px">
-    <a href="order-form.html" class="btn-main">سفارشات آفلاین</a>
+    <!-- قبلأ اینجا لینک بود: <a href="order-form.html" class="btn-main">سفارشات آفلاین</a> -->
+    <!-- به شکل غیرفعال در آورده‌ایم: -->
+    <button class="btn-main disabled" disabled>سفارشات آفلاین</button>
 
-    <!-- ⬇️ دکمهٔ جدید -->
+    <!-- ⬇️ دکمهٔ جدید (فعالسازی قیمت فلزات) -->
     <a href="/market/metals-ninjas.html" class="btn-main">قیمت لحظه‌ای فلزات</a>
   </div>
   <button class="btn-back">بازگشت</button>
@@ -239,9 +241,11 @@
   <h2 style="font-size:1.8rem; margin-bottom:2rem">دستیار منابع انسانی</h2>
 
   <div class="grid" style="max-width:600px">
-     <!-- دکمهٔ واحد حضور و غیاب -->
-    <a href="personel/attendance.html" class="btn-main">حضور و غیاب</a>
-    <!-- مسیر تقویم داخل پوشهٔ personel -->
+    <!-- قبلأ لینک بود: <a href="personel/attendance.html" class="btn-main">حضور و غیاب</a> -->
+    <!-- حالا غیرفعال شده: -->
+    <button class="btn-main disabled" disabled>حضور و غیاب</button>
+
+    <!-- مسیر تقویم داخل پوشهٔ personel بدون تغییر -->
     <a href="personel/calendar.html" class="btn-main">تقویم پرسنلی</a>
   </div>
 
