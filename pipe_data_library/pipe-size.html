@@ -60,10 +60,52 @@
 </main>
 <script>
 let pipeDB=[];
-fetch('pipe_data_library/pipe_size_demo.json').then(r=>r.json()).then(data=>pipeDB=data);
+const form=document.getElementById('pipeForm');
+const resultsDiv=document.getElementById('results');
+resultsDiv.textContent='در حال بارگذاری اطلاعات...';
+const files=[
+  'pipe_data_library/asme_b36_10m_superfull_pipes.json',
+  'pipe_data_library/asme_b36_19m_superfull_pipes.json',
+  'pipe_data_library/astm_a312_superfull_pipes.json',
+  'pipe_data_library/astm_a53_a106_a333_superfull_pipes.json',
+  'pipe_data_library/din2440_full_pipes.json',
+  'pipe_data_library/din2441_full_pipes.json',
+  'pipe_data_library/din2448_full_pipes.json',
+  'pipe_data_library/en10216_full_pipes.json',
+  'pipe_data_library/en10217_full_pipes.json',
+  'pipe_data_library/en10220_hyper_full_pipes.json',
+  'pipe_data_library/isiri3360_full_pipes.json',
+  'pipe_data_library/isiri3765_full_pipes.json',
+  'pipe_data_library/iso1129_full_pipes.json',
+  'pipe_data_library/iso4200_full_pipes.json',
+  'pipe_data_library/iso65_full_pipes.json',
+  'pipe_data_library/jisg3442_full_pipes.json',
+  'pipe_data_library/jisg3452_full_pipes.json',
+  'pipe_data_library/jisg3454_full_pipes.json',
+  'pipe_data_library/jisg3456_full_pipes.json'
+];
+Promise.all(files.map(f=>fetch(f).then(r=>r.json())))
+  .then(arr=>{pipeDB=arr.flat();resultsDiv.textContent='';})
+  .catch(err=>{resultsDiv.textContent='خطا در بارگذاری داده';console.error('data load error',err);});
 function pipeID(od,t){return +(od-2*t).toFixed(2);}
 function suggestSizes(od,id,mat,db){let out=[];for(let rec of db){if(mat!=='all'&&rec.material!==mat)continue;const realID=pipeID(rec.od_mm,rec.thickness_mm);let diffOD=od?Math.abs(rec.od_mm-od):null;let diffID=id?Math.abs(realID-id):null;let odClose=od?(diffOD<=2||diffOD/od<=0.015):true;let idClose=id?(diffID<=2||diffID/id<=0.015):true;if(odClose&&idClose){out.push({...rec,real_id:realID,diff_od:diffOD,diff_id:diffID});}}return out.sort((a,b)=>((a.diff_od||0)+(a.diff_id||0))-((b.diff_od||0)+(b.diff_id||0))).slice(0,10);}
-const form=document.getElementById('pipeForm');const resultsDiv=document.getElementById('results');form.onsubmit=function(e){e.preventDefault();const od=parseFloat(document.getElementById('odInput').value);const id_=parseFloat(document.getElementById('idInput').value);const mat=document.getElementById('matSelect').value;const res=suggestSizes(od,id_,mat,pipeDB);if(!res.length){resultsDiv.innerHTML='<div class="notfound">هیچ سایزی با مشخصات مورد نظر شما یافت نشد.</div>';return;}let table='<table><tr><th>استاندارد</th><th>NPS/DN</th><th>OD (mm)</th><th>ID (mm)</th><th>ضخامت</th><th>متریال</th><th>نوع</th><th>گرید</th></tr>';for(let r of res){table+=`<tr><td>${r.standard}</td><td>${r.nps||r.dn||''}</td><td>${r.od_mm}</td><td>${r.real_id}</td><td>${r.thickness_mm}</td><td>${r.material}</td><td>${r.type||''}</td><td>${r.grade||''}</td></tr>`;}table+='</table>';resultsDiv.innerHTML=table;};
+form.onsubmit=function(e){
+  e.preventDefault();
+  const od=parseFloat(document.getElementById('odInput').value);
+  const id_=parseFloat(document.getElementById('idInput').value);
+  const mat=document.getElementById('matSelect').value;
+  const res=suggestSizes(od,id_,mat,pipeDB);
+  if(!res.length){
+    resultsDiv.innerHTML='<div class="notfound">هیچ سایزی با مشخصات مورد نظر شما یافت نشد.</div>';
+    return;
+  }
+  let table='<table><tr><th>استاندارد</th><th>NPS/DN</th><th>OD (mm)</th><th>ID (mm)</th><th>ضخامت</th><th>متریال</th><th>نوع</th><th>گرید</th></tr>';
+  for(let r of res){
+    table+=`<tr><td>${r.standard}</td><td>${r.nps||r.dn||''}</td><td>${r.od_mm}</td><td>${r.real_id}</td><td>${r.thickness_mm}</td><td>${r.material||''}</td><td>${r.type||r.schedule||r.class||''}</td><td>${r.grade||''}</td></tr>`;
+  }
+  table+='</table>';
+  resultsDiv.innerHTML=table;
+};
 </script>
 </body>
 </html>
