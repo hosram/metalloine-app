@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>تشخیص سایز لوله | Metalloine</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+  <style>
+    :root{--c-primary:#8E1F61;--c-accent:#8FA2B2;--glass:rgba(255,255,255,0.1);--r:24px;--g:12px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#000;color:#fff;font-family:"Vazirmatn",sans-serif;min-height:100vh;line-height:1.6}
+    #topbar{display:flex;justify-content:center;align-items:center;height:64px;margin:var(--g);background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.25);border-radius:var(--r)}
+    .logo{display:flex;align-items:center;gap:8px;font-size:1.4rem;font-weight:700}
+    .ring{width:22px;height:22px;border:6px solid var(--c-accent);border-radius:50%}
+    .brand{color:var(--c-primary)}
+    main{max-width:520px;margin:0 auto;padding:var(--g)}
+    .card{background:var(--glass);backdrop-filter:blur(24px);border-radius:var(--r);border:1px solid rgba(255,255,255,.2);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:var(--g)}
+    label{display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+    input,select,button{border:none;border-radius:var(--r);background:var(--glass);color:#fff;font:inherit;padding:10px}
+    select:focus,input:focus{outline:2px solid var(--c-primary)}
+    select,option{background:#1a1a1a;color:#fff}
+    .row-2{grid-column:span 2}
+    button{cursor:pointer;font-weight:600;background:linear-gradient(135deg,var(--c-primary),var(--c-accent));box-shadow:0 4px 10px rgba(0,0,0,.4)}
+    table{width:100%;margin-top:1rem;border-collapse:collapse;font-size:.9rem}
+    th,td{border:1px solid rgba(255,255,255,.2);padding:6px;text-align:center}
+    th{background:#111}
+    tr:nth-child(even){background:#1a1a1a}
+    .notfound{text-align:center;color:#ff8080;margin-top:1rem;font-weight:700}
+    @media(max-width:600px){.card{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header id="topbar">
+  <span class="logo">
+    <span class="ring"></span>
+    <span class="brand">Metalloine</span>
+  </span>
+</header>
+<main>
+  <h2 style="text-align:center">پیشنهاد سایز لوله</h2>
+  <form id="pipeForm" class="card">
+    <label class="row-2">قطر بیرونی (OD) مورد نیاز (میلی‌متر)
+      <input type="number" step="0.01" id="odInput" placeholder="مثلاً 60.33">
+    </label>
+    <label class="row-2">قطر داخلی (ID) مورد نیاز (میلی‌متر)
+      <input type="number" step="0.01" id="idInput" placeholder="مثلاً 54.25">
+    </label>
+    <label class="row-2">نوع متریال
+      <select id="matSelect">
+        <option value="all">همه متریال‌ها</option>
+        <option value="carbon">فولاد کربنی</option>
+        <option value="stainless">استنلس استیل</option>
+        <option value="galvanized">گالوانیزه</option>
+      </select>
+    </label>
+    <button type="submit" class="row-2">جستجوی سایز پیشنهادی</button>
+  </form>
+  <div id="results"></div>
+  <a href="index.html" class="btn-icon" style="display:block;width:90%;max-width:520px;margin:2rem auto;text-align:center;padding:14px;text-decoration:none;background:#444;color:#fff;border-radius:var(--r)">⬅ بازگشت</a>
+</main>
+<script>
+let pipeDB=[];
+fetch('pipe_data_library/pipe_size_demo.json').then(r=>r.json()).then(data=>pipeDB=data);
+function pipeID(od,t){return +(od-2*t).toFixed(2);}
+function suggestSizes(od,id,mat,db){let out=[];for(let rec of db){if(mat!=='all'&&rec.material!==mat)continue;const realID=pipeID(rec.od_mm,rec.thickness_mm);let diffOD=od?Math.abs(rec.od_mm-od):null;let diffID=id?Math.abs(realID-id):null;let odClose=od?(diffOD<=2||diffOD/od<=0.015):true;let idClose=id?(diffID<=2||diffID/id<=0.015):true;if(odClose&&idClose){out.push({...rec,real_id:realID,diff_od:diffOD,diff_id:diffID});}}return out.sort((a,b)=>((a.diff_od||0)+(a.diff_id||0))-((b.diff_od||0)+(b.diff_id||0))).slice(0,10);}
+const form=document.getElementById('pipeForm');const resultsDiv=document.getElementById('results');form.onsubmit=function(e){e.preventDefault();const od=parseFloat(document.getElementById('odInput').value);const id_=parseFloat(document.getElementById('idInput').value);const mat=document.getElementById('matSelect').value;const res=suggestSizes(od,id_,mat,pipeDB);if(!res.length){resultsDiv.innerHTML='<div class="notfound">هیچ سایزی با مشخصات مورد نظر شما یافت نشد.</div>';return;}let table='<table><tr><th>استاندارد</th><th>NPS/DN</th><th>OD (mm)</th><th>ID (mm)</th><th>ضخامت</th><th>متریال</th><th>نوع</th><th>گرید</th></tr>';for(let r of res){table+=`<tr><td>${r.standard}</td><td>${r.nps||r.dn||''}</td><td>${r.od_mm}</td><td>${r.real_id}</td><td>${r.thickness_mm}</td><td>${r.material}</td><td>${r.type||''}</td><td>${r.grade||''}</td></tr>`;}table+='</table>';resultsDiv.innerHTML=table;};
+</script>
+</body>
+</html>
