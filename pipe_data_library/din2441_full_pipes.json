@@ -1,0 +1,488 @@
+[
+  {
+    "standard": "DIN 2441",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.17,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.17,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 1.39,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 1.39,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 1.39,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 1.39,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.75,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.75,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 1.79,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 1.79,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 1.79,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 1.79,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 2.22,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 2.22,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 2.38,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 2.38,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 2.94,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 2.94,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 2.61,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 2.61,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 3.27,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 3.27,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 4.02,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 4.02,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 3.17,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 3.17,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 3.77,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 3.77,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 4.6,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 4.6,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 4.09,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 4.09,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 5.11,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 5.11,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 5.1,
+    "weight_kg_m": 6.45,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 5.1,
+    "weight_kg_m": 6.45,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 5.19,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 5.19,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 6.99,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 6.99,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 5.8,
+    "weight_kg_m": 9.21,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 5.8,
+    "weight_kg_m": 9.21,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 6.53,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 6.53,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 5.0,
+    "weight_kg_m": 9.06,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 5.0,
+    "weight_kg_m": 9.06,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 6.6,
+    "weight_kg_m": 12.41,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 6.6,
+    "weight_kg_m": 12.41,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 9.07,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 9.07,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 5.4,
+    "weight_kg_m": 12.26,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 5.4,
+    "weight_kg_m": 12.26,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 7.1,
+    "weight_kg_m": 17.31,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "DIN 2441",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 7.1,
+    "weight_kg_m": 17.31,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  }
+]

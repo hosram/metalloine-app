@@ -1,0 +1,632 @@
+[
+  {
+    "standard": "EN 10216",
+    "dn": 10,
+    "od_mm": 17.2,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 0.92,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 10,
+    "od_mm": 17.2,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 0.92,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 10,
+    "od_mm": 17.2,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 0.92,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 10,
+    "od_mm": 17.2,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 0.92,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 10,
+    "od_mm": 17.2,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 0.92,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 10,
+    "od_mm": 17.2,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 0.92,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 10,
+    "od_mm": 17.2,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 0.92,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 1.17,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 1.17,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 1.17,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 1.17,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 1.17,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 1.17,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 15,
+    "od_mm": 21.3,
+    "thickness_mm": 2.3,
+    "weight_kg_m": 1.17,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.59,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.59,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.59,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.59,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.59,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.59,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 20,
+    "od_mm": 26.9,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 1.59,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.04,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.04,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.04,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.04,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.04,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.04,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 25,
+    "od_mm": 33.7,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.04,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.61,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.61,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.61,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.61,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.61,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.61,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 32,
+    "od_mm": 42.4,
+    "thickness_mm": 2.6,
+    "weight_kg_m": 2.61,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.17,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.17,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.17,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.17,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.17,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.17,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 40,
+    "od_mm": 48.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.17,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.99,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.99,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.99,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.99,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.99,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.99,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 50,
+    "od_mm": 60.3,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 3.99,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 5.06,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 5.06,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 5.06,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 5.06,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 5.06,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 5.06,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 65,
+    "od_mm": 76.1,
+    "thickness_mm": 2.9,
+    "weight_kg_m": 5.06,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 6.53,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 6.53,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 6.53,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 6.53,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 6.53,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 6.53,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 80,
+    "od_mm": 88.9,
+    "thickness_mm": 3.2,
+    "weight_kg_m": 6.53,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 9.07,
+    "grade": "P195GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 9.07,
+    "grade": "P235GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 9.07,
+    "grade": "P265GH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 9.07,
+    "grade": "P355N",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 9.07,
+    "grade": "P355NH",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 9.07,
+    "grade": "P355NL1",
+    "type": "Seamless"
+  },
+  {
+    "standard": "EN 10216",
+    "dn": 100,
+    "od_mm": 114.3,
+    "thickness_mm": 3.6,
+    "weight_kg_m": 9.07,
+    "grade": "P355NL2",
+    "type": "Seamless"
+  }
+]

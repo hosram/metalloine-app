@@ -1,0 +1,386 @@
+[
+  {
+    "standard": "ISO 1129",
+    "od_mm": 10,
+    "thickness_mm": 1.0,
+    "weight_kg_m": 0.222,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 10,
+    "thickness_mm": 1.0,
+    "weight_kg_m": 0.222,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 10,
+    "thickness_mm": 1.5,
+    "weight_kg_m": 0.325,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 10,
+    "thickness_mm": 1.5,
+    "weight_kg_m": 0.325,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 10,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 0.419,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 10,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 0.419,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 12,
+    "thickness_mm": 1.0,
+    "weight_kg_m": 0.271,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 12,
+    "thickness_mm": 1.0,
+    "weight_kg_m": 0.271,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 12,
+    "thickness_mm": 1.5,
+    "weight_kg_m": 0.397,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 12,
+    "thickness_mm": 1.5,
+    "weight_kg_m": 0.397,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 12,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 0.513,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 12,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 0.513,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 16,
+    "thickness_mm": 1.5,
+    "weight_kg_m": 0.544,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 16,
+    "thickness_mm": 1.5,
+    "weight_kg_m": 0.544,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 16,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 0.72,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 16,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 0.72,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 16,
+    "thickness_mm": 2.5,
+    "weight_kg_m": 0.887,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 16,
+    "thickness_mm": 2.5,
+    "weight_kg_m": 0.887,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 19,
+    "thickness_mm": 1.5,
+    "weight_kg_m": 0.654,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 19,
+    "thickness_mm": 1.5,
+    "weight_kg_m": 0.654,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 19,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 0.87,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 19,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 0.87,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 19,
+    "thickness_mm": 2.5,
+    "weight_kg_m": 1.08,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 19,
+    "thickness_mm": 2.5,
+    "weight_kg_m": 1.08,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 25,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 1.186,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 25,
+    "thickness_mm": 2.0,
+    "weight_kg_m": 1.186,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 25,
+    "thickness_mm": 2.5,
+    "weight_kg_m": 1.455,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 25,
+    "thickness_mm": 2.5,
+    "weight_kg_m": 1.455,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 25,
+    "thickness_mm": 3.0,
+    "weight_kg_m": 1.71,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 25,
+    "thickness_mm": 3.0,
+    "weight_kg_m": 1.71,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 32,
+    "thickness_mm": 2.5,
+    "weight_kg_m": 1.986,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 32,
+    "thickness_mm": 2.5,
+    "weight_kg_m": 1.986,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 32,
+    "thickness_mm": 3.0,
+    "weight_kg_m": 2.36,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 32,
+    "thickness_mm": 3.0,
+    "weight_kg_m": 2.36,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 32,
+    "thickness_mm": 3.5,
+    "weight_kg_m": 2.72,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 32,
+    "thickness_mm": 3.5,
+    "weight_kg_m": 2.72,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 38,
+    "thickness_mm": 3.0,
+    "weight_kg_m": 2.59,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 38,
+    "thickness_mm": 3.0,
+    "weight_kg_m": 2.59,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 38,
+    "thickness_mm": 3.5,
+    "weight_kg_m": 2.98,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 38,
+    "thickness_mm": 3.5,
+    "weight_kg_m": 2.98,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 38,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 3.36,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 38,
+    "thickness_mm": 4.0,
+    "weight_kg_m": 3.36,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 51,
+    "thickness_mm": 3.0,
+    "weight_kg_m": 3.55,
+    "class": "Light",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 51,
+    "thickness_mm": 3.0,
+    "weight_kg_m": 3.55,
+    "class": "Light",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 51,
+    "thickness_mm": 3.5,
+    "weight_kg_m": 4.01,
+    "class": "Medium",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 51,
+    "thickness_mm": 3.5,
+    "weight_kg_m": 4.01,
+    "class": "Medium",
+    "coating": "Galvanized"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 51,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 5.11,
+    "class": "Heavy",
+    "coating": "Black"
+  },
+  {
+    "standard": "ISO 1129",
+    "od_mm": 51,
+    "thickness_mm": 4.5,
+    "weight_kg_m": 5.11,
+    "class": "Heavy",
+    "coating": "Galvanized"
+  }
+]
