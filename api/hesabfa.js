@@ -9,11 +9,7 @@ export default async function handler(req, res) {
 
   try {
     let body = req.body;
-    // برای ورسل، ممکن است body string باشد
     if (typeof body === 'string') body = JSON.parse(body);
-
-    // لاگ ورودی:
-    console.log("Hesabfa Proxy body:", body);
 
     const resp = await fetch("https://api.hesabfa.com/v1/contact/list", {
       method: "POST",
@@ -25,14 +21,9 @@ export default async function handler(req, res) {
       body: JSON.stringify(body)
     });
 
-    // اگر کد 200 نبود، متن خطا را کامل بخوان:
     if (!resp.ok) {
       const errorText = await resp.text();
-      console.error("Hesabfa API error:", errorText); // این خط را هم اضافه کن
-      res.status(resp.status).json({
-        error: `Hesabfa error: ${resp.status} - ${errorText}`,
-        inputBody: body
-      });
+      res.status(resp.status).json({ error: `Hesabfa error: ${resp.status} - ${errorText}`, inputBody: body });
       return;
     }
 
