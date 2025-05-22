@@ -11,6 +11,9 @@ export default async function handler(req, res) {
     let body = req.body;
     if (typeof body === 'string') body = JSON.parse(body);
 
+    // لاگ کن تا ببینیم ورودی چی هست (فقط برای عیب‌یابی، بعداً پاک کن!)
+    console.log("API Request Body:", body);
+
     const resp = await fetch("https://api.hesabfa.com/v1/contact/list", {
       method: "POST",
       headers: {
@@ -23,7 +26,12 @@ export default async function handler(req, res) {
 
     if (!resp.ok) {
       const errorText = await resp.text();
-      res.status(resp.status).json({ error: `Hesabfa error: ${resp.status} - ${errorText}`, inputBody: body });
+      // لاگ خطا برای عیب‌یابی سریع‌تر
+      console.error("Hesabfa API Error:", errorText);
+      res.status(resp.status).json({ 
+        error: `Hesabfa error: ${resp.status} - ${errorText}`,
+        inputBody: body
+      });
       return;
     }
 
