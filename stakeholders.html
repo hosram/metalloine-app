@@ -155,37 +155,37 @@
       }
     };
 
-    // بارگذاری لیست بدهکاران/بستانکاران
+    // بارگذاری لیست بدهکاران/بستانکاران از حسابفا
     async function loadList(type) {
       goto("listPage");
       document.getElementById("listTitle").textContent = (type==="debtors") ? "بدهکاران" : "بستانکاران";
       document.getElementById("tableWrap").innerHTML = "<div style='text-align:center;opacity:.8'>در حال دریافت اطلاعات...</div>";
 
-      // آدرس فرضی API حسابفا (نمونه - حتماً با مستندات حسابفا جایگزین کن)
-      // فرض: https://api.hesabfa.com/v1/contacts?type=debtors یا creditors
-      // در صورت نیاز پارامترهای بیشتری اضافه کن
+      // پارامترهای فیلتر
+      let accountType = type === "debtors" ? 2 : 3; // 2: بدهکار، 3: بستانکار
 
-      let url = "";
-      if(type==="debtors")
-        url = "https://api.hesabfa.com/v1/contacts?type=debtors";
-      else
-        url = "https://api.hesabfa.com/v1/contacts?type=creditors";
-
+      let url = "https://api.hesabfa.com/v1/contact/list";
       try {
         const res = await fetch(url, {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Api-Key": apiKey,
             "Login-Token": loginToken
-          }
+          },
+          body: JSON.stringify({
+            take: 50,
+            skip: 0,
+            filter: { accountType: accountType }
+          })
         });
-        if(!res.ok) throw new Error("خطا در دریافت اطلاعات");
+        if(!res.ok) throw new Error("خطا در دریافت اطلاعات (" + res.status + ")");
         const data = await res.json();
+        // ساختار خروجی طبق مستندات حسابفا
+        // data.result یا data.contacts یا data.list بستگی به API دارد
+        let list = data.result || data.contacts || data.list || data; 
+        if (!Array.isArray(list)) list = [];
 
-        // فرض: دیتا چنین ساختاری دارد:
-        // [{ name, amount, last_invoice_date }]
-        // اگر ساختار واقعی متفاوت است، حتماً با console.log(data) تست کن و مطابقش نمایش بده
-        const list = data.list || data; // بسته به خروجی API
         let html = `
           <table>
             <thead>
@@ -202,9 +202,9 @@
         } else {
           for(const item of list){
             html += `<tr>
-              <td>${item.name||"-"}</td>
-              <td>${item.amount ? item.amount.toLocaleString("fa-IR") : "-"}</td>
-              <td>${item.last_invoice_date||"-"}</td>
+              <td>${item.name||item.displayName||"-"}</td>
+              <td>${item.balance !== undefined ? Number(item.balance).toLocaleString("fa-IR") : "-"}</td>
+              <td>${item.lastInvoiceDate ? item.lastInvoiceDate.slice(0,10) : "-"}</td>
             </tr>`;
           }
         }
