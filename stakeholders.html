@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>زینفعان | Metalloine</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003.4/Farsi-font-face.css" />
+  <style>
+    :root {
+      --c-primary: #8E1F61;
+      --c-accent: #8FA2B2;
+      --glass: rgba(255,255,255,0.1);
+      --r: 24px;
+      --g: 12px;
+      --c-bg: #000;
+      --c-fg: #fff;
+    }
+    body {
+      background: var(--c-bg); color: var(--c-fg);
+      font-family: "Vazirmatn", sans-serif;
+      min-height: 100vh; margin: 0;
+      display: flex; flex-direction: column;
+    }
+    #topbar {
+      display: flex; justify-content: center; align-items: center;
+      height: 64px; margin: var(--g);
+      background: var(--glass); backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: var(--r);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 1.4rem; font-weight: 700;
+    }
+    .ring {
+      width: 22px; height: 22px;
+      border: 6px solid var(--c-accent); border-radius: 50%;
+    }
+    .brand { color: var(--c-primary); }
+    main { flex: 1; max-width: 480px; margin: 0 auto; padding: var(--g);}
+    h2 { text-align:center; margin: 2rem 0 1.5rem 0; }
+    .btn-main {
+      width: 100%; padding: 14px 0; border: none;
+      border-radius: var(--r); background: var(--c-primary);
+      color: #fff; font-weight: 700; font-size: 1.05rem;
+      margin-bottom: 1.5rem; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transition: transform .13s;
+    }
+    .btn-main:hover { transform: scale(1.03); }
+    .card {
+      background: var(--glass); border-radius: var(--r);
+      padding: 24px; margin: 0 auto 2rem auto; box-shadow: 0 2px 8px #1118;
+      max-width: 420px;
+    }
+    .hidden { display: none !important; }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 1rem;
+      background: #181818; color: #fff; border-radius: var(--r);
+      overflow: hidden; font-size: 1rem;
+    }
+    th, td {
+      padding: 8px 10px; border-bottom: 1px solid #333;
+      text-align: center;
+    }
+    th { background: #222; color: var(--c-primary); font-weight: 700; }
+    tr:last-child td { border-bottom: none; }
+    .back-btn {
+      margin: 2rem auto 0 auto; display: block; text-align: center;
+      background: none; border: 1px solid var(--c-primary); color: var(--c-primary);
+      padding: .7rem 2rem; border-radius: var(--r); font-weight: 700;
+      cursor: pointer;
+    }
+    .back-btn:hover { background: var(--glass); }
+    .input-row {
+      display: flex; flex-direction: column; gap: 8px; align-items: center;
+      margin-bottom: 1.2rem;
+    }
+    .input-row input[type="password"] {
+      font-size: 1.1rem; padding: 10px; border-radius: var(--r);
+      border: none; width: 180px; background: #222; color: #fff; text-align: center;
+      letter-spacing: 0.15em;
+    }
+    .err-msg {
+      color: #ff5a5a; text-align: center; margin-bottom: 1rem; min-height: 1.3em;
+      font-size: 0.96rem;
+    }
+    @media (max-width:600px){
+      main { padding: 8px;}
+      .card { padding: 10px; }
+      th,td { font-size:0.95rem; padding: 7px 3px;}
+    }
+  </style>
+</head>
+<body>
+  <header id="topbar">
+    <span class="logo">
+      <span class="ring"></span>
+      <span class="brand">Metalloine</span>
+    </span>
+  </header>
+
+  <main>
+    <!-- صفحه رمز ورود -->
+    <section id="passwordPage" class="card">
+      <h2>ورود به زینفعان</h2>
+      <form id="pwForm" autocomplete="off">
+        <div class="input-row">
+          <input id="pwInput" type="password" maxlength="6" placeholder="رمز ورود..." autofocus>
+        </div>
+        <div class="err-msg" id="pwError"></div>
+        <button class="btn-main" type="submit">ورود</button>
+      </form>
+    </section>
+
+    <!-- منوی اصلی زینفعان -->
+    <section id="menuPage" class="card hidden">
+      <h2>زینفعان شرکت</h2>
+      <button class="btn-main" onclick="loadList('debtors')">بدهکاران</button>
+      <button class="btn-main" onclick="loadList('creditors')">بستانکاران</button>
+      <button class="back-btn" onclick="goto('passwordPage')">خروج</button>
+    </section>
+
+    <!-- نمایش لیست بدهکاران یا بستانکاران -->
+    <section id="listPage" class="card hidden">
+      <h2 id="listTitle"></h2>
+      <div id="tableWrap"></div>
+      <button class="back-btn" onclick="goto('menuPage')">بازگشت</button>
+    </section>
+  </main>
+
+  <script>
+    // امنیت: رمز ورود
+    const MASTER_PASSWORD = "136248";
+    let apiKey = "XYeyCb0ImFsL8hr97IjLcJyBy7NImVm4";
+    let loginToken = "09a16a9e8feb473bacb8ccfe1a0b2ecac9798d486193bac994022ba9e4697524d5b8de6dec5ad2af79cbae77d4ca2af0";
+
+    function goto(id) {
+      ["passwordPage", "menuPage", "listPage"].forEach(sec => {
+        document.getElementById(sec).classList.add("hidden");
+      });
+      document.getElementById(id).classList.remove("hidden");
+    }
+
+    // فرم ورود
+    document.getElementById("pwForm").onsubmit = function(e){
+      e.preventDefault();
+      const pw = document.getElementById("pwInput").value.trim();
+      if(pw === MASTER_PASSWORD){
+        document.getElementById("pwError").textContent = "";
+        goto("menuPage");
+        document.getElementById("pwInput").value = "";
+      } else {
+        document.getElementById("pwError").textContent = "رمز اشتباه است.";
+      }
+    };
+
+    // بارگذاری لیست بدهکاران/بستانکاران
+    async function loadList(type) {
+      goto("listPage");
+      document.getElementById("listTitle").textContent = (type==="debtors") ? "بدهکاران" : "بستانکاران";
+      document.getElementById("tableWrap").innerHTML = "<div style='text-align:center;opacity:.8'>در حال دریافت اطلاعات...</div>";
+
+      // آدرس فرضی API حسابفا (نمونه - حتماً با مستندات حسابفا جایگزین کن)
+      // فرض: https://api.hesabfa.com/v1/contacts?type=debtors یا creditors
+      // در صورت نیاز پارامترهای بیشتری اضافه کن
+
+      let url = "";
+      if(type==="debtors")
+        url = "https://api.hesabfa.com/v1/contacts?type=debtors";
+      else
+        url = "https://api.hesabfa.com/v1/contacts?type=creditors";
+
+      try {
+        const res = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            "Api-Key": apiKey,
+            "Login-Token": loginToken
+          }
+        });
+        if(!res.ok) throw new Error("خطا در دریافت اطلاعات");
+        const data = await res.json();
+
+        // فرض: دیتا چنین ساختاری دارد:
+        // [{ name, amount, last_invoice_date }]
+        // اگر ساختار واقعی متفاوت است، حتماً با console.log(data) تست کن و مطابقش نمایش بده
+        const list = data.list || data; // بسته به خروجی API
+        let html = `
+          <table>
+            <thead>
+              <tr>
+                <th>نام</th>
+                <th>مبلغ (ریال)</th>
+                <th>آخرین تراکنش</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        if(list.length===0){
+          html += `<tr><td colspan="3" style="opacity:.75">موردی یافت نشد.</td></tr>`;
+        } else {
+          for(const item of list){
+            html += `<tr>
+              <td>${item.name||"-"}</td>
+              <td>${item.amount ? item.amount.toLocaleString("fa-IR") : "-"}</td>
+              <td>${item.last_invoice_date||"-"}</td>
+            </tr>`;
+          }
+        }
+        html += "</tbody></table>";
+        document.getElementById("tableWrap").innerHTML = html;
+      } catch (e) {
+        document.getElementById("tableWrap").innerHTML = `<div class="err-msg">خطا: ${e.message||"دریافت اطلاعات ممکن نشد."}</div>`;
+      }
+    }
+  </script>
+</body>
+</html>
