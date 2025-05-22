@@ -130,10 +130,10 @@
   </main>
 
   <script>
-    // امنیت: رمز ورود
+    // رمز عبور ثابت (حتماً رمز را اگر خواستی تغییر بده)
     const MASTER_PASSWORD = "136248";
-    let apiKey = "XYeyCb0ImFsL8hr97IjLcJyBy7NImVm4";
-    let loginToken = "09a16a9e8feb473bacb8ccfe1a0b2ecac9798d486193bac994022ba9e4697524d5b8de6dec5ad2af79cbae77d4ca2af0";
+    // آدرس پروکسی api خودت را همینجا بذار!
+    const PROXY_API_URL = "https://metalloine-app.vercel.app/api/hesabfa";
 
     function goto(id) {
       ["passwordPage", "menuPage", "listPage"].forEach(sec => {
@@ -155,34 +155,27 @@
       }
     };
 
-    // بارگذاری لیست بدهکاران/بستانکاران از حسابفا
+    // بارگذاری لیست بدهکاران/بستانکاران از پروکسی (vercel api)
     async function loadList(type) {
       goto("listPage");
       document.getElementById("listTitle").textContent = (type==="debtors") ? "بدهکاران" : "بستانکاران";
       document.getElementById("tableWrap").innerHTML = "<div style='text-align:center;opacity:.8'>در حال دریافت اطلاعات...</div>";
 
-      // پارامترهای فیلتر
-      let accountType = type === "debtors" ? 2 : 3; // 2: بدهکار، 3: بستانکار
+      // بدهکار: accountType=2    بستانکار: accountType=3
+      let accountType = type === "debtors" ? 2 : 3;
 
-      let url = "https://api.hesabfa.com/v1/contact/list";
       try {
-        const res = await fetch(url, {
+        const res = await fetch(PROXY_API_URL, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Api-Key": apiKey,
-            "Login-Token": loginToken
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             take: 50,
             skip: 0,
-            filter: { accountType: accountType }
+            filter: { accountType }
           })
         });
         if(!res.ok) throw new Error("خطا در دریافت اطلاعات (" + res.status + ")");
         const data = await res.json();
-        // ساختار خروجی طبق مستندات حسابفا
-        // data.result یا data.contacts یا data.list بستگی به API دارد
         let list = data.result || data.contacts || data.list || data; 
         if (!Array.isArray(list)) list = [];
 
